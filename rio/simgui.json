@@ -36,7 +36,6 @@
         }
       },
       "/SmartDashboard/Field": {
-        "image": "../dashboard/src/assets/field.png",
         "window": {
           "visible": true
         }
@@ -70,5 +69,8 @@
         "open": true
       }
     }
+  },
+  "NetworkTables Info": {
+    "visible": true
   }
 }
