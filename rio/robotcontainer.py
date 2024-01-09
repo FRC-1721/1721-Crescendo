@@ -104,4 +104,5 @@ class RobotContainer:
         Use this to pass the autonomous command to the main :class:`.Robot` class.
         :returns: the command to run in autonomous
         """
-        return self.autoChooser.getSelected()
+        # return self.autoChooser.getSelected()
+        return None

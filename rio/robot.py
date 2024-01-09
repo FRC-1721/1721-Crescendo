@@ -65,7 +65,7 @@ class UnnamedToaster(commands2.TimedCommandRobot):
         if self.autonomousCommand is not None:
             self.autonomousCommand.schedule()
         else:
-            print("no auto command?")
+            logging.warning("no auto command?")
 
     def autonomousPeriodic(self) -> None:
         """This function is called periodically during autonomous"""
@@ -76,8 +76,3 @@ class UnnamedToaster(commands2.TimedCommandRobot):
     def testInit(self) -> None:
         # Cancels all running commands at the start of test mode
         commands2.CommandScheduler.getInstance().cancelAll()
-
-
-# When starting from here (and running as-is)
-if __name__ == "__main__":
-    wpilib.run(UnnamedToaster)
