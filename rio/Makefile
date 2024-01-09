@@ -5,54 +5,39 @@
 # collection of shortcuts, handy for doing simple scripts
 # and macros.
 
-all: help
+.PHONY: help
 
-help:
-	@echo
-	@echo "Targets:"
-	@echo "   sim               Shortcut for roboy.py sim."
-	@echo "   clean             Shortucut for git clean -fdX"
-	@echo "   deploy            Deploy code with netconsole"
-	@echo "   push              Deploy code by the seat of your pants"
-	@echo "   download          Download extra requirements"
-	@echo "   install           Install extra requirements"
-	@echo "   info              Get the robot current build info"
-	@echo "   download-python   Download python (new robots only)"
-	@echo "   install-python   Install python (new robots only)"
-	@echo
+help:	## Prints this help message
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-.PHONY: deploy
-
-# Shortcut for the simulator
-sim:
+sim:	## Run the simulator
 	python robot.py sim
 
-# Shortcut for deploy
-deploy:
+
+deploy:	## Deploy to the robot (with console)
 	python robot.py deploy --nc 
 
-# Ommit the --nc, this is a custom keyword~
-push:
+
+push:	## Deploy to the robot (push only, no console)
 	python robot.py deploy
 
-# Shortcut for the download command
-download:
+
+download:	## Download robot requirements locally
 	robotpy-installer download -r robot_requirements.txt
 
-# Shortcut for the install command, run download first!
-install:
+
+install:	## Install requirements, run download first!
 	robotpy-installer install -r robot_requirements.txt
 
-# Shortcut to get information about the code already on the bot
-info:
+
+info:	## Shortcut to get information about the code already on the bot
 	python robot.py deploy-info
 
-# Shortcuts for inital robot setup
-download-python:
+download-python:	## Download python (for robot)
 	robotpy-installer download-python
 
-install-python:
+install-python:	## Install python (for robot)
 	robotpy-installer install-python
 
-clean:
+clean:	## Clean the repo
 	git clean -fdX
