@@ -22,7 +22,7 @@ project.
 """
 
 
-class RotomToaster(commands2.TimedCommandRobot):
+class UnnamedToaster(commands2.TimedCommandRobot):
     """
     Our default robot class, pass it to wpilib.run
     Command v2 robots are encouraged to inherit from TimedCommandRobot, which
@@ -76,3 +76,8 @@ class RotomToaster(commands2.TimedCommandRobot):
     def testInit(self) -> None:
         # Cancels all running commands at the start of test mode
         commands2.CommandScheduler.getInstance().cancelAll()
+
+
+# When starting from here (and running as-is)
+if __name__ == "__main__":
+    wpilib.run(UnnamedToaster)

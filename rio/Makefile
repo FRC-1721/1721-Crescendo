@@ -11,15 +11,15 @@ help:	## Prints this help message
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 sim:	## Run the simulator
-	python robot.py sim
+	python -m robotpy sim
 
 
 deploy:	## Deploy to the robot (with console)
-	python robot.py deploy --nc 
+	python -m robotpy deploy --nc 
 
 
 push:	## Deploy to the robot (push only, no console)
-	python robot.py deploy
+	python -m robotpy deploy
 
 
 download:	## Download robot requirements locally
@@ -31,7 +31,7 @@ install:	## Install requirements, run download first!
 
 
 info:	## Shortcut to get information about the code already on the bot
-	python robot.py deploy-info
+	python -m robotpy deploy-info
 
 download-python:	## Download python (for robot)
 	robotpy-installer download-python
