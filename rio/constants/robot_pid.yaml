@@ -1,0 +1,31 @@
+# Constants for the robot PID
+
+drive:
+  # Diff lock
+  kStabilizationP: 0.011
+  kStabilizationI: 0.0001
+  kStabilizationD: 0
+
+  # TurnToAngle
+  kTurnP: 0.007
+  kTurnI: 0.006
+  kTurnD: 0.001
+
+  kMaxTurnRateDegPerS: 100
+  kMaxTurnAccelerationDegPerSSquared: 300
+
+  kTurnToleranceDeg: 5
+  kTurnRateToleranceDegPerS: 10 # degrees per second
+
+arm:
+  elevator:
+    kp: 0.075
+    ki: 0
+    kd: 0.1
+    ff: 0
+
+  ladder:
+    kp: 0.1
+    ki: 0
+    kd: 0.1
+    ff: 0
