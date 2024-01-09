@@ -33,6 +33,9 @@ install:	## Install requirements, run download first!
 info:	## Shortcut to get information about the code already on the bot
 	python -m robotpy deploy-info
 
+test:	## Run automated tests
+	python -m robotpy test
+
 download-python:	## Download python (for robot)
 	robotpy-installer download-python
 

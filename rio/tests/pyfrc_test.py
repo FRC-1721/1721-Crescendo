@@ -1,6 +1,6 @@
 """
 This module provides pyfrc tests useful for almost any robot.
-use `python robot.py test` to run
+use `python -m robotpy test` to run
 """
 
 from pyfrc.tests import *
