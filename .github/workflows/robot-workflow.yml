@@ -98,7 +98,7 @@ jobs:
         run: |
           cd rio && pipenv install --deploy --dev
 
-      - name: Timeout the simulator
+      - name: Run unit tests
         run: |
           cd rio && pipenv run python -m robotpy test || code=$?; if [[ $code -ne 124 && $code -ne 0 ]]; then exit $code; fi
 
