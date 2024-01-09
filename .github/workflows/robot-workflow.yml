@@ -100,7 +100,7 @@ jobs:
 
       - name: Timeout the simulator
         run: |
-          cd rio && pipenv run python robot.py test || code=$?; if [[ $code -ne 124 && $code -ne 0 ]]; then exit $code; fi
+          cd rio && pipenv run python -m robotpy test || code=$?; if [[ $code -ne 124 && $code -ne 0 ]]; then exit $code; fi
 
       - name: Discord notification
         if: ${{ failure() }}
