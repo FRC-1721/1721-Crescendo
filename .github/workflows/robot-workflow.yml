@@ -106,8 +106,10 @@ jobs:
         run: |
           cd rio && pipenv run python -m robotpy coverage test && cp .coverage ../
 
-      - name: Update Coverage Badge
-        uses: tj-actions/coverage-badge-py@v2
+      - name: Coverage comment
+        uses: py-cov-action/python-coverage-comment-action@v3
+        with:
+          GITHUB_TOKEN: ${{ github.token }}
 
       - name: Discord notification
         if: ${{ failure() }}
