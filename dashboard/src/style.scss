@@ -1,0 +1,25 @@
+@font-face {
+    font-family: "FiraCode Nerd Font";
+    src: url("asset/FiraCodeNerdFontPropo-Retina.ttf") format("truetype");
+}
+
+* {
+    font-family: "FiraCode Nerd Font";
+    color: #ebdbb2;
+    font-size: 20px;
+}
+
+body {
+    display: flex;
+    flex-direction: row;
+    background-color: #282828;
+}
+
+main {
+
+}
+
+.cameras {
+    height: 100%;
+    background: #1d2021;
+}
