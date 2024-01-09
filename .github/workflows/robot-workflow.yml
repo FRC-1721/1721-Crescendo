@@ -64,7 +64,7 @@ jobs:
 
       - name: Timeout the simulator
         run: |
-          cd rio && timeout 20 pipenv run python robot.py sim --nogui || code=$?; if [[ $code -ne 124 && $code -ne 0 ]]; then exit $code; fi
+          cd rio && timeout 20 pipenv run python -m robotpy sim --nogui || code=$?; if [[ $code -ne 124 && $code -ne 0 ]]; then exit $code; fi
 
       - name: Discord notification
         if: ${{ failure() }}
@@ -72,7 +72,7 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         uses: Ilshidur/action-discord@master
         with:
-          args: "<@Software Team> Simulator failed in {{ EVENT_PAYLOAD.pull_request.html_url }} !"
+          args: "<@614313406345904148> Simulator failed in {{ EVENT_PAYLOAD.pull_request.html_url }} !"
 
   unit_test:
     name: pyfrc Unit tests
@@ -108,4 +108,4 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         uses: Ilshidur/action-discord@master
         with:
-          args: "<@Software Team> Unit tests failed in {{ EVENT_PAYLOAD.pull_request.html_url }} !"
+          args: "<@614313406345904148> Unit tests failed in {{ EVENT_PAYLOAD.pull_request.html_url }} !"
