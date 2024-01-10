@@ -1,5 +1,6 @@
 from rev import CANSparkMax, CANSparkMaxLowLevel
 from constants.constants import getConstants
+from wpilib import DutyCycleEncoder
 
 
 class SwerveModule:
@@ -50,3 +51,12 @@ class SwerveModule:
         self.turnPIDController.setI(self.turnPID["I"])
         self.turnPIDController.setD(self.turnPID["D"])
         self.turnPIDController.setFF(self.turnPID["FF"])
+
+    # Copied from rev, be skeptical
+    def find_zero(self):
+        """
+        remember how much this sucked
+        last year, zero's serve maybe
+        """
+        # this may be the wrong motor
+        self.turnMotor.setPosition(0)
