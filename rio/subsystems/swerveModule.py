@@ -52,11 +52,29 @@ class SwerveModule:
         self.turnPIDController.setD(self.turnPID["D"])
         self.turnPIDController.setFF(self.turnPID["FF"])
 
-    # Copied from rev, be skeptical
-    def find_zero(self):
+    # based on rev, be skeptical
+    def zeroEncoders(self):
+        """
+        sets the ecoder pos to zero
+        maybe
+        """
+        # this may be the wrong encoder
+        self.turnEncoder.setPosition(0)
+
+    #
+
+    def gotoZero(self):
         """
         remember how much this sucked
         last year, zero's serve maybe
         """
-        # this may be the wrong motor
-        self.turnMotor.setPosition(0)
+        if not self.zero:
+            if self.turnEncoder.getPosition() != 0:
+                self.steer_motor.set(0.165)  # CHANGEME
+
+            else:
+                self.turnEncoder.setPosition(0)
+                self.zero = True
+
+        else:
+            self.turnEncoder.setPosition(0)

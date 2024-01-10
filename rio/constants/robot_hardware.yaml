@@ -9,29 +9,29 @@ drivetrain:
   encoderResolution: 2048        # Updated Never by Nobody
   
   FPMotors:
-    Motor1Port: 1                # Updated Never by Nobody
-    Motor2Port: 2                # Updated Never by Nobody
+    drivePort: 1                 # Updated Never by Nobody
+    turnPort: 2                  # Updated Never by Nobody
     EncoderPorts: [1, 2]         # Updated Never by Nobody
     EncoderReversed: False       # Updated Never by Nobody
     Inverted: False              # Updated Never by Nobody
     
   APMotors:
-      Motor1Port: 3              # Updated Never by Nobody
-      Motor2Port: 4              # Updated Never by Nobody
+      drivePort: 3               # Updated Never by Nobody
+      turnPort: 4                # Updated Never by Nobody
       EncoderPorts: [3, 4]       # Updated Never by Nobody
       EncoderReversed: False     # Updated Never by Nobody
       Inverted: False            # Updated Never by Nobody
 
   FSMotors:
-    Motor1Port: 5                # Updated Never by Nobody
-    Motor2Port: 6                # Updated Never by Nobody
+    drivePort: 5                 # Updated Never by Nobody
+    turnPort: 6                  # Updated Never by Nobody
     EncoderPorts: [5, 6]         # Updated Never by Nobody
     EncoderReversed: False       # Updated Never by Nobody
     Inverted: False              # Updated Never by Nobody
     
   ASMotors:
-      Motor1Port: 7                # Updated Never by Nobody
-      Motor2Port: 8                # Updated Never by Nobody
+      drivePort: 7                 # Updated Never by Nobody
+      turnPort: 8                  # Updated Never by Nobody
       EncoderPorts: [7, 8]         # Updated Never by Nobody
       EncoderReversed: False       # Updated Never by Nobody
       Inverted: False              # Updated Never by Nobody
