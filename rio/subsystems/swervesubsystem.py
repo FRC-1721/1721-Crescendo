@@ -1,11 +1,13 @@
 # rename to drivesubsystem.py when completed
-# replace IMU with our gyro
 
 from commands2 import Subsystem
 from constants.constants import getConstants
 from .swerveModule import SwerveModule
 from wpilib import Timer
 from wpimath.filter import SlewRateLimiter
+from navx import AHRS
+from wpimath.kinematics import SwerveDrive4Odometry
+from wpimath.geometry import Rotation2d
 
 
 class drivesubsystem(Subsystem):
@@ -45,7 +47,7 @@ class drivesubsystem(Subsystem):
         )
 
         # The gyro sensor
-        self.gyro = ADIS16448_IMU()
+        self.gyro = AHRS.create_spi()
 
         # Slew rate filter variables for controlling lateral acceleration
         self.currentRotation = 0.0
@@ -58,14 +60,29 @@ class drivesubsystem(Subsystem):
         # timer
         self.prevTime = Timer.getFPGATimestamp()
 
-        # Odometry class for tracking robot pose
+        # for taking robit POS
+        # TODO start with this tomorrow
         self.odometry = SwerveDrive4Odometry(
             DriveConstants.kDriveKinematics,
             Rotation2d.fromDegrees(self.gyro.getAngle()),
             (
-                self.frontLeft.getPosition(),
-                self.frontRight.getPosition(),
-                self.rearLeft.getPosition(),
-                self.rearRight.getPosition(),
+                self.fPModule.getPosition(),
+                self.fSModule.getPosition(),
+                self.aPModule.getPosition(),
+                self.aSModule.getPosition(),
+            ),
+        )
+
+    # TODO rest goes here
+
+    def periodic(self) -> None:
+        # update the robot pos
+        self.odometry.update(
+            Rotation2d.fromDegrees(self.gyro.getPitch()),
+            (
+                self.fPModule.getPosition(),
+                self.fSModule.getPosition(),
+                self.aPModule.getPosition(),
+                self.aSModule.getPosition(),
             ),
         )

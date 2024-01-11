@@ -1,8 +1,11 @@
+# vendor libs
 from rev import CANSparkMax, CANSparkMaxLowLevel, SparkMaxAbsoluteEncoder
-from constants.constants import getConstants
-from wpilib import DutyCycleEncoder
+
 from wpimath.kinematics import SwerveModuleState, SwerveModulePosition
 from wpimath.geometry import Rotation2d
+
+# constants
+from constants.constants import getConstants
 
 
 class SwerveModule:
