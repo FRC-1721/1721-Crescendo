@@ -150,3 +150,30 @@ class SwerveModule:
             self.driveEncoder.getPosition(),
             Rotation2d(self.turnEncoder.getPosition() - self.chassisAngularOffset),
         )
+
+    def setDesiredState(self, desiredState: SwerveModuleState):
+        """
+        set a new desired state
+        """
+
+        # add chassis offset
+        correctedDesiredState = SwerveModuleState()
+        correctedDesiredState.speed = desiredState.speed
+        correctedDesiredState.angle = desiredState.angle + Rotation2d(
+            self.chassisAngularOffset
+        )
+
+        # make it avoid spinning over 90 in reference state
+        optimizedDesiredState = SwerveModuleState.optimize(
+            correctedDesiredState, Rotation2d(self.turnEncoder.getPosition())
+        )
+
+        # turn to setpoints
+        self.drivePIDController.setReference(
+            optimizedDesiredState.speed, CANSparkMax.ControlType.kVelocity
+        )
+        self.turnPIDController.setReference(
+            optimizedDesiredState.angle.radians(), CANSparkMax.ControlType.kPosition
+        )
+
+        self.desiredState = desiredState
