@@ -177,3 +177,10 @@ class SwerveModule:
         )
 
         self.desiredState = desiredState
+
+    def resetEncoders(self) -> None:
+        """
+        to quote rev as to the function of this
+        "-+es all the SwerveModule encoders."
+        """
+        self.driveEncoder.setPosition(0)
