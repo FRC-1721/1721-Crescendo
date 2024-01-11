@@ -71,9 +71,11 @@ class SwerveModule:
         self.drivePIDController = self.driveMotor.getPIDController()
         self.turnPIDController = self.turnMotor.getPIDController()
 
+        # feedback
         self.drivePIDController.setFeedbackDevice(self.driveEncoder)
         self.turnPIDController.setFeedbackDevice(self.turnEncoder)
 
+        # drive PIDS
         self.drivePIDController.setP(self.drivePID["P"])
         self.drivePIDController.setI(self.drivePID["I"])
         self.drivePIDController.setD(self.drivePID["D"])
@@ -82,6 +84,7 @@ class SwerveModule:
             self.drivePID["MinOutput"], self.drivePID["MaxOutput"]
         )
 
+        # turn PIDS
         self.turnPIDController.setP(self.turnPID["P"])
         self.turnPIDController.setI(self.turnPID["I"])
         self.turnPIDController.setD(self.turnPID["D"])
@@ -113,11 +116,13 @@ class SwerveModule:
         self.driveMotor.burnFlash()
         self.turnMotor.burnFlash()
 
-        # Misc
+        # Chassis angular offset
         self.chassisAngularOffset = 0
         self.chassisAngularOffset = chassisAngularOffset
 
+        # making the desired state
         self.desiredState = SwerveModuleState(0.0, Rotation2d())
         self.desiredState.angle = Rotation2d(self.turnEncoder.getPosition())
 
+        # misc
         self.driveEncoder.setPosition(0)
