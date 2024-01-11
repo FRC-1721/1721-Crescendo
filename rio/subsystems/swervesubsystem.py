@@ -1,44 +1,71 @@
 # rename to drivesubsystem.py when completed
+# replace IMU with our gyro
 
 from commands2 import Subsystem
 from constants.constants import getConstants
 from .swerveModule import SwerveModule
+from wpilib import Timer
+from wpimath.filter import SlewRateLimiter
 
 
 class drivesubsystem(Subsystem):
-    def __init__(self) -> None:
+    def __init__(self):
+        super().__init__()
+
         # constants
         constants = getConstants("robot_hardware")
         self.driveConst = constants["drivetrain"]
 
-        # modules
-        self.fPMotors = self.driveConst["FPMotors"]
-        self.fSMotors = self.driveConst["FSMotors"]
-        self.aPMotors = self.driveConst["APMotors"]
-        self.aSMotors = self.driveConst["ASMotors"]
+        # module constants
+        self.fPMotorsConst = self.driveConst["FPMotors"]
+        self.fSMotorsConst = self.driveConst["FSMotors"]
+        self.aPMotorsConst = self.driveConst["APMotors"]
+        self.aSMotorsConst = self.driveConst["ASMotors"]
 
-        # create swerve modules
-        self.fpModule = SwerveModule(
-            self.fPMotors["drivePort"],
-            self.fPMotors["turnPort"],
-            self.fPMotors["EncoderPort"][0],
-            self.fPMotors["EncoderPort"][1],
+        # defining the modules
+        self.fPModule = SwerveModule(
+            self.fPMotorsConst["drivePort"],
+            self.fPMotorsConst["turnPort"],
+            self.fPMotorsConst["ChassisAngularOffset"],
         )
-        self.fsModule = SwerveModule(
-            self.fSMotors["drivePort"],
-            self.fSMotors["turnPort"],
-            self.fSMotors["EncoderPort"][0],
-            self.fSMotors["EncoderPort"][1],
+        self.fSModule = SwerveModule(
+            self.fSMotorsConst["drivePort"],
+            self.fSMotorsConst["turnPort"],
+            self.fSMotorsConst["ChassisAngularOffset"],
         )
-        self.apModule = SwerveModule(
-            self.aPMotors["drivePort"],
-            self.aPMotors["turnPort"],
-            self.aPMotors["EncoderPort"][0],
-            self.aPMotors["EncoderPort"][1],
+        self.aPModule = SwerveModule(
+            self.aPMotorsConst["drivePort"],
+            self.aPMotorsConst["turnPort"],
+            self.aPMotorsConst["ChassisAngularOffset"],
         )
-        self.asModule = SwerveModule(
-            self.aSMotors["drivePort"],
-            self.aSMotors["turnPort"],
-            self.aSMotors["EncoderPort"][0],
-            self.aSMotors["EncoderPort"][1],
+        self.aSModule = SwerveModule(
+            self.aSMotorsConst["drivePort"],
+            self.aSMotorsConst["turnPort"],
+            self.aSMotorsConst["ChassisAngularOffset"],
+        )
+
+        # The gyro sensor
+        self.gyro = ADIS16448_IMU()
+
+        # Slew rate filter variables for controlling lateral acceleration
+        self.currentRotation = 0.0
+        self.currentTranslationDir = 0.0
+        self.currentTranslationMag = 0.0
+
+        self.magLimiter = SlewRateLimiter(self.driveConst["MagnitudeSlewRate"])
+        self.rotLimiter = SlewRateLimiter(self.driveConst["RotationalSlewRate"])
+
+        # timer
+        self.prevTime = Timer.getFPGATimestamp()
+
+        # Odometry class for tracking robot pose
+        self.odometry = SwerveDrive4Odometry(
+            DriveConstants.kDriveKinematics,
+            Rotation2d.fromDegrees(self.gyro.getAngle()),
+            (
+                self.frontLeft.getPosition(),
+                self.frontRight.getPosition(),
+                self.rearLeft.getPosition(),
+                self.rearRight.getPosition(),
+            ),
         )

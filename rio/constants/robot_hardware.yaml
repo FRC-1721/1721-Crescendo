@@ -17,13 +17,15 @@ drivetrain:
     EncoderPorts: [1, 2]         # Updated Never by Nobody
     EncoderReversed: False       # Updated Never by Nobody
     Inverted: False              # Updated Never by Nobody
-    
+    ChassisAngularOffset: -1.75
+
   APMotors:
       drivePort: 3               # Updated Never by Nobody
       turnPort: 4                # Updated Never by Nobody
       EncoderPorts: [3, 4]       # Updated Never by Nobody
       EncoderReversed: False     # Updated Never by Nobody
       Inverted: False            # Updated Never by Nobody
+      ChassisAngularOffset: 3.14
 
   FSMotors:
     drivePort: 5                 # Updated Never by Nobody
@@ -31,13 +33,15 @@ drivetrain:
     EncoderPorts: [5, 6]         # Updated Never by Nobody
     EncoderReversed: False       # Updated Never by Nobody
     Inverted: False              # Updated Never by Nobody
-    
+    ChassisAngularOffset: 0
+
   ASMotors:
       drivePort: 7                 # Updated Never by Nobody
       turnPort: 8                  # Updated Never by Nobody
       EncoderPorts: [7, 8]         # Updated Never by Nobody
       EncoderReversed: False       # Updated Never by Nobody
       Inverted: False              # Updated Never by Nobody
+      ChassisAngularOffset: 1.75
 
   DrivePIDValues:
     P: 0                           # Updated Never by Nobody
