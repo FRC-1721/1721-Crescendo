@@ -42,8 +42,3 @@ class drivesubsystem(Subsystem):
             self.aSMotors["EncoderPort"][0],
             self.aSMotors["EncoderPort"][1],
         )
-
-        self.fsZero.setBoolean(self.fsModule.isZeroed)
-        self.asZero.setBoolean(self.asModule.isZeroed)
-        self.fpZero.setBoolean(self.fpModule.isZeroed)
-        self.apZero.setBoolean(self.apModule.isZeroed)

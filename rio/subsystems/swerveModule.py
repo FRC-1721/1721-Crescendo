@@ -1,15 +1,16 @@
-from rev import CANSparkMax, CANSparkMaxLowLevel
+from rev import CANSparkMax, CANSparkMaxLowLevel, SparkMaxAbsoluteEncoder
 from constants.constants import getConstants
 from wpilib import DutyCycleEncoder
+from wpimath.kinematics import SwerveModuleState
+from wpimath.geometry import Rotation2d
 
 
 class SwerveModule:
     def __init__(
         self,
-        driveChannel,
-        turnChannel,
-        driveEncoder,
-        turnEncoder,
+        driveChannel: int,
+        turnChannel: int,
+        chassisAngularOffset: float,
     ) -> None:
         """
         LMAO look at this joke code
@@ -23,8 +24,12 @@ class SwerveModule:
 
         # constants
         constants = getConstants("robot_hardware")
-        self.drivePID = constants["DrivePIDValues"]
-        self.turnPID = constants["TurnPIDValues"]
+        self.driveConstants = constants["drivetrain"]
+        self.drivePID = self.driveConstants["DrivePIDValues"]
+        self.turnPID = self.driveConstants["TurnPIDValues"]
+        conversions = constants["Conversions"]
+        self.driveConversions = conversions["Drive"]
+        self.turnConversions = conversions["Turn"]
 
         # motors
         self.driveMotor = CANSparkMax(
@@ -34,47 +39,85 @@ class SwerveModule:
             turnChannel, CANSparkMaxLowLevel.MotorType.kBrushless
         )
 
+        # factory reset so we know whats been done to them
+        self.driveMotor.restoreFactoryDefaults()
+        self.turnMotor.restoreFactoryDefaults()
+
         # encoders
         self.driveEncoder = self.driveMotor.getEncoder()
-        self.turnEncoder = self.turnMotor.getEncoder()
+        self.turnEncoder = self.turnMotor.getAbsoluteEncoder(
+            SparkMaxAbsoluteEncoder.Type.kDutyCycle
+        )
+
+        # converting units to meters and meters per second to better work with WPILib's swerve APIs
+        self.driveEncoder.setPositionConversionFactor(
+            self.driveConversions["MotorPositionFactor"]
+        )
+        self.driveEncoder.setVelocityConversionFactor(
+            self.driveConversions["EncoderVelocityFactor"]
+        )
+
+        self.turnEncoder.setPositionConversionFactor(
+            self.turnConversions["EncoderPositionFactor"]
+        )
+        self.turnEncoder.setVelocityConversionFactor(
+            self.turnConversions["EncoderVelocityFactor"]
+        )
+
+        # we may need to invert the turning encoder
+        # self.turnEncoder.setInverted(True)
 
         # PID
         self.drivePIDController = self.driveMotor.getPIDController()
         self.turnPIDController = self.turnMotor.getPIDController()
 
+        self.drivePIDController.setFeedbackDevice(self.driveEncoder)
+        self.turnPIDController.setFeedbackDevice(self.turnEncoder)
+
         self.drivePIDController.setP(self.drivePID["P"])
         self.drivePIDController.setI(self.drivePID["I"])
         self.drivePIDController.setD(self.drivePID["D"])
         self.drivePIDController.setFF(self.drivePID["FF"])
+        self.drivePIDController.setOutputRange(
+            self.drivePID["MinOutput"], self.drivePID["MaxOutput"]
+        )
 
         self.turnPIDController.setP(self.turnPID["P"])
         self.turnPIDController.setI(self.turnPID["I"])
         self.turnPIDController.setD(self.turnPID["D"])
         self.turnPIDController.setFF(self.turnPID["FF"])
+        self.turnPIDController.setOutputRange(
+            self.turnPID["MinOutput"], self.turnPID["MaxOutput"]
+        )
 
-    # based on rev, be skeptical
-    def zeroEncoders(self):
-        """
-        sets the ecoder pos to zero
-        maybe
-        """
-        # this may be the wrong encoder
-        self.turnEncoder.setPosition(0)
+        # this should fix it spinning from 359 to zero the long way
+        self.turnPIDController.setPositionPIDWrappingEnabled(True)
+        self.turnPIDController.setPositionPIDWrappingMinInput(
+            self.turnConversions["EncoderPositionPIDMinInput"]
+        )
+        self.turnPIDController.setPositionPIDWrappingMaxInput(
+            self.turnConversions["EncoderPositionPIDMaxInput"]
+        )
 
-    #
+        # defining idle modes
+        self.driveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake)
+        self.turnMotor.setIdleMode(CANSparkMax.IdleMode.kBrake)
 
-    def gotoZero(self):
-        """
-        remember how much this sucked
-        last year, zero's serve maybe
-        """
-        if not self.zero:
-            if self.turnEncoder.getPosition() != 0:
-                self.steer_motor.set(0.165)  # CHANGEME
+        # setting limits
+        self.driveMotor.setSmartCurrentLimit(
+            self.driveConstants["DriveMotorCurrentLimt"]
+        )
+        self.turnMotor.setSmartCurrentLimit(self.driveConstants["TurnMotorCurrentLimt"])
 
-            else:
-                self.turnEncoder.setPosition(0)
-                self.zero = True
+        # save config, to ensure config says after brown outs
+        self.driveMotor.burnFlash()
+        self.turnMotor.burnFlash()
 
-        else:
-            self.turnEncoder.setPosition(0)
+        # Misc
+        self.chassisAngularOffset = 0
+        self.chassisAngularOffset = chassisAngularOffset
+
+        self.desiredState = SwerveModuleState(0.0, Rotation2d())
+        self.desiredState.angle = Rotation2d(self.turnEncoder.getPosition())
+
+        self.driveEncoder.setPosition(0)
