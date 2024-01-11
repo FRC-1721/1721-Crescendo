@@ -126,3 +126,15 @@ class SwerveModule:
 
         # misc
         self.driveEncoder.setPosition(0)
+
+    def getState(self) -> SwerveModuleState:
+        """
+        returns the current state
+        this is all relative to the chassis
+        """
+
+        # applies angular offset of chassis to encoder position to get a final position
+        return SwerveModuleState(
+            self.driveEncoder.getVelocity(),
+            Rotation2d(self.turnEncoder.getPosition() - self.chassisAngularOffset),
+        )
