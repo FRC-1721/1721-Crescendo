@@ -1,7 +1,7 @@
 from rev import CANSparkMax, CANSparkMaxLowLevel, SparkMaxAbsoluteEncoder
 from constants.constants import getConstants
 from wpilib import DutyCycleEncoder
-from wpimath.kinematics import SwerveModuleState
+from wpimath.kinematics import SwerveModuleState, SwerveModulePosition
 from wpimath.geometry import Rotation2d
 
 
@@ -136,5 +136,17 @@ class SwerveModule:
         # applies angular offset of chassis to encoder position to get a final position
         return SwerveModuleState(
             self.driveEncoder.getVelocity(),
+            Rotation2d(self.turnEncoder.getPosition() - self.chassisAngularOffset),
+        )
+
+    def getPosition(self) -> SwerveModulePosition:
+        """
+        returns the position
+        this is all relative to the chassis
+        """
+
+        # applies angular offset of chassis to encoder position to get a final position
+        return SwerveModulePosition(
+            self.driveEncoder.getPosition(),
             Rotation2d(self.turnEncoder.getPosition() - self.chassisAngularOffset),
         )
