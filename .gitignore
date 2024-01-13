@@ -166,5 +166,9 @@ cython_debug/
 # Joe's not sure what this is for, put it back in the tree only if needed.
 networktables.json
 
-node_modules/
+# ===========
+# Dashboard
+# ===========
+
 .parcel-cache/
+node_modules/
