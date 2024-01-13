@@ -16,6 +16,9 @@ help: # List all commands and their descriptions
 
 build: # Run `parcel build' and insert all missing values
 	npm run build
+	sed -i -e 's/<p><\/p>/<script src="\/networktables\/networktables.js"><\/script><p><\/p>/g' dist/index.html
+	sed -i -e 's/<p><\/p>/<script src="\/networktables\/utils.js"><\/script><p><\/p>/g' dist/index.html
+	sed -i -e 's/<p><\/p>/<script src="\/networktables\/camera.js"><\/script>/g' dist/index.html
 run: # Run a live server of the dashboard
 	npm run run
 dev: # Automatically run `make build' whenever a file changes in src/ (requires program `entr')
@@ -23,11 +26,11 @@ dev: # Automatically run `make build' whenever a file changes in src/ (requires 
 clean: # Run `git clean -fdX
 	git clean -fdX
 stage: # Prepares dist/ for deployment
-	build
+	make build
 	cp entrypoint.sh $(STAGEDIR)
 	cp run.bat $(STAGEDIR)
 deploy: # Use scp to deploy the new files to the nuc
-	stage
+	make stage
 	@echo "═══════════════════════════════════════════════════════════════════════════════════════"
 	@echo "When prompted for a password, type 'dash' and press enter."
 	@echo "═══════════════════════════════════════════════════════════════════════════════════════"
