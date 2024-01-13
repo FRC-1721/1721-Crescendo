@@ -1,18 +1,13 @@
+#
+# Copyright (c) FIRST and other WPILib contributors.
+# Open Source Software; you can modify and/or share it under the terms of
+# the WPILib BSD license file in the root directory of this project.
+#
+
 """
-This module provides pyfrc tests useful for almost any robot.
-use `python -m robotpy test` to run
+    This test module imports tests that come with pyfrc, and can be used
+    to test basic functionality of just about any robot.
 """
 
 from pyfrc.tests import *
-
-# Testable modules
-from constants.constants import getConstants
-from subsystems.drivesubsystem import DriveSubsystem
-
-
-def test_yaml():
-    assert len(getConstants("robot_controls")) > 0
-
-
-def test_nothing():
-    assert True  # Tests if true is true!
+from magicbot.magicbot_tests import *
