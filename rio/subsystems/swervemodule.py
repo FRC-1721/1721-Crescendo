@@ -13,9 +13,13 @@ class SwerveModule:
         """
         A Swerve Module
         """
-        constants = getConstants("robot_hardware")
-        self.driveconsts = constants["driveTrain"]
-        self.pidConsts = constants["PID"]
+        # constants
+        # hardware
+        hardwareConstants = getConstants("robot_hardware")
+        self.driveconsts = hardwareConstants["driveTrain"]
+
+        # PID
+        self.pidConsts = getConstants("robot_pid")["PID"]
 
         self.chassisAngularOffset = 0
         self.desiredState = SwerveModuleState(0.0, Rotation2d())

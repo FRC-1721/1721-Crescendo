@@ -79,7 +79,7 @@ class RobotContainer:
         # Create config for trajectory
         config = TrajectoryConfig(
             self.autoConst["maxSpeedMetersPerSecond"],
-            self.autoConst["maxSpeedMetersPerSecondSquared"],
+            self.autoConst["maxAccelerationMetersPerSecondSquared"],
         )
         # ensure max speed is obeyed
         config.setKinematics(DriveConstants.driveKinematics)

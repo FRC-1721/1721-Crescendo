@@ -48,10 +48,14 @@ class DriveConstants:
 
 
 class ModuleConstants:
-    constants = getConstants("robot_hardware")
-    drivetrain = constants["driveTrain"]
-    NeoMotor = constants["NeoMotor"]
-    pid = constants["PID"]
+    # constants
+    # hardware
+    hardwareConstants = getConstants("robot_hardware")
+    drivetrain = hardwareConstants["driveTrain"]
+    NeoMotor = hardwareConstants["NeoMotor"]
+
+    # pids
+    pid = getConstants("robot_pid")["PID"]
 
     driveMotorPinionTeeth = drivetrain["driveMotorPinionTeeth"]
 

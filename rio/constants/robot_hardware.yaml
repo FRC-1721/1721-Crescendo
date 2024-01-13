@@ -68,22 +68,5 @@ driveTrain:
       EncoderReversed: False       # Updated Never by Nobody
       Inverted: False              # Updated Never by Nobody
 
-PID:
-  turnEncoderPositionPIDMinInput: 0
-
-  driveP: 0.04
-  driveI: 0
-  driveD: 0
-  driveFF: 1
-  driveMinOutput: -1
-  driveMaxOutput: 1
-
-  turnP: 1
-  turnI: 0
-  turnD: 0
-  turnFF: 0
-  turnMinOutput: -1
-  turnMaxOutput: 1
-
 NeoMotor:
   FreeSpeedRpm: 5676
