@@ -1,7 +1,7 @@
 # commands
 import commands2
 
-from commands2 import cmd
+from commands2 import cmd, swerveControllerCommand
 
 # wpilib
 import wpimath
@@ -103,7 +103,7 @@ class RobotContainer:
         )
         thetaController.enableContinuousInput(-math.pi, math.pi)
 
-        swerveControllerCommand = commands2.SwerveControllerCommand(
+        swerveControllerCommand = commands2.swerveControllerCommand(
             exampleTrajectory,
             self.robotDrive.getPose(),
             DriveConstants.driveKinematics,
