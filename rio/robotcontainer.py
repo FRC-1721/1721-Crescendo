@@ -1,7 +1,7 @@
 # commands
 import commands2
 
-from commands2 import cmd, swerveControllerCommand
+from commands2 import cmd
 
 # wpilib
 import wpimath
@@ -17,6 +17,9 @@ from subsystems.drivesubsystem import DriveSubsystem
 # constants
 from constants.mathConstant import AutoConstants, DriveConstants
 from constants.constants import getConstants
+
+# yes its the enitire ottoman empire
+from ottomanEmpire.bursa.swervecontrollercommand import SwerveControllerCommand
 
 # misc
 import math
@@ -103,7 +106,7 @@ class RobotContainer:
         )
         thetaController.enableContinuousInput(-math.pi, math.pi)
 
-        swerveControllerCommand = commands2.swerveControllerCommand(
+        swerveControllerCommand = SwerveControllerCommand(
             exampleTrajectory,
             self.robotDrive.getPose(),
             DriveConstants.driveKinematics,
