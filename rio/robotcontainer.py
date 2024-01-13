@@ -19,7 +19,7 @@ from constants.mathConstant import AutoConstants, DriveConstants
 from constants.constants import getConstants
 
 # yes its the enitire ottoman empire
-from ottomanEmpire.bursa.swervecontrollercommand import SwerveControllerCommand
+from ottomanempire.commands2.swervecontrollercommand import SwerveControllerCommand
 
 # misc
 import math
