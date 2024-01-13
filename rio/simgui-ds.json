@@ -1,39 +1,28 @@
 {
-  "System Joysticks": {
-    "window": {
-      "visible": false
-    }
-  },
   "keyboardJoysticks": [
     {
       "axisConfig": [
         {
-          "decKey": 69,
-          "decayRate": 0.0,
-          "incKey": 82,
-          "keyRate": 0.009999999776482582
+          "decKey": 65,
+          "incKey": 68
         },
         {
           "decKey": 87,
           "incKey": 83
         },
         {
-          "decKey": 65,
-          "incKey": 68
+          "decKey": 69,
+          "decayRate": 0.0,
+          "incKey": 82,
+          "keyRate": 0.009999999776482582
         }
       ],
       "axisCount": 3,
-      "buttonCount": 10,
+      "buttonCount": 4,
       "buttonKeys": [
         90,
         88,
         67,
-        86,
-        86,
-        86,
-        86,
-        86,
-        86,
         86
       ],
       "povConfig": [
@@ -53,43 +42,21 @@
     {
       "axisConfig": [
         {
-          "decKey": 263,
-          "incKey": 262
+          "decKey": 74,
+          "incKey": 76
         },
         {
-          "decKey": 265,
-          "incKey": 264
-        },
-        {
-          "decKey": 265,
-          "incKey": 264
-        },
-        {
-          "decKey": 265,
-          "incKey": 264
-        },
-        {
-          "decKey": 265,
-          "incKey": 264
-        },
-        {
-          "decKey": 265,
-          "incKey": 264
+          "decKey": 73,
+          "incKey": 75
         }
       ],
-      "axisCount": 6,
-      "buttonCount": 10,
+      "axisCount": 2,
+      "buttonCount": 4,
       "buttonKeys": [
         77,
         44,
         46,
-        47,
-        86,
-        86,
-        86,
-        86,
-        86,
-        86
+        47
       ],
       "povCount": 0
     },
@@ -120,16 +87,6 @@
       "axisCount": 0,
       "buttonCount": 0,
       "povCount": 0
-    }
-  ],
-  "robotJoysticks": [
-    {
-      "guid": "Keyboard0",
-      "name": "Driver Joystick"
-    },
-    {
-      "guid": "Keyboard1",
-      "name": "Operator Stick"
     }
   ]
 }
