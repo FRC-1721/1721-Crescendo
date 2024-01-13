@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-pynetworktables2js = "*"
+pynetworktables2js = {ref = "refs/pull/45/head", git = "git+https://github.com/robotpy/pynetworktables2js.git"}
 
 [dev-packages]
 
