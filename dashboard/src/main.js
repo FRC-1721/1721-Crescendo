@@ -51,7 +51,7 @@ function onValueChanged(key, value, isNew) {
     // the NetworkTables.keyToId() function to convert them appropriately
 
     if (isNew) {
-        var tr = $('<div class="table-info"></div>').appendTo($("body"));
+        var tr = $('<div class="table-info"></div>').appendTo($("#nt-table"));
         $('<div class="table-label"></div>').text(key).appendTo(tr);
         $('<div class="table-area"></div>')
             .attr("id", NetworkTables.keyToId(key))

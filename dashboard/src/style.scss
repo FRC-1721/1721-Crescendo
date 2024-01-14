@@ -3,6 +3,19 @@
     src: url("asset/FiraCodeNerdFontPropo-Retina.ttf") format("truetype");
 }
 
+html,
+body {
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+html {
+    transform-origin: center;
+    transform: scale(0.65) rotate(30deg);
+}
+
 * {
     font-family: "FiraCode Nerd Font";
     color: #ebdbb2;
@@ -11,15 +24,31 @@
 
 body {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     background-color: #282828;
 }
 
-main {
-
+.cameras {
+    background: #1d2021;
 }
 
-.cameras {
+#nt-table {
+    .table-info {
+        display: flex;
+        flex-direction: row;
+        .table-label {
+            flex: 1;
+        }
+        .table-area {
+            flex: 2;
+        }
+    }
+}
+
+main {
     height: 100%;
-    background: #1d2021;
+    overflow-y: scroll;
+    background: #ff0000;
+    margin: 0.5rem;
+    padding: 0.5rem;
 }
