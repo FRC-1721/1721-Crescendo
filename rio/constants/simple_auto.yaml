@@ -1,0 +1,7 @@
+auto:
+  kMaxSpeedMetersPerSecond: 3
+  kMaxAccelerationMetersPerSecondSquared: 3
+
+  kPXController: 1
+  kPYController: 1
+  kPThetaController: 1

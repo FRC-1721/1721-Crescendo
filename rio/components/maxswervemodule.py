@@ -2,7 +2,8 @@ from rev import CANSparkMax, SparkMaxAbsoluteEncoder
 from wpimath.geometry import Rotation2d
 from wpimath.kinematics import SwerveModuleState, SwerveModulePosition
 
-from constants.constants import ModuleConstants
+from constants.complexConstants import ModuleConstants
+from constants.getConstants import getConstants
 
 
 class MAXSwerveModule:
@@ -14,6 +15,13 @@ class MAXSwerveModule:
         MAXSwerve Module built with NEOs, SPARKS MAX, and a Through Bore
         Encoder.
         """
+        # hardware constants
+        hardwareconstants = getConstants("simple_hardware")
+        self.moduleConsts = hardwareconstants["module"]
+
+        # pid constants
+        pidconstants = getConstants("simple_pid")
+        self.pidConsts = pidconstants["PID"]
 
         self.chassisAngularOffset = 0
         self.desiredState = SwerveModuleState(0.0, Rotation2d())
@@ -62,7 +70,7 @@ class MAXSwerveModule:
 
         # Invert the turning encoder, since the output shaft rotates in the opposite direction of
         # the steering motor in the MAXSwerve Module.
-        self.turningEncoder.setInverted(ModuleConstants.kTurningEncoderInverted)
+        self.turningEncoder.setInverted(self.moduleConsts["kTurningEncoderInverted"])
 
         # Enable PID wrap around for the turning motor. This will allow the PID
         # controller to go through 0 to get to the setpoint i.e. going from 350 degrees
@@ -70,7 +78,7 @@ class MAXSwerveModule:
         # longer route.
         self.turningPIDController.setPositionPIDWrappingEnabled(True)
         self.turningPIDController.setPositionPIDWrappingMinInput(
-            ModuleConstants.kTurningEncoderPositionPIDMinInput
+            self.pidConsts["kTurningEncoderPositionPIDMinInput"]
         )
         self.turningPIDController.setPositionPIDWrappingMaxInput(
             ModuleConstants.kTurningEncoderPositionPIDMaxInput
@@ -78,31 +86,31 @@ class MAXSwerveModule:
 
         # Set the PID gains for the driving motor. Note these are example gains, and you
         # may need to tune them for your own robot!
-        self.drivingPIDController.setP(ModuleConstants.kDrivingP)
-        self.drivingPIDController.setI(ModuleConstants.kDrivingI)
-        self.drivingPIDController.setD(ModuleConstants.kDrivingD)
+        self.drivingPIDController.setP(self.pidConsts["kDrivingP"])
+        self.drivingPIDController.setI(self.pidConsts["kDrivingI"])
+        self.drivingPIDController.setD(self.pidConsts["kDrivingD"])
         self.drivingPIDController.setFF(ModuleConstants.kDrivingFF)
         self.drivingPIDController.setOutputRange(
-            ModuleConstants.kDrivingMinOutput, ModuleConstants.kDrivingMaxOutput
+            self.pidConsts["kDrivingMinOutput"], self.pidConsts["kDrivingMaxOutput"]
         )
 
         # Set the PID gains for the turning motor. Note these are example gains, and you
         # may need to tune them for your own robot!
-        self.turningPIDController.setP(ModuleConstants.kTurningP)
-        self.turningPIDController.setI(ModuleConstants.kTurningI)
-        self.turningPIDController.setD(ModuleConstants.kTurningD)
-        self.turningPIDController.setFF(ModuleConstants.kTurningFF)
+        self.turningPIDController.setP(self.pidConsts["kTurningP"])
+        self.turningPIDController.setI(self.pidConsts["kTurningI"])
+        self.turningPIDController.setD(self.pidConsts["kTurningD"])
+        self.turningPIDController.setFF(self.pidConsts["kTurningFF"])
         self.turningPIDController.setOutputRange(
-            ModuleConstants.kTurningMinOutput, ModuleConstants.kTurningMaxOutput
+            self.pidConsts["kTurningMinOutput"], self.pidConsts["kTurningMaxOutput"]
         )
 
         self.drivingSparkMax.setIdleMode(ModuleConstants.kDrivingMotorIdleMode)
         self.turningSparkMax.setIdleMode(ModuleConstants.kTurningMotorIdleMode)
         self.drivingSparkMax.setSmartCurrentLimit(
-            ModuleConstants.kDrivingMotorCurrentLimit
+            self.moduleConsts["kDrivingMotorCurrentLimit"]
         )
         self.turningSparkMax.setSmartCurrentLimit(
-            ModuleConstants.kTurningMotorCurrentLimit
+            self.moduleConsts["kTurningMotorCurrentLimit"]
         )
 
         # Save the SPARK MAX configurations. If a SPARK MAX browns out during

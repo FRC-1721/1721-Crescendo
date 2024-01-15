@@ -64,9 +64,14 @@
       "axisCount": 0,
       "buttonCount": 0,
       "povCount": 0
+    },
+    {
+      "axisCount": 0,
+      "buttonCount": 0,
+      "povCount": 0
     }
   ],
-   "robotJoysticks": [
+  "robotJoysticks": [
     {
       "guid": "Keyboard0",
       "name": "Driver Joystick"

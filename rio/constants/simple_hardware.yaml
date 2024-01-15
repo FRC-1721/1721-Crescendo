@@ -1,0 +1,35 @@
+neo:
+  kFreeSpeedRpm: 5676
+
+drive:
+  kMaxSpeedMetersPerSecond: 4.8
+
+  kDirectionSlewRate: 1.2
+  kMagnitudeSlewRate: 1.8
+  kRotationalSlewRate: 2.0
+
+  kTrackWidth: 0.6731
+  kWheelBase: 0.6731
+
+  # SPARK MAX CAN IDs
+  kFrontLeftDrivingCanId: 11
+  kRearLeftDrivingCanId: 13
+  kFrontRightDrivingCanId: 15
+  kRearRightDrivingCanId: 17
+
+  kFrontLeftTurningCanId: 10
+  kRearLeftTurningCanId: 12
+  kFrontRightTurningCanId: 14
+  kRearRightTurningCanId: 16
+
+  kGyroReversed: False
+
+module:
+  kDrivingMotorPinionTeeth: 14
+
+  kTurningEncoderInverted: True
+
+  kWheelDiameterMeters: 0.0762
+
+  kDrivingMotorCurrentLimit: 50
+  kTurningMotorCurrentLimit: 20
