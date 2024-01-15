@@ -14,7 +14,7 @@ help: # List all commands and their descriptions
 	@cat Makefile | grep ': #' --color=never | sed '/^\t/d' | sed 's/: / /' | column -t -s '#'
 	@echo
 
-build: # Run `parcel build' and insert all missing values
+build: # Run `parcel build' and inject NetworkTables
 	npm run build
 	sed -i -e 's/<p><\/p>/<script src="\/networktables\/networktables.js"><\/script><p><\/p>/g' dist/index.html
 	sed -i -e 's/<p><\/p>/<script src="\/networktables\/utils.js"><\/script><p><\/p>/g' dist/index.html
@@ -26,6 +26,7 @@ dev: # Automatically run `make build' whenever a file changes in src/ (requires 
 clean: # Run `git clean -fdX
 	git clean -fdX
 stage: # Prepares dist/ for deployment
+	rm -r dist/
 	make build
 	cp entrypoint.sh $(STAGEDIR)
 	cp run.bat $(STAGEDIR)
@@ -41,3 +42,6 @@ deploy: # Use scp to deploy the new files to the nuc
 	# Restart
 	ssh dash@10.17.21.11 "sudo -S systemctl daemon-reload"
 	ssh dash@10.17.21.11 "sudo -S systemctl restart dashboard"
+zip: # Create zip file of dashboard contents
+	make stage
+	zip dashboard.zip dist/*
