@@ -3,37 +3,37 @@
     {
       "axisConfig": [
         {
-          "decKey": 263,
-          "incKey": 262
+          "decKey": 65,
+          "incKey": 81
         },
         {
-          "decKey": 265,
-          "incKey": 264
+          "decKey": 83,
+          "incKey": 87
         },
         {
-          "decKey": 265,
-          "incKey": 264
+          "decKey": 68,
+          "incKey": 69
         },
         {
-          "decKey": 265,
-          "incKey": 264
+          "decKey": 70,
+          "incKey": 82
         },
         {
-          "decKey": 265,
-          "incKey": 264
+          "decKey": 71,
+          "incKey": 84
         },
         {
-          "decKey": 265,
-          "incKey": 264
+          "decKey": 72,
+          "incKey": 89
         }
       ],
       "axisCount": 5,
       "buttonCount": 10,
       "buttonKeys": [
-        77,
-        44,
-        46,
-        47
+        90,
+        88,
+        67,
+        86
       ],
       "povCount": 0
     },
