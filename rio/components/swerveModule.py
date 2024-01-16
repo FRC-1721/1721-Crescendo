@@ -6,20 +6,20 @@ from constants.complexConstants import ModuleConstants
 from constants.getConstants import getConstants
 
 
-class MAXSwerveModule:
+class MikeSwerveModule:
     def __init__(
         self, drivingCANId: int, turningCANId: int, chassisAngularOffset: float
     ) -> None:
-        """Constructs a MAXSwerveModule and configures the driving and turning motor,
-        encoder, and PID controller. This configuration is specific to the REV
-        MAXSwerve Module built with NEOs, SPARKS MAX, and a Through Bore
-        Encoder.
         """
-        # hardware constants
-        hardwareconstants = getConstants("simple_hardware")
+        Construct a custom swerve module, this model is similar to a MAXSwerveModule but
+        using our custom construction.
+        """
+
+        # Hardware constants
+        hardwareconstants = getConstants("robotHardware")
         self.moduleConsts = hardwareconstants["module"]
 
-        # pid constants
+        # PID constants
         pidconstants = getConstants("simple_pid")
         self.pidConsts = pidconstants["PID"]
 

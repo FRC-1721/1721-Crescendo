@@ -1,0 +1,58 @@
+# There are four swerve modules that make up a drivetrain
+modules:
+  frontRight:
+    CANSteerID: 0 # Configured Never
+    CANDriveID: 1 # Configured Never
+    Pose: [1, 1] # Configured Never
+  frontLeft:
+    CANSteerID: 2 # Configured Never
+    CANDriveID: 3 # Configured Never
+    Pose: [-1, 1] # Configured Never
+  rearRight:
+    CANSteerID: 4 # Configured Never
+    CANDriveID: 5 # Configured Never
+    Pose: [1, -1] # Configured Never
+  rearLeft:
+    CANSteerID: 6 # Configured Never
+    CANDriveID: 7 # Configured Never
+    Pose: [-1, -1] # Configured Never
+
+# ============================
+# Old stuff joe isn't touching
+# ============================
+
+neo:
+  kFreeSpeedRpm: 5676
+
+drive:
+  kMaxSpeedMetersPerSecond: 4.8
+
+  kDirectionSlewRate: 1.2
+  kMagnitudeSlewRate: 1.8
+  kRotationalSlewRate: 2.0
+
+  kTrackWidth: 0.6731
+  kWheelBase: 0.6731
+
+  # SPARK MAX CAN IDs
+  kFrontLeftDrivingCanId: 11
+  kRearLeftDrivingCanId: 13
+  kFrontRightDrivingCanId: 15
+  kRearRightDrivingCanId: 17
+
+  kFrontLeftTurningCanId: 10
+  kRearLeftTurningCanId: 12
+  kFrontRightTurningCanId: 14
+  kRearRightTurningCanId: 16
+
+  kGyroReversed: False
+
+module:
+  kDrivingMotorPinionTeeth: 14
+
+  kTurningEncoderInverted: True
+
+  kWheelDiameterMeters: 0.0762
+
+  kDrivingMotorCurrentLimit: 50
+  kTurningMotorCurrentLimit: 20

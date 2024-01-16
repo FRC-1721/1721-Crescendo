@@ -5,7 +5,7 @@ import wpilib
 
 from commands2 import Subsystem
 from wpimath.filter import SlewRateLimiter
-from wpimath.geometry import Pose2d, Rotation2d
+from wpimath.geometry import Pose2d, Rotation2d, Translation2d
 from wpimath.kinematics import (
     ChassisSpeeds,
     SwerveModuleState,
@@ -15,7 +15,7 @@ from wpimath.kinematics import (
 from navx import AHRS
 from constants.complexConstants import DriveConstants
 import swerveutils
-from .maxswervemodule import MAXSwerveModule
+from .swerveModule import MikeSwerveModule
 
 from constants.getConstants import getConstants
 
@@ -23,30 +23,41 @@ from constants.getConstants import getConstants
 class DriveSubsystem(Subsystem):
     def __init__(self) -> None:
         super().__init__()
-        # hardware constants
-        hardwareconstants = getConstants("simple_hardware")
-        self.driveConsts = hardwareconstants["drive"]
+
+        # Get Hardware constants
+        hardwareConsts = getConstants("robotHardware")
+        # Get Swerve Modules
+        moduleConstants = hardwareConsts["modules"]
+
+        # Build constants (these are copied from old complexConstants.py)
+        modulePositions = []  # All the module positions
+        for module in moduleConstants:  # For every module in the moduleConstants list
+            # Create a translation2d that represents its pose
+            modulePositions.append(Translation2d(module["pose"][0], module["pose"][0]))
+
+        # Build the kinematics
+        kDriveKinematics = SwerveDrive4Kinematics(*modulePositions)
 
         # Create MAXSwerveModules
-        self.frontLeft = MAXSwerveModule(
+        self.frontLeft = MikeSwerveModule(
             self.driveConsts["kFrontLeftDrivingCanId"],
             self.driveConsts["kFrontLeftTurningCanId"],
             DriveConstants.kFrontLeftChassisAngularOffset,
         )
 
-        self.frontRight = MAXSwerveModule(
+        self.frontRight = MikeSwerveModule(
             self.driveConsts["kFrontRightDrivingCanId"],
             self.driveConsts["kFrontRightTurningCanId"],
             DriveConstants.kFrontRightChassisAngularOffset,
         )
 
-        self.rearLeft = MAXSwerveModule(
+        self.rearLeft = MikeSwerveModule(
             self.driveConsts["kRearLeftDrivingCanId"],
             self.driveConsts["kRearLeftTurningCanId"],
             DriveConstants.kBackLeftChassisAngularOffset,
         )
 
-        self.rearRight = MAXSwerveModule(
+        self.rearRight = MikeSwerveModule(
             self.driveConsts["kRearRightDrivingCanId"],
             self.driveConsts["kRearRightTurningCanId"],
             DriveConstants.kBackRightChassisAngularOffset,
