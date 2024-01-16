@@ -20,18 +20,40 @@ class UnnamedToaster(wpilib.TimedRobot):
     def robotInit(self) -> None:
         """Robot initialization function"""
         self.controller = wpilib.Joystick(0)
-        self.swerve = Drivetrain()
+        self.drivetrain = Drivetrain()
 
         # Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
         self.xspeedLimiter = wpimath.filter.SlewRateLimiter(3)
         self.yspeedLimiter = wpimath.filter.SlewRateLimiter(3)
         self.rotLimiter = wpimath.filter.SlewRateLimiter(3)
 
+    def disabledPeriodic(self) -> None:
+        """
+        Runs when the robot is in DISABLED mode.
+        """
+
+        # Run periodic tasks
+        self.drivetrain.periodic()
+
     def autonomousPeriodic(self) -> None:
+        """
+        Runs when the robot is in AUTONOMOUS mode.
+        """
+
         self.driveWithJoystick(False)
 
+        # Run periodic tasks
+        self.drivetrain.periodic()
+
     def teleopPeriodic(self) -> None:
+        """
+        Runs when the robot is in TELEOP mode.
+        """
+
         self.driveWithJoystick(True)
+
+        # Run periodic tasks
+        self.drivetrain.periodic()
 
     def driveWithJoystick(self, fieldRelative: bool) -> None:
         # Get the x speed. We are inverting this because Xbox controllers return
@@ -61,4 +83,4 @@ class UnnamedToaster(wpilib.TimedRobot):
             )  # TODO: What axis?! Make a controls.yaml!
         )
 
-        self.swerve.drive(xSpeed, ySpeed, rot, fieldRelative, self.getPeriod())
+        self.drivetrain.drive(xSpeed, ySpeed, rot, fieldRelative, self.getPeriod())

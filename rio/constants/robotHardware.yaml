@@ -56,6 +56,7 @@ drive:
   kDirectionSlewRate: 1.2
   kMagnitudeSlewRate: 1.8
   kRotationalSlewRate: 2.0
+  kMaxAngularSpeed: 4.0 # Configured Jan 16 by Joe (just a guess!)
 
   kTrackWidth: 0.6731
   kWheelBase: 0.6731
