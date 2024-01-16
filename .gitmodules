@@ -1,4 +1,0 @@
-[submodule "rio/ottomanempire"]
-	path = rio/ottomanempire
-	url = https://github.com/lospugs/robotpy-commands-v2.git
-	branch = swervecontrollercommand
