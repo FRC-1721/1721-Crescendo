@@ -1,7 +1,7 @@
 import math
 import typing
-
 import wpilib
+import logging
 
 from commands2 import Subsystem
 from wpimath.filter import SlewRateLimiter
@@ -13,54 +13,60 @@ from wpimath.kinematics import (
     SwerveDrive4Odometry,
 )
 from navx import AHRS
-from constants.complexConstants import DriveConstants
+
+# from constants.complexConstants import DriveConstants
 import swerveutils
-from .swerveModule import MikeSwerveModule
+from .mikeSwerveModule import MikeSwerveModule
 
 from constants.getConstants import getConstants
 
 
-class DriveSubsystem(Subsystem):
+class Drivetrain:
     def __init__(self) -> None:
         super().__init__()
 
         # Get Hardware constants
         hardwareConsts = getConstants("robotHardware")
+
+        # Get Swerve constants
+        serveConstants = hardwareConsts["swerve"]
+
+        # Get Drive constants
+        driveConstants = hardwareConsts["drive"]
+
         # Get Swerve Modules
-        moduleConstants = hardwareConsts["modules"]
+        moduleConstants = serveConstants["modules"]
 
         # Build constants (these are copied from old complexConstants.py)
         modulePositions = []  # All the module positions
         for module in moduleConstants:  # For every module in the moduleConstants list
             # Create a translation2d that represents its pose
-            modulePositions.append(Translation2d(module["pose"][0], module["pose"][0]))
+            modulePositions.append(
+                Translation2d(
+                    moduleConstants[module]["Pose"][0],
+                    moduleConstants[module]["Pose"][1],
+                )
+            )
 
         # Build the kinematics
         kDriveKinematics = SwerveDrive4Kinematics(*modulePositions)
 
-        # Create MAXSwerveModules
+        # Create Swerve Modules
         self.frontLeft = MikeSwerveModule(
-            self.driveConsts["kFrontLeftDrivingCanId"],
-            self.driveConsts["kFrontLeftTurningCanId"],
-            DriveConstants.kFrontLeftChassisAngularOffset,
+            serveConstants,
+            moduleConstants["frontLeft"],
         )
-
         self.frontRight = MikeSwerveModule(
-            self.driveConsts["kFrontRightDrivingCanId"],
-            self.driveConsts["kFrontRightTurningCanId"],
-            DriveConstants.kFrontRightChassisAngularOffset,
+            serveConstants,
+            moduleConstants["frontRight"],
         )
-
         self.rearLeft = MikeSwerveModule(
-            self.driveConsts["kRearLeftDrivingCanId"],
-            self.driveConsts["kRearLeftTurningCanId"],
-            DriveConstants.kBackLeftChassisAngularOffset,
+            serveConstants,
+            moduleConstants["rearLeft"],
         )
-
         self.rearRight = MikeSwerveModule(
-            self.driveConsts["kRearRightDrivingCanId"],
-            self.driveConsts["kRearRightTurningCanId"],
-            DriveConstants.kBackRightChassisAngularOffset,
+            serveConstants,
+            moduleConstants["rearRight"],
         )
 
         # The gyro sensor
@@ -71,13 +77,13 @@ class DriveSubsystem(Subsystem):
         self.currentTranslationDir = 0.0
         self.currentTranslationMag = 0.0
 
-        self.magLimiter = SlewRateLimiter(self.driveConsts["kMagnitudeSlewRate"])
-        self.rotLimiter = SlewRateLimiter(self.driveConsts["kRotationalSlewRate"])
+        self.magLimiter = SlewRateLimiter(driveConstants["kMagnitudeSlewRate"])
+        self.rotLimiter = SlewRateLimiter(driveConstants["kRotationalSlewRate"])
         self.prevTime = wpilib.Timer.getFPGATimestamp()
 
         # Odometry class for tracking robot pose
         self.odometry = SwerveDrive4Odometry(
-            DriveConstants.kDriveKinematics,
+            kDriveKinematics,
             Rotation2d.fromDegrees(self.gyro.getAngle()),
             (
                 self.frontLeft.getPosition(),
