@@ -21,11 +21,23 @@ def getConstants(identifier):
     else:
         path = "constants/"
 
+    retries = 3
+
     try:
-        # Try opening requested .yaml
-        with open(f"{path}{identifier}.yaml", "r") as yamlFile:
-            # Use yaml.safe_load to load the yaml into a dict
-            constants = yaml.safe_load(yamlFile)
+        while retries > 0:
+            try:
+                # Try opening requested .yaml
+                with open(f"{path}{identifier}.yaml", "r") as yamlFile:
+                    # Use yaml.safe_load to load the yaml into a dict
+                    constants = yaml.safe_load(yamlFile)
+            except FileNotFoundError as e:
+                logging.info(
+                    f"File {identifier} not found, currently in {os.getcwd()}, trying alternative locations..."
+                )
+                path = os.getcwd().replace("tests", "constants")
+                retries -= 1
+                continue  # Retry loop
+            break
     except FileNotFoundError as e:
         # If the file is not found, report it!
         logging.error(f"{identifier} config not found!")

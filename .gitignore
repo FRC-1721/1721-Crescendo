@@ -165,3 +165,6 @@ cython_debug/
 
 # Joe's not sure what this is for, put it back in the tree only if needed.
 networktables.json
+
+# Add to tree but only when neccicary (adding a map or smthn)
+simgui-window.json
