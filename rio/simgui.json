@@ -1,10 +1,52 @@
 {
+  "HALProvider": {
+    "Other Devices": {
+      "SPARK MAX [2]": {
+        "header": {
+          "open": true
+        }
+      }
+    }
+  },
   "NTProvider": {
     "types": {
-      "/FMSInfo": "FMSInfo"
+      "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Field": "Field2d"
+    }
+  },
+  "NetworkTables": {
+    "transitory": {
+      "SmartDashboard": {
+        "Audio": {
+          "open": true
+        },
+        "Swerve": {
+          "open": true
+        },
+        "open": true
+      }
     }
   },
   "NetworkTables Info": {
+    "Clients": {
+      "open": true
+    },
+    "Connections": {
+      "open": true
+    },
     "visible": true
+  },
+  "Window": {
+    "/SmartDashboard/Autonomous": {
+      "window": {
+        "visible": true
+      }
+    },
+    "/SmartDashboard/Field": {
+      "image": "../dashboard/src/assets/field.png",
+      "window": {
+        "visible": true
+      }
+    }
   }
 }

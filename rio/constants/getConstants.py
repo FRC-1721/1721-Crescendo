@@ -32,9 +32,9 @@ def getConstants(identifier):
                     constants = yaml.safe_load(yamlFile)
             except FileNotFoundError as e:
                 logging.info(
-                    f"File {identifier} not found, currently in {os.getcwd()}, trying alternative locations..."
+                    f"File {identifier} not found, currently in {os.getcwd()}, trying alternative locations... {retries} left. Trying to load path {path}{identifier}.yaml"
                 )
-                path = os.getcwd().replace("tests", "constants")
+                path = os.getcwd().replace("tests", "constants/")
                 retries -= 1
                 continue  # Retry loop
             break
