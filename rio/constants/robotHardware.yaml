@@ -22,6 +22,20 @@ swerve:
       Pose: [1, -1] # Configured Never by Nobody
   # General constants all modules share
 
+  kDrivingP: 0
+  kDrivingI: 0
+  kDrivingD: 0
+  kDrivingFF: 0 # Was configured in complexConstants.py, might need to do that again!
+  kDrivingMinOutput: -1
+  kDrivingMaxOutput: 1
+
+  kTurningP: 2.65
+  kTurningI: 0.012
+  kTurningD: 1.5
+  kTurningFF: 0
+  kTurningMinOutput: -1
+  kTurningMaxOutput: 1
+
   # These are important translation factors to convert native units to m/s, do not leave at 1!
   drivePosConversionFactor: 1 # Drive motor conversion factor (position)
   driveVelConversionFactor: 1 # Drive motor conversion factor (velocity)
