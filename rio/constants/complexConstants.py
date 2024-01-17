@@ -50,9 +50,7 @@ class ModuleConstants:
 
     kWheelCircumferenceMeters = moduleConsts["kWheelDiameterMeters"] * math.pi
     # 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15 teeth on the bevel pinion
-    kDrivingMotorReduction = (45.0 * 22) / (
-        moduleConsts["kDrivingMotorPinionTeeth"] * 15
-    )
+    kDrivingMotorReduction = (60 * 34) / (moduleConsts["kDrivingMotorPinionTeeth"] * 15)
     kDriveWheelFreeSpeedRps = (
         kDrivingMotorFreeSpeedRps * kWheelCircumferenceMeters
     ) / kDrivingMotorReduction

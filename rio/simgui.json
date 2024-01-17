@@ -1,13 +1,4 @@
 {
-  "HALProvider": {
-    "Other Devices": {
-      "SPARK MAX [2]": {
-        "header": {
-          "open": true
-        }
-      }
-    }
-  },
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
@@ -33,8 +24,10 @@
     },
     "Connections": {
       "open": true
-    },
-    "visible": true
+    }
+  },
+  "NetworkTables View": {
+    "visible": false
   },
   "Window": {
     "/SmartDashboard/Autonomous": {

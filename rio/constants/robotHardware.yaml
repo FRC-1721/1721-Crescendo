@@ -5,14 +5,17 @@ swerve:
       CANSteerID: 2 # Configured Never by Nobody
       CANDriveID: 3 # Configured Never by Nobody
       Pose: [-1, 1] # Configured Never by Nobody
+
     frontRight:
       CANSteerID: 0 # Configured Never by Nobody
       CANDriveID: 1 # Configured Never by Nobody
       Pose: [1, 1] # Configured Never by Nobody
+    
     rearLeft:
       CANSteerID: 6 # Configured Never by Nobody
       CANDriveID: 7 # Configured Never by Nobody
       Pose: [-1, -1] # Configured Never by Nobody
+    
     rearRight:
       CANSteerID: 4 # Configured Never by Nobody
       CANDriveID: 5 # Configured Never by Nobody
@@ -25,40 +28,28 @@ swerve:
   steerPosConversionFactor: 1 # Drive motor conversion factor (position)
   steerVelConversionFactor: 1 # Drive motor conversion factor (velocity)
 
-  kWheelDiameterMeters: 0.0762 # Configured Never by Nobody
+  kWheelDiameterMeters: 0.09525 # Configured 1/17 by Keegan
 
   # Swerve PID
   minimumPIDInput: 5 # Configured Jan 16 by Joe
 
-  kDrivingP: 0
-  kDrivingI: 0
-  kDrivingD: 0
-  kDrivingFF: 0 # Was configured in complexConstants.py, might need to do that again!
-  kDrivingMinOutput: -1
-  kDrivingMaxOutput: 1
+  kDrivingMotorCurrentLimit: 150 # Configured Never by Nobody
+  kTurningMotorCurrentLimit: 50  # Configured Never by Nobody
 
-  kTurningP: 2.65
-  kTurningI: 0.012
-  kTurningD: 1.5
-  kTurningFF: 0
-  kTurningMinOutput: -1
-  kTurningMaxOutput: 1
-
-  kDrivingMotorCurrentLimit: 150
-  kTurningMotorCurrentLimit: 50
+  kDrivingMotorPinionTeeth: 17
 
 neo:
-  kFreeSpeedRpm: 5676
+  kFreeSpeedRpm: 5676 # Configured Never by Nobody
 
 drive:
-  kMaxSpeedMetersPerSecond: 4.8
+  kMaxSpeedMetersPerSecond: 4.8 # Configured Never by Nobody
 
-  kDirectionSlewRate: 1.2
-  kMagnitudeSlewRate: 1.8
-  kRotationalSlewRate: 2.0
-  kMaxAngularSpeed: 4.0 # Configured Jan 16 by Joe (just a guess!)
+  kDirectionSlewRate: 1.2  # Configured Never by Nobody
+  kMagnitudeSlewRate: 1.8  # Configured Never by Nobody
+  kRotationalSlewRate: 2.0 # Configured Never by Nobody
+  kMaxAngularSpeed: 4.0    # Configured Jan 16 by Joe (just a guess!)
 
-  kTrackWidth: 0.6731
-  kWheelBase: 0.6731
+  kTrackWidth: 0.0254 # Configured Never by Nobody
+  kWheelBase: 0.51425  # Configured Never by Nobody
 
-  kGyroReversed: False
+  kGyroReversed: False # Configured Never by Nobody

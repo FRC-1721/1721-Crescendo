@@ -1,19 +1,19 @@
 PID:
-  kTurningEncoderPositionPIDMinInput: 0
+  kTurningEncoderPositionPIDMinInput: 0 # Configured Never by Nobody
   # kTurningEncoderPositionPIDMaxInput in complexConstants.py
 
-  kDrivingP: 0
-  kDrivingI: 0
-  kDrivingD: 0
-  # kDriveingFF in complexConstants.py
+  kDrivingP: 0 # Configured Never by Nobody
+  kDrivingI: 0 # Configured Never by Nobody
+  kDrivingD: 0 # Configured Never by Nobody
+  kDrivingFF: 0 # Was configured in complexConstants.py, might need to do that again!
 
-  kDrivingMinOutput: -1
-  kDrivingMaxOutput: 1
+  kDrivingMinOutput: -1 # Configured Never by Nobody
+  kDrivingMaxOutput: 1  # Configured Never by Nobody
 
-  kTurningP: 2.65
-  kTurningI: 0.012
-  kTurningD: 1.5
-  kTurningFF: 0
+  kTurningP: 2.65  # Configured Never by Nobody
+  kTurningI: 0.012 # Configured Never by Nobody
+  kTurningD: 1.5   # Configured Never by Nobody
+  kTurningFF: 0    # Configured Never by Nobody
 
-  kTurningMinOutput: -1
-  kTurningMaxOutput: 1
+  kTurningMinOutput: -1 # Configured Never by Nobody
+  kTurningMaxOutput: 1  # Configured Never by Nobody

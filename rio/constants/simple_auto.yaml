@@ -1,7 +1,7 @@
 auto:
-  kMaxSpeedMetersPerSecond: 3
-  kMaxAccelerationMetersPerSecondSquared: 3
+  kMaxSpeedMetersPerSecond: 3               # Configured Never by Nobody
+  kMaxAccelerationMetersPerSecondSquared: 3 # Configured Never by Nobody
 
-  kPXController: 1
-  kPYController: 1
-  kPThetaController: 1
+  kPXController: 1     # Configured Never by Nobody
+  kPYController: 1     # Configured Never by Nobody
+  kPThetaController: 1 # Configured Never by Nobody
