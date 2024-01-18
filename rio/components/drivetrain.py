@@ -3,7 +3,6 @@ import typing
 import wpilib
 import logging
 
-from commands2 import Subsystem
 from wpilib import Field2d, DriverStation
 from wpimath.filter import SlewRateLimiter
 from wpimath.geometry import Pose2d, Rotation2d, Translation2d
