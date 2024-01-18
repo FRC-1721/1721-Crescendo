@@ -37,10 +37,10 @@ test:	## Run automated tests
 	python -m robotpy test
 
 download-python:	## Download python (for robot)
-	robotpy-installer download-python
+	python -m robotpy installer download-python
 
 install-python:	## Install python (for robot)
-	robotpy-installer install-python
+	python -m robotpy installer install-python
 
 clean:	## Clean the repo
 	git clean -fdX
