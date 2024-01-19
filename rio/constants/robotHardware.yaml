@@ -2,39 +2,39 @@
 swerve:
   modules:
     frontLeft:
-      CANSteerID: 2 # Configured Never by Nobody
-      CANDriveID: 3 # Configured Never by Nobody
+      CANSteerID: 2 # Configured 1/19 by Keegan
+      CANDriveID: 1 # Configured 1/19 by Keegan
       Pose: [-1, 1] # Configured Never by Nobody
 
     frontRight:
-      CANSteerID: 0 # Configured Never by Nobody
-      CANDriveID: 1 # Configured Never by Nobody
+      CANSteerID: 6 # Configured 1/19 by Keegan
+      CANDriveID: 5 # Configured 1/19 by Keegan
       Pose: [1, 1] # Configured Never by Nobody
     
     rearLeft:
-      CANSteerID: 6 # Configured Never by Nobody
-      CANDriveID: 7 # Configured Never by Nobody
+      CANSteerID: 4 # Configured 1/19 by Keegan
+      CANDriveID: 3 # Configured 1/19 by Keegan
       Pose: [-1, -1] # Configured Never by Nobody
     
     rearRight:
-      CANSteerID: 4 # Configured Never by Nobody
-      CANDriveID: 5 # Configured Never by Nobody
+      CANSteerID: 8 # Configured 1/19 by Keegan
+      CANDriveID: 7 # Configured 1/19 by Keegan
       Pose: [1, -1] # Configured Never by Nobody
   # General constants all modules share
 
-  kDrivingP: 0
-  kDrivingI: 0
-  kDrivingD: 0
-  kDrivingFF: 0 # Was configured in complexConstants.py, might need to do that again!
-  kDrivingMinOutput: -1
-  kDrivingMaxOutput: 1
+  kDrivingP: 0          # Configured Never by Nobody
+  kDrivingI: 0          # Configured Never by Nobody
+  kDrivingD: 0          # Configured Never by Nobody
+  kDrivingFF: 0         # Configured Never by Nobody
+  kDrivingMinOutput: -1 # Configured Never by Nobody
+  kDrivingMaxOutput: 1  # Configured Never by Nobody
 
-  kTurningP: 2.65
-  kTurningI: 0.012
-  kTurningD: 1.5
-  kTurningFF: 0
-  kTurningMinOutput: -1
-  kTurningMaxOutput: 1
+  kTurningP: 0.265      # Updated 1/19 by Keegan
+  kTurningI: 0.012      # Configured Never by Nobody
+  kTurningD: 1.5        # Configured Never by Nobody
+  kTurningFF: 0         # Configured Never by Nobody
+  kTurningMinOutput: -1 # Configured Never by Nobody
+  kTurningMaxOutput: 1  # Configured Never by Nobody
 
   # These are important translation factors to convert native units to m/s, do not leave at 1!
   drivePosConversionFactor: 1 # Drive motor conversion factor (position)

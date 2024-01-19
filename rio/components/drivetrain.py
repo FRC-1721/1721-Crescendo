@@ -123,6 +123,10 @@ class Drivetrain:
         self.sd.putNumber("Swerve/RL", self.rearLeft.desiredState.angle.degrees())
         self.sd.putNumber("Swerve/RR", self.rearRight.desiredState.angle.degrees())
 
+        # print(
+        #     f"FL: {self.frontLeft.turningEncoder.getPosition()} FR: {self.frontRight.turningEncoder.getPosition()} RL: {self.rearLeft.turningEncoder.getPosition()} RR: {self.rearRight.turningEncoder.getPosition()}"
+        # )
+
     def getPose(self) -> Pose2d:
         """Returns the currently-estimated pose of the robot.
 
