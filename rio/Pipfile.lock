@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "d585b89124e91d03d7f6977e1c5d71cca1dd8951467b0fe4592cc53f07b3b5ef"
+            "sha256": "a10fc2592b799759069137ac85dffb63b25f3511b5f7412f19889b73fc36cc7d"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -663,14 +663,6 @@
             ],
             "markers": "python_version >= '3.8'",
             "version": "==2024.0.0"
-        },
-        "robotpy-commands-v2": {
-            "hashes": [
-                "sha256:0161feea5288b6af6fe3eddc412ad30c920acb929bcb5fea6899ba47e2e5763b",
-                "sha256:e0f808645f3f01c1a49d54cbdca6a2f528c2797913bb6382bec067c69b646065"
-            ],
-            "index": "pypi",
-            "version": "==2024.0.0b4"
         },
         "robotpy-ctre": {
             "hashes": [
