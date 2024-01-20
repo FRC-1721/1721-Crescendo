@@ -29,9 +29,9 @@ swerve:
   kDrivingMinOutput: -1 # Configured Never by Nobody
   kDrivingMaxOutput: 1  # Configured Never by Nobody
 
-  kTurningP: 2.65      # Updated 1/19 by Keegan
-  kTurningI: 0.012      # Configured Never by Nobody
-  kTurningD: 1.5        # Configured Never by Nobody
+  kTurningP: 2.65       # Updated 1/20 by Keegan
+  kTurningI: 0.012      # Updated 1/20 by Keegan
+  kTurningD: 1.5        # Updated 1/20 by Keegan
   kTurningFF: 0         # Configured Never by Nobody
   kTurningMinOutput: -1 # Configured Never by Nobody
   kTurningMaxOutput: 1  # Configured Never by Nobody

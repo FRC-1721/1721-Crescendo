@@ -118,20 +118,32 @@ class Drivetrain:
             ),
         )
         # desired
-        self.sd.putNumber("Swerve/FL", self.frontLeft.desiredState.angle.degrees())
-        self.sd.putNumber("Swerve/FR", self.frontRight.desiredState.angle.degrees())
-        self.sd.putNumber("Swerve/RL", self.rearLeft.desiredState.angle.degrees())
-        self.sd.putNumber("Swerve/RR", self.rearRight.desiredState.angle.degrees())
+        self.sd.putNumber(
+            "Swerve/FL desired", self.frontLeft.desiredState.angle.degrees()
+        )
+        self.sd.putNumber(
+            "Swerve/FR desired", self.frontRight.desiredState.angle.degrees()
+        )
+        self.sd.putNumber(
+            "Swerve/RL desired", self.rearLeft.desiredState.angle.degrees()
+        )
+        self.sd.putNumber(
+            "Swerve/RR desired", self.rearRight.desiredState.angle.degrees()
+        )
 
         # actual
-        self.sd.putNumber("Swerve/FL", self.frontLeft.getState().angle.degrees())
-        self.sd.putNumber("Swerve/FR", self.frontRight.getState().angle.degrees())
-        self.sd.putNumber("Swerve/RL", self.rearLeft.getState().angle.degrees())
-        self.sd.putNumber("Swerve/RR", self.rearRight.getState().angle.degrees())
-
-        # logging.info(
-        #     f"FR Swerve module setpoint {self.frontLeft.desiredState.angle.degrees()}, actual is {self.frontLeft.getPosition().angle.degrees(),} .getPosition is {self.frontLeft.getPosition()}"
-        # )
+        self.sd.putNumber(
+            "Swerve/FL", self.frontLeft.getState().angle.degrees() * (360 / 60)
+        )
+        self.sd.putNumber(
+            "Swerve/FR", self.frontRight.getState().angle.degrees() * (360 / 60)
+        )
+        self.sd.putNumber(
+            "Swerve/RL", self.rearLeft.getState().angle.degrees() * (360 / 60)
+        )
+        self.sd.putNumber(
+            "Swerve/RR", self.rearRight.getState().angle.degrees() * (360 / 60)
+        )
 
     def getPose(self) -> Pose2d:
         """Returns the currently-estimated pose of the robot.
