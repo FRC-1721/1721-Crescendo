@@ -15,7 +15,7 @@ help: # List all commands and their descriptions
 	@echo
 
 build: # Run `parcel build' and inject NetworkTables
-	rm -r dist/
+	rm -rf dist/
 	npm run build
 	./build.sh
 
@@ -26,7 +26,6 @@ dev: # Automatically run `make build' whenever a file changes in src/ (requires 
 clean: # Run `git clean -fdX
 	git clean -fdX
 stage: # Prepares dist/ for deployment
-	rm -r dist/
 	make build
 	cp entrypoint.sh $(STAGEDIR)
 	cp run.bat $(STAGEDIR)
