@@ -62,7 +62,7 @@ class MikeSwerveModule:
         )
 
         # Uncomment to invert the encoders
-        # self.turningEncoder.setInverted(true)
+        self.turningEncoder.setInverted(True)
 
         # Enable PID wrap around for the turning motor. This will allow the PID
         # controller to go through 0 to get to the setpoint i.e. going from 350 degrees

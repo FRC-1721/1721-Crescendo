@@ -7,8 +7,8 @@ swerve:
       Pose: [-1, 1] # Configured Never by Nobody
 
     frontRight:
-      CANSteerID: 6 # Configured 1/19 by Keegan
-      CANDriveID: 5 # Configured 1/19 by Keegan
+      CANSteerID: 99 # 6 Configured 1/19 by Keegan
+      CANDriveID: 98 # 5 Configured 1/19 by Keegan
       Pose: [1, 1] # Configured Never by Nobody
     
     rearLeft:
@@ -29,7 +29,7 @@ swerve:
   kDrivingMinOutput: -1 # Configured Never by Nobody
   kDrivingMaxOutput: 1  # Configured Never by Nobody
 
-  kTurningP: 0.265      # Updated 1/19 by Keegan
+  kTurningP: 2.65      # Updated 1/19 by Keegan
   kTurningI: 0.012      # Configured Never by Nobody
   kTurningD: 1.5        # Configured Never by Nobody
   kTurningFF: 0         # Configured Never by Nobody

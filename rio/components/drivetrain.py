@@ -107,7 +107,7 @@ class Drivetrain:
         like updating the dashboard and maintaining odometry.
         """
 
-        # Update the odometry in the periodic block
+        # Update the odometry in the periodic bloc
         self.odometry.update(
             Rotation2d.fromDegrees(self.gyro.getAngle()),
             (
@@ -117,16 +117,20 @@ class Drivetrain:
                 self.rearRight.getPosition(),
             ),
         )
-
+        # desired
         self.sd.putNumber("Swerve/FL", self.frontLeft.desiredState.angle.degrees())
         self.sd.putNumber("Swerve/FR", self.frontRight.desiredState.angle.degrees())
         self.sd.putNumber("Swerve/RL", self.rearLeft.desiredState.angle.degrees())
         self.sd.putNumber("Swerve/RR", self.rearRight.desiredState.angle.degrees())
 
-        logging.info(f"FR Swerve module setpoint {self.frontRight.desiredState.angle.degrees()}, actual is {self.frontRight.getPosition().angle.degrees()}")
+        # actual
+        self.sd.putNumber("Swerve/FL", self.frontLeft.getState().angle.degrees())
+        self.sd.putNumber("Swerve/FR", self.frontRight.getState().angle.degrees())
+        self.sd.putNumber("Swerve/RL", self.rearLeft.getState().angle.degrees())
+        self.sd.putNumber("Swerve/RR", self.rearRight.getState().angle.degrees())
 
-        # print(
-        #     f"FL: {self.frontLeft.turningEncoder.getPosition()} FR: {self.frontRight.turningEncoder.getPosition()} RL: {self.rearLeft.turningEncoder.getPosition()} RR: {self.rearRight.turningEncoder.getPosition()}"
+        # logging.info(
+        #     f"FR Swerve module setpoint {self.frontLeft.desiredState.angle.degrees()}, actual is {self.frontLeft.getPosition().angle.degrees(),} .getPosition is {self.frontLeft.getPosition()}"
         # )
 
     def getPose(self) -> Pose2d:

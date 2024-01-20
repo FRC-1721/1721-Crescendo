@@ -168,3 +168,6 @@ networktables.json
 
 # Add to tree but only when neccicary (adding a map or smthn)
 simgui-window.json
+
+# sysid ignores
+*.SysId
