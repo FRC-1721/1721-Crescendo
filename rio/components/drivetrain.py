@@ -123,6 +123,8 @@ class Drivetrain:
         self.sd.putNumber("Swerve/RL", self.rearLeft.desiredState.angle.degrees())
         self.sd.putNumber("Swerve/RR", self.rearRight.desiredState.angle.degrees())
 
+        logging.info(f"FR Swerve module setpoint {self.frontRight.desiredState.angle.degrees()}, actual is {self.frontRight.getPosition().angle.degrees()}")
+
         # print(
         #     f"FL: {self.frontLeft.turningEncoder.getPosition()} FR: {self.frontRight.turningEncoder.getPosition()} RL: {self.rearLeft.turningEncoder.getPosition()} RR: {self.rearRight.turningEncoder.getPosition()}"
         # )
