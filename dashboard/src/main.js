@@ -72,4 +72,10 @@ function onValueChanged(key, value, isNew) {
             "/SmartDashboard/Autonomous/options"
         );
     }
+
+    if (key.includes("/SmartDashboard/Swerve/")) {
+        wheel = key.split("/").at(-1);
+        console.log(wheel);
+        $("#" + wheel).css("transform", "rotate(" + value + "deg)");
+    }
 }

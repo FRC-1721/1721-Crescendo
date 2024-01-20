@@ -13,13 +13,14 @@ body {
 
 html {
     transform-origin: center;
-    transform: scale(0.65) rotate(30deg);
+    // transform: scale(0.65) rotate(30deg);
 }
 
 * {
     font-family: "FiraCode Nerd Font";
     color: #ebdbb2;
     font-size: 20px;
+    box-sizing: border-box;
 }
 
 body {
@@ -51,4 +52,25 @@ main {
     background: #ff0000;
     margin: 0.5rem;
     padding: 0.5rem;
+}
+
+.swerve {
+    width: 320px;
+    height: 320px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: #3c3836;
+
+    &-row {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+}
+
+.wheel {
+    height: 120px;
+    width: 120px;
 }
