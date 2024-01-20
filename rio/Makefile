@@ -23,11 +23,11 @@ push:	## Deploy to the robot (push only, no console)
 
 
 download:	## Download robot requirements locally
-	robotpy-installer download -r robot_requirements.txt
+	python -m robotpy installer download -r robot_requirements.txt
 
 
 install:	## Install requirements, run download first!
-	robotpy-installer install -r robot_requirements.txt
+	python -m robotpy installer install -r robot_requirements.txt
 
 
 info:	## Shortcut to get information about the code already on the bot
@@ -37,10 +37,10 @@ test:	## Run automated tests
 	python -m robotpy test
 
 download-python:	## Download python (for robot)
-	robotpy-installer download-python
+	python -m robotpy installer download-python
 
 install-python:	## Install python (for robot)
-	robotpy-installer install-python
+	python -m robotpy installer install-python
 
 clean:	## Clean the repo
 	git clean -fdX

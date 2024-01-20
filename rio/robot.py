@@ -5,74 +5,82 @@
 # the WPILib BSD license file in the root directory of this project.
 #
 
-import typing
-import logging
-
+# wpilib
 import wpilib
-import commands2
-import commands2.cmd
+import wpimath
+import wpilib.drive
+import wpimath.filter
+import wpimath.controller
 
-import robotcontainer
-
-"""
-The VM is configured to automatically run this class, and to call the functions corresponding to
-each mode, as described in the TimedRobot documentation. If you change the name of this class or
-the package after creating this project, you must also update the build.gradle file in the
-project.
-"""
+# drivetrain
+from components.drivetrain import Drivetrain
 
 
-class UnnamedToaster(commands2.TimedCommandRobot):
-    """
-    Our default robot class, pass it to wpilib.run
-    Command v2 robots are encouraged to inherit from TimedCommandRobot, which
-    has an implementation of robotPeriodic which runs the scheduler for you
-    """
-
+class UnnamedToaster(wpilib.TimedRobot):
     def robotInit(self) -> None:
-        """
-        This function is run when the robot is first started up and should be used for any
-        initialization code.
-        """
+        """Robot initialization function"""
+        self.controller = wpilib.Joystick(0)
+        self.drivetrain = Drivetrain()
 
-        wpilib.CameraServer.launch()
-
-        self.autonomousCommand: typing.Optional[commands2.Command] = None
-
-        # Instantiate our RobotContainer.  This will perform all our button bindings, and put our
-        # autonomous chooser on the dashboard.
-        self.container = robotcontainer.RobotContainer()
-
-    def teleopInit(self) -> None:
-        # This makes sure that the autonomous stops running when
-        # teleop starts running. If you want the autonomous to
-        # continue until interrupted by another command, remove
-        # this line or comment it out.
-        if self.autonomousCommand is not None:
-            self.autonomousCommand.cancel()
-
-    def disabledInit(self) -> None:
-        """This function is called once each time the robot enters Disabled mode."""
+        # Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
+        self.xspeedLimiter = wpimath.filter.SlewRateLimiter(3)
+        self.yspeedLimiter = wpimath.filter.SlewRateLimiter(3)
+        self.rotLimiter = wpimath.filter.SlewRateLimiter(3)
 
     def disabledPeriodic(self) -> None:
-        """This function is called periodically when disabled"""
+        """
+        Runs when the robot is in DISABLED mode.
+        """
 
-    def autonomousInit(self) -> None:
-        """This autonomous runs the autonomous command selected by your RobotContainer class."""
-        self.autonomousCommand = self.container.getAutonomousCommand()
-
-        # schedule the autonomous command (example)
-        if self.autonomousCommand is not None:
-            self.autonomousCommand.schedule()
-        else:
-            logging.warning("no auto command?")
+        # Run periodic tasks
+        self.drivetrain.periodic()
 
     def autonomousPeriodic(self) -> None:
-        """This function is called periodically during autonomous"""
+        """
+        Runs when the robot is in AUTONOMOUS mode.
+        """
+
+        self.driveWithJoystick(False)
+
+        # Run periodic tasks
+        self.drivetrain.periodic()
 
     def teleopPeriodic(self) -> None:
-        """This function is called periodically during operator control"""
+        """
+        Runs when the robot is in TELEOP mode.
+        """
 
-    def testInit(self) -> None:
-        # Cancels all running commands at the start of test mode
-        commands2.CommandScheduler.getInstance().cancelAll()
+        self.driveWithJoystick(True)
+
+        # Run periodic tasks
+        self.drivetrain.periodic()
+
+    def driveWithJoystick(self, fieldRelative: bool) -> None:
+        # Get the x speed. We are inverting this because Xbox controllers return
+        # negative values when we push forward.
+        xSpeed = -self.xspeedLimiter.calculate(
+            wpimath.applyDeadband(
+                self.controller.getRawAxis(0), 0.02
+            )  # TODO: What axis?! Make a controls.yaml!
+        )
+
+        # Get the y speed or sideways/strafe speed. We are inverting this because
+        # we want a positive value when we pull to the left. Xbox controllers
+        # return positive values when you pull to the right by default.
+        ySpeed = -self.yspeedLimiter.calculate(
+            wpimath.applyDeadband(
+                self.controller.getRawAxis(1), 0.02
+            )  # TODO: What axis?! Make a controls.yaml!
+        )
+
+        # Get the rate of angular rotation. We are inverting this because we want a
+        # positive value when we pull to the left (remember, CCW is positive in
+        # mathematics). Xbox controllers return positive values when you pull to
+        # the right by default.
+        rot = -self.rotLimiter.calculate(
+            wpimath.applyDeadband(
+                self.controller.getRawAxis(2), 0.02
+            )  # TODO: What axis?! Make a controls.yaml!
+        )
+
+        self.drivetrain.drive(xSpeed, ySpeed, rot, fieldRelative, self.getPeriod())

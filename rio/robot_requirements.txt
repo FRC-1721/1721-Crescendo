@@ -11,4 +11,5 @@ robotpy-cscore
 robotpy-ctre
 robotpy-hal
 robotpy-rev
+robotpy-navx
 wpilib
