@@ -41,6 +41,3 @@ deploy: # Use scp to deploy the new files to the nuc
 	# Restart
 	ssh dash@10.17.21.11 "sudo -S systemctl daemon-reload"
 	ssh dash@10.17.21.11 "sudo -S systemctl restart dashboard"
-zip: # Create zip file of dashboard contents
-	make stage
-	zip dashboard.zip dist/*
