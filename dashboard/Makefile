@@ -15,10 +15,10 @@ help: # List all commands and their descriptions
 	@echo
 
 build: # Run `parcel build' and inject NetworkTables
+	rm -r dist/
 	npm run build
-	sed -i -e 's/<p><\/p>/<script src="\/networktables\/networktables.js"><\/script><p><\/p>/g' dist/index.html
-	sed -i -e 's/<p><\/p>/<script src="\/networktables\/utils.js"><\/script><p><\/p>/g' dist/index.html
-	sed -i -e 's/<p><\/p>/<script src="\/networktables\/camera.js"><\/script>/g' dist/index.html
+	./build.sh
+
 run: # Run a live server of the dashboard
 	npm run run
 dev: # Automatically run `make build' whenever a file changes in src/ (requires program `entr')
