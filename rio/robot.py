@@ -5,82 +5,32 @@
 # the WPILib BSD license file in the root directory of this project.
 #
 
-# wpilib
+import commands2
 import wpilib
-import wpimath
-import wpilib.drive
-import wpimath.filter
-import wpimath.controller
 
-# drivetrain
-from components.drivetrain import Drivetrain
+from robotcontainer import RobotContainer
 
 
-class UnnamedToaster(wpilib.TimedRobot):
-    def robotInit(self) -> None:
-        """Robot initialization function"""
-        self.controller = wpilib.Joystick(0)
-        self.drivetrain = Drivetrain()
+class MyRobot(commands2.TimedCommandRobot):
+    def robotInit(self):
+        # Instantiate our RobotContainer.  This will perform all our button bindings, and put our
+        # autonomous chooser on the dashboard.
+        self.container = RobotContainer()
+        self.autonomousCommand = None
 
-        # Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
-        self.xspeedLimiter = wpimath.filter.SlewRateLimiter(3)
-        self.yspeedLimiter = wpimath.filter.SlewRateLimiter(3)
-        self.rotLimiter = wpimath.filter.SlewRateLimiter(3)
+    def autonomousInit(self) -> None:
+        self.autonomousCommand = self.container.getAutonomousCommand()
 
-    def disabledPeriodic(self) -> None:
-        """
-        Runs when the robot is in DISABLED mode.
-        """
+        if self.autonomousCommand:
+            self.autonomousCommand.schedule()
 
-        # Run periodic tasks
-        self.drivetrain.periodic()
+    def teleopInit(self) -> None:
+        if self.autonomousCommand:
+            self.autonomousCommand.cancel()
 
-    def autonomousPeriodic(self) -> None:
-        """
-        Runs when the robot is in AUTONOMOUS mode.
-        """
+    def testInit(self) -> None:
+        commands2.CommandScheduler.getInstance().cancelAll()
 
-        self.driveWithJoystick(False)
 
-        # Run periodic tasks
-        self.drivetrain.periodic()
-
-    def teleopPeriodic(self) -> None:
-        """
-        Runs when the robot is in TELEOP mode.
-        """
-
-        self.driveWithJoystick(True)
-
-        # Run periodic tasks
-        self.drivetrain.periodic()
-
-    def driveWithJoystick(self, fieldRelative: bool) -> None:
-        # Get the x speed. We are inverting this because Xbox controllers return
-        # negative values when we push forward.
-        xSpeed = -self.xspeedLimiter.calculate(
-            wpimath.applyDeadband(
-                self.controller.getRawAxis(0), 0.02
-            )  # TODO: What axis?! Make a controls.yaml!
-        )
-
-        # Get the y speed or sideways/strafe speed. We are inverting this because
-        # we want a positive value when we pull to the left. Xbox controllers
-        # return positive values when you pull to the right by default.
-        ySpeed = -self.yspeedLimiter.calculate(
-            wpimath.applyDeadband(
-                self.controller.getRawAxis(1), 0.02
-            )  # TODO: What axis?! Make a controls.yaml!
-        )
-
-        # Get the rate of angular rotation. We are inverting this because we want a
-        # positive value when we pull to the left (remember, CCW is positive in
-        # mathematics). Xbox controllers return positive values when you pull to
-        # the right by default.
-        rot = -self.rotLimiter.calculate(
-            wpimath.applyDeadband(
-                self.controller.getRawAxis(2), 0.02
-            )  # TODO: What axis?! Make a controls.yaml!
-        )
-
-        self.drivetrain.drive(xSpeed, ySpeed, rot, fieldRelative, self.getPeriod())
+if __name__ == "__main__":
+    wpilib.run(MyRobot)

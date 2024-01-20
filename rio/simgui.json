@@ -1,46 +1,10 @@
 {
   "NTProvider": {
     "types": {
-      "/FMSInfo": "FMSInfo",
-      "/SmartDashboard/Field": "Field2d"
-    }
-  },
-  "NetworkTables": {
-    "transitory": {
-      "SmartDashboard": {
-        "Audio": {
-          "open": true
-        },
-        "Swerve": {
-          "open": true
-        },
-        "open": true
-      }
+      "/FMSInfo": "FMSInfo"
     }
   },
   "NetworkTables Info": {
-    "Clients": {
-      "open": true
-    },
-    "Connections": {
-      "open": true
-    },
     "visible": true
-  },
-  "NetworkTables View": {
-    "visible": false
-  },
-  "Window": {
-    "/SmartDashboard/Autonomous": {
-      "window": {
-        "visible": true
-      }
-    },
-    "/SmartDashboard/Field": {
-      "image": "../dashboard/src/assets/field.png",
-      "window": {
-        "visible": true
-      }
-    }
   }
 }

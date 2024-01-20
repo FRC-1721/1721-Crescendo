@@ -10,16 +10,8 @@
       "style": "0",
       "userScale": "2",
       "width": "1280",
-      "xpos": "636",
-      "ypos": "329"
-    }
-  },
-  "Table": {
-    "0xE56EC1C2,4": {
-      "Column 0  Weight": "1.0000",
-      "Column 1  Weight": "1.0000",
-      "Column 2  Weight": "1.0000",
-      "Column 3  Weight": "1.0000"
+      "xpos": "447",
+      "ypos": "289"
     }
   },
   "Window": {
@@ -31,7 +23,7 @@
     "###Joysticks": {
       "Collapsed": "0",
       "Pos": "250,465",
-      "Size": "796,138"
+      "Size": "796,73"
     },
     "###NetworkTables": {
       "Collapsed": "0",
@@ -50,12 +42,12 @@
     },
     "###System Joysticks": {
       "Collapsed": "0",
-      "Pos": "16,322",
+      "Pos": "5,350",
       "Size": "192,218"
     },
     "###Timing": {
       "Collapsed": "0",
-      "Pos": "7,129",
+      "Pos": "5,150",
       "Size": "135,150"
     },
     "Debug##Default": {
