@@ -15,7 +15,7 @@ from wpimath.kinematics import (
 
 from constants import DriveConstants
 import swerveutils
-from .maxswervemodule import MAXSwerveModule
+from .mikeswervemodule import MikeSwerveModule
 
 
 class DriveSubsystem(Subsystem):
@@ -23,25 +23,25 @@ class DriveSubsystem(Subsystem):
         super().__init__()
 
         # Create MAXSwerveModules
-        self.frontLeft = MAXSwerveModule(
+        self.frontLeft = MikeSwerveModule(
             DriveConstants.kFrontLeftDrivingCanId,
             DriveConstants.kFrontLeftTurningCanId,
             DriveConstants.kFrontLeftChassisAngularOffset,
         )
 
-        self.frontRight = MAXSwerveModule(
+        self.frontRight = MikeSwerveModule(
             DriveConstants.kFrontRightDrivingCanId,
             DriveConstants.kFrontRightTurningCanId,
             DriveConstants.kFrontRightChassisAngularOffset,
         )
 
-        self.rearLeft = MAXSwerveModule(
+        self.rearLeft = MikeSwerveModule(
             DriveConstants.kRearLeftDrivingCanId,
             DriveConstants.kRearLeftTurningCanId,
             DriveConstants.kBackLeftChassisAngularOffset,
         )
 
-        self.rearRight = MAXSwerveModule(
+        self.rearRight = MikeSwerveModule(
             DriveConstants.kRearRightDrivingCanId,
             DriveConstants.kRearRightTurningCanId,
             DriveConstants.kBackRightChassisAngularOffset,
