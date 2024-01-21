@@ -13,6 +13,8 @@ from wpimath.kinematics import (
     SwerveDrive4Odometry,
 )
 
+from navx import AHRS
+
 from ntcore import NetworkTableInstance
 
 from constants import DriveConstants
@@ -54,7 +56,7 @@ class DriveSubsystem(Subsystem):
         self.sd = self.nt.getTable("SmartDashboard")
 
         # The gyro sensor
-        self.gyro = wpilib.ADIS16448_IMU()
+        self.gyro = AHRS.create_spi()
 
         # Slew rate filter variables for controlling lateral acceleration
         self.currentRotation = 0.0
