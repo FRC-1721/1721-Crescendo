@@ -9,10 +9,11 @@ class MikeSwerveModule:
     def __init__(
         self, drivingCANId: int, turningCANId: int, chassisAngularOffset: float
     ) -> None:
-        """Constructs a MAXSwerveModule and configures the driving and turning motor,
-        encoder, and PID controller. This configuration is specific to the REV
-        MAXSwerve Module built with NEOs, SPARKS MAX, and a Through Bore
-        Encoder.
+        """Constructs a Mike Swerve Module, a custom module designed in house.
+
+        This code is based on Rev's swerve module the Max Swerve module, and
+        the original code for that can be found here
+        https://github.com/robotpy/robotpy-rev/blob/main/examples/maxswerve/subsystems/maxswervemodule.py
         """
 
         self.chassisAngularOffset = 0

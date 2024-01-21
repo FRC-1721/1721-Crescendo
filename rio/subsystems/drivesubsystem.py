@@ -13,6 +13,8 @@ from wpimath.kinematics import (
     SwerveDrive4Odometry,
 )
 
+from ntcore import NetworkTableInstance
+
 from constants import DriveConstants
 import swerveutils
 from .mikeswervemodule import MikeSwerveModule
@@ -46,6 +48,10 @@ class DriveSubsystem(Subsystem):
             DriveConstants.kRearRightTurningCanId,
             DriveConstants.kBackRightChassisAngularOffset,
         )
+
+        # Configure networktables
+        self.nt = NetworkTableInstance.getDefault()
+        self.sd = self.nt.getTable("SmartDashboard")
 
         # The gyro sensor
         self.gyro = wpilib.ADIS16448_IMU()
@@ -81,6 +87,34 @@ class DriveSubsystem(Subsystem):
                 self.rearLeft.getPosition(),
                 self.rearRight.getPosition(),
             ),
+        )
+
+        # desired
+        self.sd.putNumber(
+            "Swerve/FL desired", self.frontLeft.desiredState.angle.degrees()
+        )
+        self.sd.putNumber(
+            "Swerve/FR desired", self.frontRight.desiredState.angle.degrees()
+        )
+        self.sd.putNumber(
+            "Swerve/RL desired", self.rearLeft.desiredState.angle.degrees()
+        )
+        self.sd.putNumber(
+            "Swerve/RR desired", self.rearRight.desiredState.angle.degrees()
+        )
+
+        # actual
+        self.sd.putNumber(
+            "Swerve/FL", self.frontLeft.getState().angle.degrees() * (360 / 60)
+        )
+        self.sd.putNumber(
+            "Swerve/FR", self.frontRight.getState().angle.degrees() * (360 / 60)
+        )
+        self.sd.putNumber(
+            "Swerve/RL", self.rearLeft.getState().angle.degrees() * (360 / 60)
+        )
+        self.sd.putNumber(
+            "Swerve/RR", self.rearRight.getState().angle.degrees() * (360 / 60)
         )
 
     def getPose(self) -> Pose2d:

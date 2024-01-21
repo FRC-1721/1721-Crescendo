@@ -1,7 +1,26 @@
 {
+  "HALProvider": {
+    "Other Devices": {
+      "ADIS16448[4]": {
+        "header": {
+          "open": true
+        }
+      }
+    }
+  },
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo"
+    }
+  },
+  "NetworkTables": {
+    "transitory": {
+      "SmartDashboard": {
+        "Swerve": {
+          "open": true
+        },
+        "open": true
+      }
     }
   },
   "NetworkTables Info": {

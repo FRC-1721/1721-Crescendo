@@ -26,7 +26,7 @@ class RobotContainer:
         self.robotDrive = DriveSubsystem()
 
         # The driver's controller
-        self.driverController = wpilib.XboxController(OIConstants.kDriverControllerPort)
+        self.driverController = wpilib.Joystick(0)
 
         # Configure the button bindings
         self.configureButtonBindings()
@@ -38,13 +38,16 @@ class RobotContainer:
             commands2.RunCommand(
                 lambda: self.robotDrive.drive(
                     -wpimath.applyDeadband(
-                        self.driverController.getLeftY(), OIConstants.kDriveDeadband
+                        self.driverController.getRawAxis(0),
+                        OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     ),
                     -wpimath.applyDeadband(
-                        self.driverController.getLeftX(), OIConstants.kDriveDeadband
+                        self.driverController.getRawAxis(1),
+                        OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     ),
                     -wpimath.applyDeadband(
-                        self.driverController.getRightX(), OIConstants.kDriveDeadband
+                        self.driverController.getRawAxis(2),
+                        OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     ),
                     True,
                     True,
