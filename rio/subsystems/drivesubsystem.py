@@ -18,7 +18,11 @@ from navx import AHRS
 from ntcore import NetworkTableInstance
 
 from constants import DriveConstants
-import swerveutils
+
+import utils.swerveutils as swerveutils
+
+from utils.dummygyro import DummyGyro
+
 from .mikeswervemodule import MikeSwerveModule
 
 
@@ -56,7 +60,11 @@ class DriveSubsystem(Subsystem):
         self.sd = self.nt.getTable("SmartDashboard")
 
         # The gyro sensor
-        self.gyro = AHRS.create_spi()
+        if wpilib.RobotBase.isReal():
+            self.gyro = AHRS.create_spi()
+        else:
+            # Bug with navx init! For sim/unit testing just use the ADIS
+            self.gyro = DummyGyro()
 
         # Slew rate filter variables for controlling lateral acceleration
         self.currentRotation = 0.0
