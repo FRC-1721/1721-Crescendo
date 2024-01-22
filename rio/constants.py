@@ -139,3 +139,13 @@ class AutoConstants:
     kThetaControllerConstraints = TrapezoidProfileRadians.Constraints(
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared
     )
+
+
+class IntakeConstants:
+    # CANSparkMax porrts
+    kliftCanId = 9
+    kIntakeCanId = 10
+
+    # inversion
+    kLiftInversion = False
+    kIntakeInversion = False
