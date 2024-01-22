@@ -77,14 +77,14 @@ function onValueChanged(key, value, isNew) {
         if (key.includes("desired")) {
             wheel = key.split("/").at(-1);
             console.log(wheel);
-            $(".swerve ." + wheel).css("transform", "rotate(" + value + "deg)");
-        } else {
-            wheel = key.split("/").at(-1);
-            console.log(wheel);
             $(".swerve-desired ." + wheel).css(
                 "transform",
                 "rotate(" + value + "deg)"
             );
+        } else {
+            wheel = key.split("/").at(-1).replace(" desired", "");
+            console.log(wheel);
+            $(".swerve ." + wheel).css("transform", "rotate(" + value + "deg)");
         }
     }
 }
