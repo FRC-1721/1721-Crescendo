@@ -114,18 +114,10 @@ class DriveSubsystem(Subsystem):
         )
 
         # actual
-        self.sd.putNumber(
-            "Swerve/FL", self.frontLeft.getState().angle.degrees()
-        )
-        self.sd.putNumber(
-            "Swerve/FR", self.frontRight.getState().angle.degrees()
-        )
-        self.sd.putNumber(
-            "Swerve/RL", self.rearLeft.getState().angle.degrees()
-        )
-        self.sd.putNumber(
-            "Swerve/RR", self.rearRight.getState().angle.degrees()
-        )
+        self.sd.putNumber("Swerve/FL", self.frontLeft.getState().angle.degrees())
+        self.sd.putNumber("Swerve/FR", self.frontRight.getState().angle.degrees())
+        self.sd.putNumber("Swerve/RL", self.rearLeft.getState().angle.degrees())
+        self.sd.putNumber("Swerve/RR", self.rearRight.getState().angle.degrees())
 
     def getPose(self) -> Pose2d:
         """Returns the currently-estimated pose of the robot.
