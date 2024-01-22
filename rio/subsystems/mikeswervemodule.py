@@ -1,4 +1,4 @@
-from rev import CANSparkMax, SparkMaxAbsoluteEncoder
+from rev import CANSparkMax, SparkMaxAbsoluteEncoder, CANSparkLowLevel
 from wpimath.geometry import Rotation2d
 from wpimath.kinematics import SwerveModuleState, SwerveModulePosition
 
@@ -20,10 +20,10 @@ class MikeSwerveModule:
         self.desiredState = SwerveModuleState(0.0, Rotation2d())
 
         self.drivingSparkMax = CANSparkMax(
-            drivingCANId, CANSparkMax.MotorType.kBrushless
+            drivingCANId, CANSparkLowLevel.MotorType.kBrushless
         )
         self.turningSparkMax = CANSparkMax(
-            turningCANId, CANSparkMax.MotorType.kBrushless
+            turningCANId, CANSparkLowLevel.MotorType.kBrushless
         )
 
         # Factory reset, so we get the SPARKS MAX to a known state before configuring
