@@ -33,9 +33,9 @@ class DriveConstants:
     kRotationalSlewRate = 2.0  # percent per second (1 = 100%)
 
     # Chassis configuration
-    kTrackWidth = units.inchesToMeters(20.3937)
+    kTrackWidth = units.inchesToMeters(1)
     # Distance between centers of right and left wheels on robot
-    kWheelBase = units.inchesToMeters(24)
+    kWheelBase = units.inchesToMeters(20.25)
 
     # Distance between front and back wheels on robot
     kModulePositions = [
@@ -70,7 +70,7 @@ class ModuleConstants:
     # The MAXSwerve module can be configured with one of three pinion gears: 12T, 13T, or 14T.
     # This changes the drive speed of the module (a pinion gear with more teeth will result in a
     # robot that drives faster).
-    kDrivingMotorPinionTeeth = 14
+    kDrivingMotorPinionTeeth = 17
 
     # Invert the turning encoder, since the output shaft rotates in the opposite direction of
     # the steering motor in the MAXSwerve Module.
@@ -78,10 +78,10 @@ class ModuleConstants:
 
     # Calculations required for driving motor conversion factors and feed forward
     kDrivingMotorFreeSpeedRps = NeoMotorConstants.kFreeSpeedRpm / 60
-    kWheelDiameterMeters = 0.0762
+    kWheelDiameterMeters = 0.09525
     kWheelCircumferenceMeters = kWheelDiameterMeters * math.pi
     # 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15 teeth on the bevel pinion
-    kDrivingMotorReduction = (45.0 * 22) / (kDrivingMotorPinionTeeth * 15)
+    kDrivingMotorReduction = (60 * 34) / (kDrivingMotorPinionTeeth * 15)
     kDriveWheelFreeSpeedRps = (
         kDrivingMotorFreeSpeedRps * kWheelCircumferenceMeters
     ) / kDrivingMotorReduction
