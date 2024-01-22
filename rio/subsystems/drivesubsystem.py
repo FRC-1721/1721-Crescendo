@@ -115,16 +115,16 @@ class DriveSubsystem(Subsystem):
 
         # actual
         self.sd.putNumber(
-            "Swerve/FL", self.frontLeft.getState().angle.degrees() * (360 / 60)
+            "Swerve/FL", self.frontLeft.getState().angle.degrees()
         )
         self.sd.putNumber(
-            "Swerve/FR", self.frontRight.getState().angle.degrees() * (360 / 60)
+            "Swerve/FR", self.frontRight.getState().angle.degrees()
         )
         self.sd.putNumber(
-            "Swerve/RL", self.rearLeft.getState().angle.degrees() * (360 / 60)
+            "Swerve/RL", self.rearLeft.getState().angle.degrees()
         )
         self.sd.putNumber(
-            "Swerve/RR", self.rearRight.getState().angle.degrees() * (360 / 60)
+            "Swerve/RR", self.rearRight.getState().angle.degrees()
         )
 
     def getPose(self) -> Pose2d:
