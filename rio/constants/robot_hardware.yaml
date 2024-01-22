@@ -28,24 +28,11 @@ drivetrain:
     pitch: 0                     # Updated 1/13 by Keegan
     roll: 0                      # Updated 1/13 by Keegan
 
-arm:
-  elevatorMotor: # Drives the spool to move the lift in and out
-    MotorPort: 5                 # Updated 1/22 by Keegan
-    Inverted: False              # Updated 1/22 by Keegan
-    LimitSwitch: 0               # Updated 2/15 by Keegan
-    ConversionFactor: 1          # Updated 1/18 by Joe
-    Start: 0                     # Updated 3/18 by Keegan
+intake:
+  # can IDS
+  LiftPort: 9            # Updated Never by Nobody
+  IntakePort: 10         # Updated Never by Nobody
 
-  ladderMotor: # Drives the lead screw to run the lift up and down
-    MotorPort: 6             # Updated 1/22 by Keegan
-    Inverted: False          # Updated 1/22 by Keegan
-    ConversionFactor: 1      # Updated 1/18 by Joe
-    Start: 55                # Updated 3/18 by Keegan
-
-
-
-claw:
-  MotorPort: 7             # Updated 1/22 by Keegan
-  Inverted: False          # Updated 1/22 by Keegan
-  EncoderPorts: 7          # Updated 2/11 by Keegan
-  EncoderReversed: False   # Updated 1/22 by Keegan
+  # inversion
+  LiftInverted: False    # Updated Never by Nobody
+  IntakeInverted: False  # Updated Never by Nobody
