@@ -121,8 +121,13 @@ class ModuleConstants:
 
 
 class OIConstants:
+    # driver controller
     kDriverControllerPort = 0
     kDriveDeadband = 0.075
+
+    # operator controller
+    kOpControllerPort = 1
+    kIntakeButton = 1
 
 
 class AutoConstants:

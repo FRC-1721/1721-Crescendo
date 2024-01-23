@@ -3,7 +3,7 @@ import commands2
 from subsystems.intake import IntakeSubsystem
 
 
-class intakeRotation(commands2.Command):
+class IntakeRotation(commands2.Command):
     def __init__(self, speed):
         """
         rotates the intake

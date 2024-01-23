@@ -3,7 +3,7 @@ import commands2
 from subsystems.intake import IntakeSubsystem
 
 
-class intakeSuck(commands2.Command):
+class IntakeSuck(commands2.Command):
     def __init__(self, speed):
         """
         takes in the rings
