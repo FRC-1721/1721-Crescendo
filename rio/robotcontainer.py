@@ -49,8 +49,8 @@ class RobotContainer:
                         self.driverController.getRawAxis(2),
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     ),
-                    True,
-                    True,
+                    False,
+                    False,
                 ),
                 self.robotDrive,
             )
