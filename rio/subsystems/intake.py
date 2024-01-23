@@ -1,7 +1,7 @@
 import commands2
 
 from ntcore import NetworkTableInstance
-from rev import CANSparkMax, CANSparkLowLevel
+from rev import CANSparkMax, CANSparkLowLevel, SparkAbsoluteEncoder
 from constants import IntakeConstants
 
 
@@ -27,6 +27,12 @@ class IntakeSubsystem(commands2.Subsystem):
             IntakeConstants.kIntakeCanId,
             CANSparkLowLevel.MotorType.kBrushless,
         )
+
+        # encoders
+        self.liftEncoder = self.liftMotor.getAbsoluteEncoder(
+            SparkAbsoluteEncoder.Type.kDutyCycle
+        )
+        self.intakeEncoder = self.intakeMotor.getEncoder()
 
         # setting iverted
         self.liftMotor.setInverted(IntakeConstants.kLiftInversion)
