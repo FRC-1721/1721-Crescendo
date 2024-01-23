@@ -47,10 +47,10 @@ class DriveConstants:
     kDriveKinematics = SwerveDrive4Kinematics(*kModulePositions)
 
     # Angular offsets of the modules relative to the chassis in radians
-    kFrontLeftChassisAngularOffset = math.pi * 0.25
-    kFrontRightChassisAngularOffset = math.pi * 1.75
-    kBackLeftChassisAngularOffset = math.pi * 0.75
-    kBackRightChassisAngularOffset = math.pi * 1.25
+    kFrontLeftChassisAngularOffset = 0
+    kFrontRightChassisAngularOffset = 0
+    kBackLeftChassisAngularOffset = 0
+    kBackRightChassisAngularOffset = 0
 
     # SPARK MAX CAN IDs
     kFrontLeftDrivingCanId = 5
