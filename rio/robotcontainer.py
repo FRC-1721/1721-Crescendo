@@ -40,15 +40,18 @@ class RobotContainer:
                     -wpimath.applyDeadband(
                         self.driverController.getRawAxis(1),
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
-                    ),
+                    )
+                    * 0.62,
                     -wpimath.applyDeadband(
                         self.driverController.getRawAxis(0),
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
-                    ),
+                    )
+                    * 0.62,
                     -wpimath.applyDeadband(
                         self.driverController.getRawAxis(2),
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
-                    ),
+                    )
+                    * 0.62,
                     False,
                     False,
                 ),

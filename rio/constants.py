@@ -108,7 +108,7 @@ class ModuleConstants:
 
     kTurningP = 1
     kTurningI = 0
-    kTurningD = 0
+    kTurningD = 0.1
     kTurningFF = 0
     kTurningMinOutput = -1
     kTurningMaxOutput = 1
@@ -122,7 +122,7 @@ class ModuleConstants:
 
 class OIConstants:
     kDriverControllerPort = 0
-    kDriveDeadband = 0.05
+    kDriveDeadband = 0.075
 
 
 class AutoConstants:
