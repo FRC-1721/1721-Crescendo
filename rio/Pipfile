@@ -5,11 +5,11 @@ name = "pypi"
 
 [packages]
 wpilib = {extras = ["all"]}
-robotpy = "2024.2.1.0"
+robotpy = "2024.2.1.1"
 robotpy-rev = "2024.2.0"
-robotpy-ctre = "*"
-robotpy-navx = "*"
-robotpy-commands-v2 = "2024.0.0b4"
+robotpy-ctre = "2024.1.1"
+robotpy-navx = "2024.1.0"
+robotpy-commands-v2 = "2024.2.1"
 
 [dev-packages]
 
