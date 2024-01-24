@@ -4,7 +4,7 @@ from subsystems.intake import IntakeSubsystem
 
 
 class IntakeRotation(commands2.Command):
-    def __init__(self, speed):
+    def __init__(self, angle):
         """
         rotates the intake
         """
@@ -14,13 +14,13 @@ class IntakeRotation(commands2.Command):
         self.intakeSubsystem = IntakeSubsystem()
 
         # requested speed
-        self.speed = speed
+        self.angle = angle
 
         # TODO change current limit later in amps
         self.intakeSubsystem.liftCurrentLimit(1)
 
     def initialize(self):
-        self.intakeSubsystem.lift(self.speed)
+        self.intakeSubsystem.lift(self.angle)
 
     def end(self, interrupted: bool):
         self.intakeSubsystem.lift(0)

@@ -5,25 +5,25 @@
   "MainWindow": {
     "GLOBAL": {
       "fps": "120",
-      "height": "720",
+      "height": "1033",
       "maximized": "0",
       "style": "0",
       "userScale": "2",
-      "width": "1280",
-      "xpos": "447",
-      "ypos": "289"
+      "width": "1920",
+      "xpos": "0",
+      "ypos": "20"
     }
   },
   "Window": {
     "###FMS": {
       "Collapsed": "0",
       "Pos": "5,540",
-      "Size": "283,146"
+      "Size": "283,140"
     },
     "###Joysticks": {
       "Collapsed": "0",
       "Pos": "291,574",
-      "Size": "796,138"
+      "Size": "796,73"
     },
     "###NetworkTables": {
       "Collapsed": "0",
@@ -58,7 +58,7 @@
     "Robot State": {
       "Collapsed": "0",
       "Pos": "5,20",
-      "Size": "92,99"
+      "Size": "92,116"
     }
   }
 }

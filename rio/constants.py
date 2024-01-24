@@ -154,3 +154,12 @@ class IntakeConstants:
     # inversion
     kLiftInversion = False
     kIntakeInversion = False
+
+    # conversion factor
+    kLiftConversion = 0
+
+    # lift pid
+    kLiftP = 0
+    kLiftI = 0
+    kLiftD = 0
+    kLiftFF = 0
