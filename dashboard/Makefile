@@ -17,7 +17,6 @@ ready: # Run the necessary commands for development
 	pipenv install
 	npm ci
 build: # Run `parcel build' and inject NetworkTables
-	rm -rf dist/
 	npm run build
 	./build.sh
 run: # Run a live server of the dashboard
@@ -27,6 +26,7 @@ dev: # Automatically run `make build' whenever a file changes in src/ (requires 
 clean: # Run `git clean -fdX
 	git clean -fdX
 stage: # Prepares dist/ for deployment
+	rm -rf dist/
 	make build
 	cp entrypoint.sh $(STAGEDIR)
 	cp run.bat $(STAGEDIR)
