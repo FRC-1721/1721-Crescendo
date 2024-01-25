@@ -41,23 +41,23 @@ class RobotContainer:
             # Turning is controlled by the X axis of the right stick.
             commands2.RunCommand(
                 lambda: self.robotDrive.drive(
+                    wpimath.applyDeadband(
+                        self.driverController.getRawAxis(0),
+                        OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
+                    )
+                    * 0.3,
                     -wpimath.applyDeadband(
                         self.driverController.getRawAxis(1),
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
-                    * 0.62,
-                    -wpimath.applyDeadband(
-                        self.driverController.getRawAxis(0),
-                        OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
-                    )
-                    * 0.62,
+                    * 0.3,
                     -wpimath.applyDeadband(
                         self.driverController.getRawAxis(2),
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
-                    * 0.62,
-                    False,
-                    False,
+                    * 0.3,
+                    True,
+                    True,
                 ),
                 self.robotDrive,
             )
