@@ -5,7 +5,11 @@ import wpilib
 
 import wpimath
 
-from wpimath.controller import PIDController, ProfiledPIDControllerRadians
+from wpimath.controller import (
+    PIDController,
+    ProfiledPIDControllerRadians,
+    HolonomicDriveController,
+)
 from wpimath.geometry import Pose2d, Rotation2d, Translation2d
 from wpimath.trajectory import TrajectoryConfig, TrajectoryGenerator
 
@@ -115,14 +119,18 @@ class RobotContainer:
         )
         thetaController.enableContinuousInput(-math.pi, math.pi)
 
+        holoController = HolonomicDriveController(
+            PIDController(AutoConstants.kPXController, 0, 0),
+            PIDController(AutoConstants.kPYController, 0, 0),
+            thetaController,
+        )
+
         swerveControllerCommand = commands2.SwerveControllerCommand(
             exampleTrajectory,
             self.robotDrive.getPose,  # Functional interface to feed supplier
             DriveConstants.kDriveKinematics,
-            # Position controllers
-            PIDController(AutoConstants.kPXController, 0, 0),
-            PIDController(AutoConstants.kPYController, 0, 0),
-            thetaController,
+            # Position controller
+            holoController,
             self.robotDrive.setModuleStates,
             (self.robotDrive,),
         )
