@@ -56,7 +56,7 @@ class RobotContainer:
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
                     * 0.3,
-                    True,
+                    False,
                     True,
                 ),
                 self.robotDrive,
@@ -77,7 +77,8 @@ class RobotContainer:
     def getAutonomousCommand(self) -> commands2.Command:
         """Use this to pass the autonomous command to the main {@link Robot} class.
 
-        :returns: the command to run in autonomous
+        :returns:
+        command to run in autonomous
         """
         # Create config for trajectory
         config = TrajectoryConfig(
