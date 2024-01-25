@@ -21,8 +21,7 @@ build: # Run `parcel build' and inject NetworkTables
 	npm run build
 	./build.sh
 run: # Run a live server of the dashboard
-	cd dist
-	pipenv run python -m pynetworktables2js
+	cd dist && pipenv run python -m pynetworktables2js
 dev: # Automatically run `make build' whenever a file changes in src/ (requires program `entr')
 	find src/ | entr sh -c 'make build'
 clean: # Run `git clean -fdX
