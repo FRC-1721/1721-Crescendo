@@ -5,10 +5,11 @@
 
 html,
 body {
-    height: 100vh;
     margin: 0;
     padding: 0;
     overflow: hidden;
+    height: 528px;
+    width: 1366px;
 }
 
 html {
@@ -26,7 +27,7 @@ html {
 body {
     display: flex;
     flex-direction: column;
-    background-color: #282828;
+    background: #ff0000;
 }
 
 .cameras {
@@ -49,9 +50,6 @@ body {
 main {
     height: 100%;
     overflow-y: scroll;
-    background: #ff0000;
-    margin: 0.5rem;
-    padding: 0.5rem;
 }
 
 .swerve {
