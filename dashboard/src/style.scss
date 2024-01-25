@@ -57,20 +57,33 @@ main {
 .swerve {
     width: 320px;
     height: 320px;
-    padding: 25px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
     background: #3c3836;
+    position: relative;
+
+    &-actual,
+    &-desired {
+        width: 320px;
+        height: 320px;
+        padding: 25px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    &-desired {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
 
     &-row {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
     }
-}
 
-.wheel {
-    height: 120px;
-    width: 120px;
+    .wheel {
+        height: 120px;
+        width: 120px;
+    }
 }
