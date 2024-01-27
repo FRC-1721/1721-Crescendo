@@ -4,16 +4,14 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-robotpy = {extras = ["rev", "ctre", "commands2", "navx"]}
 wpilib = {extras = ["all"]}
-pyyaml = "6.0"
-black = "*"
+robotpy = "2024.2.1.1"
+robotpy-rev = "2024.2.0"
+robotpy-ctre = "2024.1.1"
+robotpy-navx = "2024.1.0"
+robotpy-commands-v2 = "2024.2.1"
 
 [dev-packages]
-black = "*"
 
 [requires]
 python_version = "3.11"
-
-[pipenv]
-allow_prereleases = true

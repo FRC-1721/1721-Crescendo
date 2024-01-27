@@ -13,22 +13,21 @@ help:	## Prints this help message
 sim:	## Run the simulator
 	python -m robotpy sim
 
-
-deploy:	## Deploy to the robot (with console)
+deploy:	## Deploy to the robot (with netconsole)
 	python -m robotpy deploy --nc 
 
-
-push:	## Deploy to the robot (push only, no console)
+push:	## Deploy to the robot (push only, no netconsole)
 	python -m robotpy deploy
 
-
 download:	## Download robot requirements locally
-	robotpy-installer download -r robot_requirements.txt
-
+	python -m robotpy installer download -r robot_requirements.txt
+	python -m robotpy installer download-python
 
 install:	## Install requirements, run download first!
-	robotpy-installer install -r robot_requirements.txt
+	python -m robotpy installer install -r robot_requirements.txt
 
+sync:		## Sync robotpy requirements
+	python -m robotpy sync
 
 info:	## Shortcut to get information about the code already on the bot
 	python -m robotpy deploy-info
@@ -37,10 +36,10 @@ test:	## Run automated tests
 	python -m robotpy test
 
 download-python:	## Download python (for robot)
-	robotpy-installer download-python
+	python -m robotpy installer download-python
 
 install-python:	## Install python (for robot)
-	robotpy-installer install-python
+	python -m robotpy installer install-python
 
 clean:	## Clean the repo
 	git clean -fdX

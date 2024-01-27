@@ -5,74 +5,35 @@
 # the WPILib BSD license file in the root directory of this project.
 #
 
-import typing
-import logging
-
-import wpilib
 import commands2
-import commands2.cmd
+import wpilib
 
-import robotcontainer
-
-"""
-The VM is configured to automatically run this class, and to call the functions corresponding to
-each mode, as described in the TimedRobot documentation. If you change the name of this class or
-the package after creating this project, you must also update the build.gradle file in the
-project.
-"""
+from robotcontainer import RobotContainer
 
 
-class UnnamedToaster(commands2.TimedCommandRobot):
-    """
-    Our default robot class, pass it to wpilib.run
-    Command v2 robots are encouraged to inherit from TimedCommandRobot, which
-    has an implementation of robotPeriodic which runs the scheduler for you
-    """
-
-    def robotInit(self) -> None:
-        """
-        This function is run when the robot is first started up and should be used for any
-        initialization code.
-        """
-
-        wpilib.CameraServer.launch()
-
-        self.autonomousCommand: typing.Optional[commands2.Command] = None
-
+class MyRobot(commands2.TimedCommandRobot):
+    def robotInit(self):
         # Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         # autonomous chooser on the dashboard.
-        self.container = robotcontainer.RobotContainer()
-
-    def teleopInit(self) -> None:
-        # This makes sure that the autonomous stops running when
-        # teleop starts running. If you want the autonomous to
-        # continue until interrupted by another command, remove
-        # this line or comment it out.
-        if self.autonomousCommand is not None:
-            self.autonomousCommand.cancel()
-
-    def disabledInit(self) -> None:
-        """This function is called once each time the robot enters Disabled mode."""
-
-    def disabledPeriodic(self) -> None:
-        """This function is called periodically when disabled"""
+        self.container = RobotContainer()
+        self.autonomousCommand = None
 
     def autonomousInit(self) -> None:
-        """This autonomous runs the autonomous command selected by your RobotContainer class."""
         self.autonomousCommand = self.container.getAutonomousCommand()
 
-        # schedule the autonomous command (example)
-        if self.autonomousCommand is not None:
+        if self.autonomousCommand:
             self.autonomousCommand.schedule()
-        else:
-            logging.warning("no auto command?")
 
-    def autonomousPeriodic(self) -> None:
-        """This function is called periodically during autonomous"""
+    def teleopInit(self) -> None:
+        if self.autonomousCommand:
+            self.autonomousCommand.cancel()
 
-    def teleopPeriodic(self) -> None:
-        """This function is called periodically during operator control"""
+    # def teleopPeriodic(self) -> None:
+    #     self.container.robotDrive.drive(0.1, 0.1, 0, False, False)
 
     def testInit(self) -> None:
-        # Cancels all running commands at the start of test mode
         commands2.CommandScheduler.getInstance().cancelAll()
+
+
+if __name__ == "__main__":
+    wpilib.run(MyRobot)

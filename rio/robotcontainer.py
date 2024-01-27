@@ -1,25 +1,22 @@
-import wpilib
+import math
 
 import commands2
-import commands2.cmd
-import commands2.button
+import wpimath
+import wpilib
 
-# Constants
-from constants.constants import getConstants
+from commands2 import cmd
+from commands2.button import CommandJoystick
 
-# Subsystems
+from wpimath.controller import (
+    PIDController,
+    ProfiledPIDControllerRadians,
+    HolonomicDriveController,
+)
+from wpimath.geometry import Pose2d, Rotation2d, Translation2d
+from wpimath.trajectory import TrajectoryConfig, TrajectoryGenerator
+
+from constants import AutoConstants, DriveConstants, OIConstants
 from subsystems.drivesubsystem import DriveSubsystem
-
-# Commands
-from commands.FlyByWire import FlyByWire
-
-# Autonomous
-
-# NetworkTables
-from ntcore import NetworkTableInstance
-
-# Misc
-from extras.deployData import getDeployData
 
 
 class RobotContainer:
@@ -28,81 +25,116 @@ class RobotContainer:
     "declarative" paradigm, very little robot logic should actually be handled in the :class:`.Robot`
     periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
     subsystems, commands, and button mappings) should be declared here.
-
     """
 
-    def __init__(self):
-        """The container for the robot. Contains subsystems, OI devices, and commands."""
-        # Configure networktables
-        self.configureNetworktables()
-
-        # Setup constants
-        self.controlConsts = getConstants("robot_controls")
-        self.hardConsts = getConstants("robot_hardware")
-        self.pidConsts = getConstants("robot_pid")
-        self.driverConsts = self.controlConsts["main mode"]["driver"]
-        self.operatorConsts = self.controlConsts["main mode"]["operator"]
-
+    def __init__(self) -> None:
         # The robot's subsystems
         self.robotDrive = DriveSubsystem()
-        # The driver's controller
-        self.driverController = commands2.button.CommandJoystick(
-            self.driverConsts["controller_port"]
-        )
 
-        # The operators controller
-        self.operatorController = commands2.button.CommandJoystick(
-            self.operatorConsts["controller_port"]
-        )
+        # The driver's controller
+        self.driverController = CommandJoystick(0)
 
         # Configure the button bindings
         self.configureButtonBindings()
 
-        # Setup all autonomous routines
-        self.configureAutonomous()
-
-        # Default drive command
+        # Configure default commands
         self.robotDrive.setDefaultCommand(
-            FlyByWire(
+            # The left stick controls translation of the robot.
+            # Turning is controlled by the X axis of the right stick.
+            commands2.cmd.run(
+                lambda: self.robotDrive.drive(
+                    # -0.1,
+                    # 0,
+                    # 0,
+                    wpimath.applyDeadband(
+                        self.driverController.getRawAxis(1),
+                        OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
+                    )
+                    * 0.3,
+                    wpimath.applyDeadband(
+                        self.driverController.getRawAxis(0),
+                        OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
+                    )
+                    * 0.3,
+                    -wpimath.applyDeadband(
+                        self.driverController.getRawAxis(2),
+                        OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
+                    )
+                    * 0.3,
+                    False,
+                    True,
+                ),
                 self.robotDrive,
-                lambda: -self.driverController.getRawAxis(
-                    self.driverConsts["ForwardAxis"],
-                ),
-                lambda: self.driverController.getRawAxis(
-                    self.driverConsts["SteerAxis"],
-                ),
             )
         )
 
-    def configureButtonBindings(self):
+    def configureButtonBindings(self) -> None:
         """
-        Use this method to define your button->command mappings. Buttons can be created via the button
-        factories on commands2.button.CommandGenericHID or one of its
-        subclasses (commands2.button.CommandJoystick or command2.button.CommandXboxController).
+        Use this method to define your button->command mappings. Buttons can be created by
+        instantiating a :GenericHID or one of its subclasses (Joystick or XboxController),
+        and then passing it to a JoystickButton.
         """
-        pass
 
-    def configureAutonomous(self):
-        pass
-
-    def configureNetworktables(self):
-        # Configure networktables
-        self.nt = NetworkTableInstance.getDefault()
-        self.sd = self.nt.getTable("SmartDashboard")
-
-        # Subtables
-        self.build_table = self.sd.getSubTable("BuildData")
-
-        # Build data (May need to be moved to a dedicated function to be updated more than once)
-        data = getDeployData()
-        for key in data:
-            key_entry = self.build_table.getEntry(str(key))
-            key_entry.setString(str(data[key]))
+    def disablePIDSubsystems(self) -> None:
+        """Disables all ProfiledPIDSubsystem and PIDSubsystem instances.
+        This should be called on robot disable to prevent integral windup."""
 
     def getAutonomousCommand(self) -> commands2.Command:
+        """Use this to pass the autonomous command to the main {@link Robot} class.
+
+        :returns:
+        command to run in autonomous
         """
-        Use this to pass the autonomous command to the main :class:`.Robot` class.
-        :returns: the command to run in autonomous
-        """
-        # return self.autoChooser.getSelected()
-        return None
+        # Create config for trajectory
+        config = TrajectoryConfig(
+            AutoConstants.kMaxSpeedMetersPerSecond,
+            AutoConstants.kMaxAccelerationMetersPerSecondSquared,
+        )
+        # Add kinematics to ensure max speed is actually obeyed
+        config.setKinematics(DriveConstants.kDriveKinematics)
+
+        # An example trajectory to follow. All units in meters.
+        exampleTrajectory = TrajectoryGenerator.generateTrajectory(
+            # Start at the origin facing the +X direction
+            Pose2d(0, 0, Rotation2d(0)),
+            # Pass through these two interior waypoints, making an 's' curve path
+            [Translation2d(1, 1), Translation2d(2, -1)],
+            # End 3 meters straight ahead of where we started, facing forward
+            Pose2d(3, 0, Rotation2d(0)),
+            config,
+        )
+
+        thetaController = ProfiledPIDControllerRadians(
+            AutoConstants.kPThetaController,
+            0,
+            0,
+            AutoConstants.kThetaControllerConstraints,
+        )
+        thetaController.enableContinuousInput(-math.pi, math.pi)
+
+        holoController = HolonomicDriveController(
+            PIDController(AutoConstants.kPXController, 0, 0),
+            PIDController(AutoConstants.kPYController, 0, 0),
+            thetaController,
+        )
+
+        swerveControllerCommand = commands2.SwerveControllerCommand(
+            exampleTrajectory,
+            self.robotDrive.getPose,  # Functional interface to feed supplier
+            DriveConstants.kDriveKinematics,
+            # Position controller
+            holoController,
+            self.robotDrive.setModuleStates,
+            (self.robotDrive,),
+        )
+
+        # Reset odometry to the starting pose of the trajectory.
+        self.robotDrive.resetOdometry(exampleTrajectory.initialPose())
+
+        # Run path following command, then stop at the end.
+        return swerveControllerCommand.andThen(
+            cmd.run(
+                lambda: self.robotDrive.drive(0, 0, 0, False, False),
+                self.robotDrive,
+            )
+        )
