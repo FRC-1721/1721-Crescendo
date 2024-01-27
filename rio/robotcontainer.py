@@ -5,6 +5,8 @@ import wpimath
 import wpilib
 
 from commands2 import cmd
+from commands2.button import CommandJoystick
+
 from wpimath.controller import (
     PIDController,
     ProfiledPIDControllerRadians,
@@ -30,7 +32,7 @@ class RobotContainer:
         self.robotDrive = DriveSubsystem()
 
         # The driver's controller
-        self.driverController = wpilib.Joystick(0)
+        self.driverController = CommandJoystick(0)
 
         # Configure the button bindings
         self.configureButtonBindings()
@@ -39,15 +41,18 @@ class RobotContainer:
         self.robotDrive.setDefaultCommand(
             # The left stick controls translation of the robot.
             # Turning is controlled by the X axis of the right stick.
-            commands2.RunCommand(
+            commands2.cmd.run(
                 lambda: self.robotDrive.drive(
+                    # -0.1,
+                    # 0,
+                    # 0,
                     wpimath.applyDeadband(
-                        self.driverController.getRawAxis(0),
+                        self.driverController.getRawAxis(1),
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
                     * 0.3,
-                    -wpimath.applyDeadband(
-                        self.driverController.getRawAxis(1),
+                    wpimath.applyDeadband(
+                        self.driverController.getRawAxis(0),
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
                     * 0.3,
