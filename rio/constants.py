@@ -147,7 +147,7 @@ class AutoConstants:
 
 
 class IntakeConstants:
-    # CANSparkMax porrts
+    # CANSparkMax ports
     kliftCanId = 9
     kIntakeCanId = 10
 
