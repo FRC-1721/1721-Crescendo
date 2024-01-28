@@ -24,6 +24,7 @@ from subsystems.drivesubsystem import DriveSubsystem
 from subsystems.intake import IntakeSubsystem
 
 from commands.intakeSuck import IntakeSuck
+from commands.intakeRotationPID import IntakeRotationPID
 
 
 class RobotContainer:
@@ -82,8 +83,12 @@ class RobotContainer:
         instantiating a :GenericHID or one of its subclasses (Joystick or XboxController),
         and then passing it to a JoystickButton.
         """
-        self.opController.b().onTrue(
+        self.opController.x().onTrue(
             commands2.cmd.run(lambda: IntakeSuck(0.4), self.intake)
+        )
+
+        self.opController.a().onTrue(
+            commands2.cmd.run(lambda: IntakeRotationPID(25), self.intake)
         )
 
     def disablePIDSubsystems(self) -> None:

@@ -3,10 +3,10 @@ import commands2
 from subsystems.intake import IntakeSubsystem
 
 
-class IntakeRotation(commands2.Command):
+class IntakeRotationMAN(commands2.Command):
     def __init__(self, angle):
         """
-        rotates the intake
+        allows people to rotate the intake
         """
         super().__init__()
 
@@ -20,8 +20,8 @@ class IntakeRotation(commands2.Command):
         self.intakeSubsystem.liftCurrentLimit(1)
 
     def initialize(self):
-        self.intakeSubsystem.lift(self.angle)
+        self.intakeSubsystem.manualLift(self.angle)
 
     def end(self, interrupted: bool):
-        self.intakeSubsystem.lift(0)
+        self.intakeSubsystem.manualLift(0)
         return True
