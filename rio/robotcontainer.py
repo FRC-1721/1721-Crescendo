@@ -44,10 +44,10 @@ class RobotContainer:
 
         # The driver's controller
         self.driverController = CommandJoystick(0)
-        
+
         # the operators controller
         self.opController = CommandXboxController(OIConstants.kOpControllerPort)
-        
+
         # Configure the button bindings
         self.configureButtonBindings()
 
@@ -65,7 +65,6 @@ class RobotContainer:
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
                     * 0.3,
-
                     -wpimath.applyDeadband(
                         self.driverController.getRawAxis(0),
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
