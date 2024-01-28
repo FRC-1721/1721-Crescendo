@@ -4,6 +4,8 @@ import math
 import wpilib
 
 import wpimath
+from commands2 import cmd
+from commands2.button import CommandJoystick
 
 from wpimath.controller import (
     PIDController,
@@ -41,11 +43,11 @@ class RobotContainer:
         self.intake = IntakeSubsystem()
 
         # The driver's controller
-        self.driverController = CommandJoystick(OIConstants.kDriverControllerPort)
-
+        self.driverController = CommandJoystick(0)
+        
         # the operators controller
         self.opController = CommandXboxController(OIConstants.kOpControllerPort)
-
+        
         # Configure the button bindings
         self.configureButtonBindings()
 
@@ -55,11 +57,15 @@ class RobotContainer:
             # Turning is controlled by the X axis of the right stick.
             commands2.cmd.run(
                 lambda: self.robotDrive.drive(
-                    -wpimath.applyDeadband(
+                    # -0.1,
+                    # 0,
+                    # 0,
+                    wpimath.applyDeadband(
                         self.driverController.getRawAxis(1),
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
                     * 0.3,
+
                     -wpimath.applyDeadband(
                         self.driverController.getRawAxis(0),
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
@@ -71,7 +77,7 @@ class RobotContainer:
                     )
                     * 0.3,
                     False,
-                    False,
+                    True,
                 ),
                 self.robotDrive,
             )
@@ -100,7 +106,8 @@ class RobotContainer:
     def getAutonomousCommand(self) -> commands2.Command:
         """Use this to pass the autonomous command to the main {@link Robot} class.
 
-        :returns: the command to run in autonomous
+        :returns:
+        command to run in autonomous
         """
         # Create config for trajectory
         config = TrajectoryConfig(
