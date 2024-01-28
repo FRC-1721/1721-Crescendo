@@ -4,14 +4,14 @@ from subsystems.intake import IntakeSubsystem
 
 
 class IntakeRotationMAN(commands2.Command):
-    def __init__(self, angle):
+    def __init__(self, angle, subsystem):
         """
         allows people to rotate the intake
         """
         super().__init__()
 
         # local subsystem instance
-        self.intakeSubsystem = IntakeSubsystem()
+        self.intakeSubsystem = subsystem
 
         # requested speed
         self.angle = angle

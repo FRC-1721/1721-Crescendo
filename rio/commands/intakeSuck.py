@@ -4,14 +4,14 @@ from subsystems.intake import IntakeSubsystem
 
 
 class IntakeSuck(commands2.Command):
-    def __init__(self, speed):
+    def __init__(self, speed, subsystem):
         """
         takes in the rings
         """
         super().__init__()
 
         # local subsystem instance
-        self.intakeSubsystem = IntakeSubsystem()
+        self.intakeSubsystem = subsystem
 
         # requested speed
         self.speed = speed

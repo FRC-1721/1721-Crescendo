@@ -4,7 +4,7 @@ from subsystems.intake import IntakeSubsystem
 
 
 class IntakeRotationPID(commands2.Command):
-    def __init__(self, angle):
+    def __init__(self, angle, subsystem):
         """
         rotates the intake
         supposed to be used with
@@ -13,7 +13,7 @@ class IntakeRotationPID(commands2.Command):
         super().__init__()
 
         # local subsystem instance
-        self.intakeSubsystem = IntakeSubsystem()
+        self.intakeSubsystem = subsystem
 
         # requested speed
         self.angle = angle

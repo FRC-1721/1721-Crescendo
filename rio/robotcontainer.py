@@ -84,11 +84,13 @@ class RobotContainer:
         and then passing it to a JoystickButton.
         """
         self.opController.x().onTrue(
-            commands2.cmd.run(lambda: IntakeSuck(0.4), self.intake)
+            commands2.cmd.run(lambda: IntakeSuck(0.4, self.intake), self.intake)
         )
 
         self.opController.a().onTrue(
-            commands2.cmd.run(lambda: IntakeRotationPID(25), self.intake)
+            commands2.cmd.runOnce(
+                lambda: IntakeRotationPID(25, self.intake), self.intake
+            )
         )
 
     def disablePIDSubsystems(self) -> None:
