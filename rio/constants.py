@@ -139,3 +139,15 @@ class AutoConstants:
     kThetaControllerConstraints = TrapezoidProfileRadians.Constraints(
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared
     )
+
+
+class SuperStrucConstants:
+    # CANSpark IDS
+    rotateID = 11
+    flyID = 12
+
+    # PID values
+    kP = 0
+    kI = 0
+    kD = 0
+    kFF = 0
