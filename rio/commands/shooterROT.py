@@ -14,7 +14,7 @@ class ShooterROT(commands2.Command):
         self.angle = angle
 
     def initialize(self):
-        self.subsystem.gotoPOS(self.angle)
+        self.subsystem.setRotateAngle(self.angle)
 
     def end(self, interrupted: bool):
         return True

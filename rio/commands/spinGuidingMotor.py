@@ -11,7 +11,7 @@ class Fire(commands2.Command):
         self.subsystem = subsystem
 
     def initialize(self):
-        self.subsystem.guiding()
+        self.subsystem.setGuidingMotorSpeed()
 
     def end(self, interrupted: bool):
         self.subsystem.guiding(0)

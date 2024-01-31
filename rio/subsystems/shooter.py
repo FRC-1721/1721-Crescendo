@@ -12,7 +12,7 @@ from rev import (
 from constants import SuperStrucConstants
 
 
-class Superstructure(Subsystem):
+class Shooter(Subsystem):
     def __init__(self) -> None:
         super().__init__()
 
@@ -64,12 +64,12 @@ class Superstructure(Subsystem):
         self.sd.putNumber("Thermals/fly", self.flyMotor.getMotorTemperature())
         self.sd.putNumber("Thermals/guide", self.guideMotor.getMotorTemperature())
 
-    def fire(self, speed):
+    def setFlyWheelSpeed(self, speed):
         self.flyMotor.set(speed)
 
-    def gotoPOS(self, angle: float):
+    def setRotateAngle(self, angle: float):
         self.rotatePIDController.setReference(angle, CANSparkMax.ControlType.kPosition)
 
-    def guiding(self):
+    def setGuidingMotorSpeed(self):
         if self.limit.get():
             self.guideMotor.set(0)

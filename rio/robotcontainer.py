@@ -17,7 +17,7 @@ from wpimath.trajectory import TrajectoryConfig, TrajectoryGenerator
 
 from constants import AutoConstants, DriveConstants, OIConstants
 from subsystems.drivesubsystem import DriveSubsystem
-from subsystems.superstructure import Superstructure
+from subsystems.shooter import Shooter
 from commands.shooterROT import ShooterROT
 
 
@@ -32,7 +32,7 @@ class RobotContainer:
     def __init__(self) -> None:
         # The robot's subsystems
         self.robotDrive = DriveSubsystem()
-        self.superstructure = Superstructure()
+        self.shooter = Shooter()
 
         # The driver's controller
         self.driverController = CommandJoystick(0)
@@ -84,16 +84,12 @@ class RobotContainer:
         # TODO change these
         # amp
         self.opperatorController.x().onTrue(
-            commands2.cmd.run(
-                lambda: ShooterROT(15, self.superstructure), self.superstructure
-            )
+            commands2.cmd.run(lambda: ShooterROT(15, self.shooter), self.shooter)
         )
 
         # speaker
         self.opperatorController.b().onTrue(
-            commands2.cmd.run(
-                lambda: ShooterROT(35, self.superstructure), self.superstructure
-            )
+            commands2.cmd.run(lambda: ShooterROT(35, self.shooter), self.shooter)
         )
 
     def disablePIDSubsystems(self) -> None:
