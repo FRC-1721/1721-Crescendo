@@ -5,7 +5,7 @@ import wpimath
 import wpilib
 
 from commands2 import cmd
-from commands2.button import CommandJoystick
+from commands2.button import CommandJoystick, CommandXboxController
 
 from wpimath.controller import (
     PIDController,
@@ -17,6 +17,8 @@ from wpimath.trajectory import TrajectoryConfig, TrajectoryGenerator
 
 from constants import AutoConstants, DriveConstants, OIConstants
 from subsystems.drivesubsystem import DriveSubsystem
+from subsystems.superstructure import Superstructure
+from commands.shooterROT import ShooterROT
 
 
 class RobotContainer:
@@ -30,9 +32,13 @@ class RobotContainer:
     def __init__(self) -> None:
         # The robot's subsystems
         self.robotDrive = DriveSubsystem()
+        self.superstructure = Superstructure()
 
         # The driver's controller
         self.driverController = CommandJoystick(0)
+
+        # the opperator controller
+        self.opperatorController = CommandXboxController(1)
 
         # Configure the button bindings
         self.configureButtonBindings()
@@ -74,6 +80,21 @@ class RobotContainer:
         instantiating a :GenericHID or one of its subclasses (Joystick or XboxController),
         and then passing it to a JoystickButton.
         """
+        # presents
+        # TODO change these
+        # amp
+        self.opperatorController.x().onTrue(
+            commands2.cmd.run(
+                lambda: ShooterROT(15, self.superstructure), self.superstructure
+            )
+        )
+
+        # speaker
+        self.opperatorController.b().onTrue(
+            commands2.cmd.run(
+                lambda: ShooterROT(35, self.superstructure), self.superstructure
+            )
+        )
 
     def disablePIDSubsystems(self) -> None:
         """Disables all ProfiledPIDSubsystem and PIDSubsystem instances.
