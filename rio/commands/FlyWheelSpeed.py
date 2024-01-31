@@ -1,7 +1,7 @@
 import commands2
 
 
-class Fire(commands2.Command):
+class FlyWheelSpeed(commands2.Command):
     def __init__(self, speed, subsystem):
         super().__init__()
 
