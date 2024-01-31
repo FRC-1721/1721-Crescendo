@@ -145,6 +145,7 @@ class SuperStrucConstants:
     # CANSpark IDS
     rotateID = 11
     flyID = 12
+    guideID = 13
 
     # PID values
     kP = 0

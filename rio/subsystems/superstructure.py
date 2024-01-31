@@ -22,9 +22,13 @@ class Superstructure(Subsystem):
         self.flyMotor = CANSparkMax(
             SuperStrucConstants.flyID, CANSparkLowLevel.MotorType.kBrushless
         )
+        self.guideMotor = CANSparkMax(
+            SuperStrucConstants.guideID, CANSparkLowLevel.MotorType.kBrushless
+        )
 
         # encoders
         self.flyEncoder = self.flyMotor.getEncoder()
+        self.guideEncoder = self.guideMotor.getEncoder()
         self.rotateEncoder = self.rotateMotor.getAbsoluteEncoder(
             SparkMaxAbsoluteEncoder.Type.kDutyCycle
         )
@@ -40,6 +44,7 @@ class Superstructure(Subsystem):
     def periodic(self) -> None:
         self.sd.putNumber("Thermals/rotate", self.rotateMotor.getMotorTemperature())
         self.sd.putNumber("Thermals/fly", self.flyMotor.getMotorTemperature())
+        self.sd.putNumber("Thermals/guide", self.guideMotor.getMotorTemperature())
 
     def fire(self, speed):
         self.flyMotor.set(speed)
@@ -52,3 +57,6 @@ class Superstructure(Subsystem):
 
     def flyCurrentLimit(self, current):
         self.flyMotor.setSmartCurrentLimit(current)
+
+    def guiding(self, speed):
+        self.guideMotor.set(speed)
