@@ -70,6 +70,9 @@ class Shooter(Subsystem):
     def setRotateAngle(self, angle: float):
         self.rotatePIDController.setReference(angle, CANSparkMax.ControlType.kPosition)
 
-    def setGuidingMotorSpeed(self):
+    def setGuidingMotorSpeed(self, speed):
         if self.limit.get():
             self.guideMotor.set(0)
+
+        else:
+            self.guideMotor.set(speed)
