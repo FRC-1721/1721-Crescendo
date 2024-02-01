@@ -1,7 +1,7 @@
 import commands2
 
 from ntcore import NetworkTableInstance
-from rev import CANSparkMax, CANSparkLowLevel, SparkAbsoluteEncoder
+from rev import CANSparkMax, CANSparkLowLevel, SparkAbsoluteEncoder, SparkMaxLimitSwitch
 from constants import IntakeConstants
 
 
@@ -47,12 +47,24 @@ class IntakeSubsystem(commands2.Subsystem):
         self.liftPID.setD(IntakeConstants.kLiftD)
         self.liftPID.setFF(IntakeConstants.kLiftFF)
 
+        # limit switches
+        self.leftLimitSwitch = self.liftMotor.getForwardLimitSwitch(
+            SparkMaxLimitSwitch.Type.kNormallyOpen
+        )
+        self.rightLimitSwitch = self.intakeMotor.getForwardLimitSwitch(
+            SparkMaxLimitSwitch.Type.kNormallyOpen
+        )
+
+        self.leftLimitSwitch.enableLimitSwitch(True)
+        self.rightLimitSwitch.enableLimitSwitch(True)
+
     def periodic(self) -> None:
         self.sd.putNumber("Thermals/Intake", self.intakeMotor.getMotorTemperature())
         self.sd.putNumber("Thermals/Lift", self.liftMotor.getMotorTemperature())
 
     def intake(self, speed):
-        self.intakeMotor.set(speed)
+        if not self.rightLimitSwitch.get() or not self.leftLimitSwitch.get():
+            self.intakeMotor.set(speed)
 
     def manualLift(self, speed):
         self.liftMotor.set(speed)
