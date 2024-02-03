@@ -35,7 +35,7 @@ class DriveConstants:
     # Chassis configuration
     kTrackWidth = units.inchesToMeters(20.3937)
     # Distance between centers of right and left wheels on robot
-    kWheelBase = units.inchesToMeters(20.25)
+    kWheelBase = units.inchesToMeters(20.5)
 
     # Distance between front and back wheels on robot
     kModulePositions = [
