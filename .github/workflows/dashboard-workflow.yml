@@ -24,8 +24,9 @@ jobs:
             - name: Install NPM
               run: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 
+            - run: ls
+            
             - name: Install npm deps
-              run: ls
               run: cd dashboard && npm ci
 
             - id: cache-pipenv
