@@ -24,7 +24,7 @@ jobs:
             - name: Install NPM
               run: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 
-            - run: cd .. && pwd | xargs echo $(ls)
+            - run: pwd | xargs echo $(find dashboard)
 
             - name: Install npm deps
               run: cd dashboard && npm ci
