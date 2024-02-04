@@ -2,7 +2,7 @@ name: Makefile CI
 
 on:
     push:
-        branches: ["*"]
+        branches: ["feat/dashboard"]
     pull_request:
         branches: ["feat/dashboard"]
 
@@ -25,7 +25,6 @@ jobs:
               run: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 
             - name: Install npm deps
-              run: cd ~
               run: cd dashboard && npm ci
 
             - id: cache-pipenv
