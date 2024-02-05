@@ -139,3 +139,8 @@ class AutoConstants:
     kThetaControllerConstraints = TrapezoidProfileRadians.Constraints(
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared
     )
+
+
+class ClimberConstants:
+    kmotorID = 14
+    kInversion = False
