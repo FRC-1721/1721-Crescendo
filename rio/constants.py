@@ -142,6 +142,13 @@ class AutoConstants:
 
 
 class ClimberConstants:
+    # ids
     kmotorID = 14
     kServoID = 0
+
+    # inversions
     kInversion = False
+
+    # servo angles
+    kservolock = 10
+    kservoOpen = 15
