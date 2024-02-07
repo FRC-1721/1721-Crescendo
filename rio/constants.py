@@ -143,4 +143,5 @@ class AutoConstants:
 
 class ClimberConstants:
     kmotorID = 14
+    kServoID = 0
     kInversion = False

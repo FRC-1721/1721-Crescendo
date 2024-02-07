@@ -2,6 +2,7 @@ import commands2
 
 from ntcore import NetworkTableInstance
 from rev import CANSparkMax, CANSparkLowLevel
+from wpilib import Servo
 from constants import ClimberConstants
 
 
@@ -20,6 +21,7 @@ class ClimberSubsystem(commands2.Subsystem):
         self.motor = CANSparkMax(
             ClimberConstants.kmotorID, CANSparkLowLevel.MotorType.kBrushless
         )
+        self.servo = Servo(ClimberConstants.kServoID)
 
         # encoder
         self.encoder = self.motor.getEncoder()
@@ -32,3 +34,6 @@ class ClimberSubsystem(commands2.Subsystem):
 
     def setClimberMotorSpeed(self, speed):
         self.motor.set(speed)
+
+    def setServoAngle(self, angle):
+        self.servo.setAngle(angle)
