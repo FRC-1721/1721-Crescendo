@@ -89,12 +89,13 @@ class RobotContainer:
         instantiating a :GenericHID or one of its subclasses (Joystick or XboxController),
         and then passing it to a JoystickButton.
         """
+        # intaking
         self.opController.x().whileTrue(IntakeSuck(0.4, self.intake))
         self.opController.y().whileTrue(IntakeSuck(-0.4, self.intake))
 
-        self.opController.a().onTrue(
-            IntakeRotationMAN(self.opController.getRawAxis(1), self.intake)
-        )
+        # moving intake
+        self.opController.pov(0).whileTrue(IntakeRotationMAN(1, self.intake))  # out
+        self.opController.pov(180).whileTrue(IntakeRotationMAN(-1, self.intake))  # in
 
     def disablePIDSubsystems(self) -> None:
         """Disables all ProfiledPIDSubsystem and PIDSubsystem instances.
