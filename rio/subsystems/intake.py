@@ -5,6 +5,7 @@ from ntcore import NetworkTableInstance
 from rev import CANSparkMax, CANSparkLowLevel, SparkAbsoluteEncoder, SparkMaxLimitSwitch
 from constants import IntakeConstants
 
+
 class IntakeSubsystem(commands2.Subsystem):
     def __init__(self) -> None:
         """
@@ -27,7 +28,7 @@ class IntakeSubsystem(commands2.Subsystem):
             IntakeConstants.kIntakeCanId,
             CANSparkLowLevel.MotorType.kBrushless,
         )
-        
+
         self.intakeMotor.restoreFactoryDefaults()
 
         self.intakeMotor.setInverted(True)
@@ -52,14 +53,10 @@ class IntakeSubsystem(commands2.Subsystem):
         self.liftPID.setFF(IntakeConstants.kLiftFF)
 
         # limit switches
-        self.leftLimitSwitch = self.liftMotor.getForwardLimitSwitch(
-            SparkMaxLimitSwitch.Type.kNormallyOpen
-        )
         self.rightLimitSwitch = self.intakeMotor.getForwardLimitSwitch(
             SparkMaxLimitSwitch.Type.kNormallyOpen
         )
 
-        self.leftLimitSwitch.enableLimitSwitch(True)
         self.rightLimitSwitch.enableLimitSwitch(True)
 
         self.intakeMotor.burnFlash()
@@ -70,10 +67,11 @@ class IntakeSubsystem(commands2.Subsystem):
         self.sd.putNumber("Thermals/Lift", self.liftMotor.getMotorTemperature())
 
     def intake(self, speed):
-        if not self.rightLimitSwitch.get() or not self.leftLimitSwitch.get():
-            self.intakeMotor.set(speed)
+        if speed > 0:
+            if not self.rightLimitSwitch.get():
+                self.intakeMotor.set(speed)
         else:
-            logging.warn("intake at limit")
+            self.intakeMotor.set(speed)
 
     def manualLift(self, speed):
         self.liftMotor.set(speed)

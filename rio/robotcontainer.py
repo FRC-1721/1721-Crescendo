@@ -27,6 +27,7 @@ from subsystems.intake import IntakeSubsystem
 
 from commands.intakeSuck import IntakeSuck
 from commands.intakeRotationPID import IntakeRotationPID
+from commands.intakeRotationMAN import IntakeRotationMAN
 
 
 class RobotContainer:
@@ -88,14 +89,11 @@ class RobotContainer:
         instantiating a :GenericHID or one of its subclasses (Joystick or XboxController),
         and then passing it to a JoystickButton.
         """
-        self.opController.x().whileTrue(
-            IntakeSuck(0.4, self.intake)
-        )
+        self.opController.x().whileTrue(IntakeSuck(0.4, self.intake))
+        self.opController.y().whileTrue(IntakeSuck(-0.4, self.intake))
 
         self.opController.a().onTrue(
-            commands2.cmd.runOnce(
-                lambda: IntakeRotationPID(25, self.intake), self.intake
-            )
+            IntakeRotationMAN(self.opController.getRawAxis(1), self.intake)
         )
 
     def disablePIDSubsystems(self) -> None:

@@ -21,10 +21,6 @@ class IntakeSuck(commands2.Command):
 
     def execute(self):
         self.intakeSubsystem.intake(self.speed)
-        print("gib me runnin :(")
-
-    def initialize(self):
-        print("idoit b runnin O_o")
 
     def end(self, interrupted: bool):
         self.intakeSubsystem.intake(0)
