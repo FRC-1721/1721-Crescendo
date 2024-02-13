@@ -1,9 +1,9 @@
 import commands2
+import logging
 
 from ntcore import NetworkTableInstance
 from rev import CANSparkMax, CANSparkLowLevel, SparkAbsoluteEncoder, SparkMaxLimitSwitch
 from constants import IntakeConstants
-
 
 class IntakeSubsystem(commands2.Subsystem):
     def __init__(self) -> None:
@@ -66,6 +66,8 @@ class IntakeSubsystem(commands2.Subsystem):
     def intake(self, speed):
         if not self.rightLimitSwitch.get() or not self.leftLimitSwitch.get():
             self.intakeMotor.set(speed)
+        else:
+            logging.warn("intake at limit")
 
     def manualLift(self, speed):
         self.liftMotor.set(speed)
