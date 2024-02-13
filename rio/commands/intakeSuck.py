@@ -17,7 +17,7 @@ class IntakeSuck(commands2.Command):
         self.speed = speed
 
         # TODO change current limit later in amps
-        self.intakeSubsystem.intakeCurrentLimit(1)
+        self.intakeSubsystem.intakeCurrentLimit(30)
 
     def execute(self):
         self.intakeSubsystem.intake(self.speed)

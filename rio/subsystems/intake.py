@@ -27,6 +27,10 @@ class IntakeSubsystem(commands2.Subsystem):
             IntakeConstants.kIntakeCanId,
             CANSparkLowLevel.MotorType.kBrushless,
         )
+        
+        self.intakeMotor.restoreFactoryDefaults()
+
+        self.intakeMotor.setInverted(True)
 
         # encoders
         self.liftEncoder = self.liftMotor.getAbsoluteEncoder(
@@ -38,7 +42,7 @@ class IntakeSubsystem(commands2.Subsystem):
 
         # setting inverted
         self.liftMotor.setInverted(IntakeConstants.kLiftInversion)
-        self.intakeMotor.setInverted(IntakeConstants.kIntakeInversion)
+        # self.intakeMotor.setInverted(IntakeConstants.kIntakeInversion)
 
         # pids
         self.liftPID = self.liftMotor.getPIDController()
@@ -57,6 +61,8 @@ class IntakeSubsystem(commands2.Subsystem):
 
         self.leftLimitSwitch.enableLimitSwitch(True)
         self.rightLimitSwitch.enableLimitSwitch(True)
+
+        self.intakeMotor.burnFlash()
 
     def periodic(self) -> None:
         self.sd.putNumber("Thermals/Intake", self.intakeMotor.getMotorTemperature())
