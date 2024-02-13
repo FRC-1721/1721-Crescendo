@@ -88,8 +88,8 @@ class RobotContainer:
         instantiating a :GenericHID or one of its subclasses (Joystick or XboxController),
         and then passing it to a JoystickButton.
         """
-        self.opController.x().onTrue(
-            commands2.cmd.run(lambda: IntakeSuck(0.4, self.intake), self.intake)
+        self.opController.x().whileTrue(
+            IntakeSuck(0.4, self.intake)
         )
 
         self.opController.a().onTrue(
