@@ -60,6 +60,7 @@ class IntakeSubsystem(commands2.Subsystem):
 
     def periodic(self) -> None:
         self.sd.putNumber("Thermals/Intake", self.intakeMotor.getMotorTemperature())
+        self.sd.putNumber("Intake/IntakeAngle", self.intakeEncoder.getPosition())
         self.sd.putNumber("Thermals/Lift", self.liftMotor.getMotorTemperature())
 
     def intake(self, speed):
