@@ -4,7 +4,7 @@ from subsystems.intake import IntakeSubsystem
 
 
 class IntakeSuck(commands2.Command):
-    def __init__(self, speed, subsystem):
+    def __init__(self, speed: float, subsystem: IntakeSubsystem):
         """
         takes in the rings
         """
