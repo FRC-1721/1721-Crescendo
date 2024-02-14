@@ -27,7 +27,6 @@ from subsystems.shooter import Shooter
 from subsystems.intake import IntakeSubsystem
 
 from commands.FlyWheelSpeed import FlyWheelSpeed
-from commands.spinGuidingMotor import spinGuideMotor
 from commands.intakeSuck import IntakeSuck
 from commands.intakeRotationMAN import IntakeRotationMAN
 
@@ -92,9 +91,6 @@ class RobotContainer:
         # shooter keybinds
         # fly wheel spin
         self.opController.a().whileTrue(FlyWheelSpeed(1.00, self.shooter))
-
-        # guiding motor spin
-        self.opController.b().whileTrue(spinGuideMotor(0.4, self.shooter))
 
         # intake keybinds
         # intaking

@@ -27,13 +27,9 @@ class Shooter(Subsystem):
         self.flyMotor = CANSparkMax(
             SuperStrucConstants.flyID, CANSparkLowLevel.MotorType.kBrushless
         )
-        self.guideMotor = CANSparkMax(
-            SuperStrucConstants.guideID, CANSparkLowLevel.MotorType.kBrushless
-        )
 
         # encoders
         self.flyEncoder = self.flyMotor.getEncoder()
-        self.guideEncoder = self.guideMotor.getEncoder()
         self.rotateEncoder = self.rotateMotor.getAbsoluteEncoder(
             SparkMaxAbsoluteEncoder.Type.kDutyCycle
         )
@@ -46,33 +42,12 @@ class Shooter(Subsystem):
         self.rotatePIDController.getD(SuperStrucConstants.kD)
         self.rotatePIDController.getFF(SuperStrucConstants.kFF)
 
-        # limit switches
-        self.limit = self.guideMotor.getForwardLimitSwitch(
-            SparkMaxLimitSwitch.Type.kNormallyOpen
-        )
-
-        self.limit.enableLimitSwitch(True)
-
-        # current limits
-        # TODO change these
-        # self.rotateMotor.setSmartCurrentLimit(SuperStrucConstants.rotateCurrentLimit)
-        # self.flyMotor.setSmartCurrentLimit(SuperStrucConstants.flyCurrentLimit)
-        # self.guideMotor.setSmartCurrentLimit(SuperStrucConstants.guideCurrentLimit)
-
     def periodic(self) -> None:
         self.sd.putNumber("Thermals/rotate", self.rotateMotor.getMotorTemperature())
         self.sd.putNumber("Thermals/fly", self.flyMotor.getMotorTemperature())
-        self.sd.putNumber("Thermals/guide", self.guideMotor.getMotorTemperature())
 
     def setFlyWheelSpeed(self, speed):
         self.flyMotor.set(speed)
 
     def setRotateAngle(self, angle: float):
         self.rotatePIDController.setReference(angle, CANSparkMax.ControlType.kPosition)
-
-    def setGuidingMotorSpeed(self, speed):
-        if self.limit.get():
-            self.guideMotor.set(0)
-
-        else:
-            self.guideMotor.set(speed)
