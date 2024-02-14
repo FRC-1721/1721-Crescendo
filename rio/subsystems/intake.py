@@ -6,7 +6,6 @@ from rev import CANSparkMax, CANSparkLowLevel, SparkAbsoluteEncoder, SparkMaxLim
 from constants import IntakeConstants
 
 
-
 class IntakeSubsystem(commands2.Subsystem):
     def __init__(self) -> None:
         """
