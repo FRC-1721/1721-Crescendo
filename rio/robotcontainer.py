@@ -19,6 +19,8 @@ from constants import AutoConstants, DriveConstants, OIConstants
 from subsystems.drivesubsystem import DriveSubsystem
 from subsystems.shooter import Shooter
 from commands.shooterROT import ShooterROT
+from commands.FlyWheelSpeed import FlyWheelSpeed
+from commands.spinGuidingMotor import spinGuideMotor
 
 
 class RobotContainer:
@@ -82,13 +84,16 @@ class RobotContainer:
         """
         # presents
         # TODO change these
+        #guiding motor drive
+        self.opperatorController.a().whileTrue(FlyWheelSpeed(1.00, self.shooter))
+        self.opperatorController.b().whileTrue(spinGuideMotor(0.4, self.shooter))
         # amp
         self.opperatorController.x().onTrue(
             commands2.cmd.run(lambda: ShooterROT(15, self.shooter), self.shooter)
         )
 
         # speaker
-        self.opperatorController.b().onTrue(
+        self.opperatorController.y().onTrue(
             commands2.cmd.run(lambda: ShooterROT(35, self.shooter), self.shooter)
         )
 

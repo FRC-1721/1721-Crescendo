@@ -14,7 +14,7 @@ sim:	## Run the simulator
 	python -m robotpy sim
 
 deploy:	## Deploy to the robot (with netconsole)
-	python -m robotpy deploy --nc 
+	python -m robotpy deploy --nc --skip-test --no-install
 
 push:	## Deploy to the robot (push only, no netconsole)
 	python -m robotpy deploy

@@ -55,9 +55,9 @@ class Shooter(Subsystem):
 
         # current limits
         # TODO change these
-        self.rotateMotor.setSmartCurrentLimit(SuperStrucConstants.rotateCurrentLimit)
-        self.flyMotor.setSmartCurrentLimit(SuperStrucConstants.flyCurrentLimit)
-        self.guideMotor.setSmartCurrentLimit(SuperStrucConstants.guideCurrentLimit)
+        # self.rotateMotor.setSmartCurrentLimit(SuperStrucConstants.rotateCurrentLimit)
+        # self.flyMotor.setSmartCurrentLimit(SuperStrucConstants.flyCurrentLimit)
+        # self.guideMotor.setSmartCurrentLimit(SuperStrucConstants.guideCurrentLimit)
 
     def periodic(self) -> None:
         self.sd.putNumber("Thermals/rotate", self.rotateMotor.getMotorTemperature())

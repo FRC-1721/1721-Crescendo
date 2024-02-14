@@ -2,7 +2,7 @@ import commands2
 
 
 class spinGuideMotor(commands2.Command):
-    def __init__(self, subsystem, speed):
+    def __init__(self, speed, subsystem):
         super().__init__()
 
         # local subsystem instance
@@ -14,5 +14,5 @@ class spinGuideMotor(commands2.Command):
         self.subsystem.setGuidingMotorSpeed(self.speed)
 
     def end(self, interrupted: bool):
-        self.subsystem.guiding(0)
+        self.subsystem.setGuidingMotorSpeed(0)
         return True
