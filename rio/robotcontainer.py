@@ -1,9 +1,9 @@
 import math
 
-import commands2
-import wpimath
+# vendor libs
 import wpilib
 
+import wpimath
 from commands2 import cmd
 from commands2.button import CommandJoystick
 
@@ -15,8 +15,19 @@ from wpimath.controller import (
 from wpimath.geometry import Pose2d, Rotation2d, Translation2d
 from wpimath.trajectory import TrajectoryConfig, TrajectoryGenerator
 
+import commands2
+
+from commands2 import cmd
+from commands2.button import CommandJoystick, CommandXboxController
+
 from constants import AutoConstants, DriveConstants, OIConstants
+
 from subsystems.drivesubsystem import DriveSubsystem
+from subsystems.intake import IntakeSubsystem
+
+from commands.intakeSuck import IntakeSuck
+from commands.intakeRotationPID import IntakeRotationPID
+from commands.intakeRotationMAN import IntakeRotationMAN
 
 
 class RobotContainer:
@@ -30,9 +41,13 @@ class RobotContainer:
     def __init__(self) -> None:
         # The robot's subsystems
         self.robotDrive = DriveSubsystem()
+        self.intake = IntakeSubsystem()
 
         # The driver's controller
         self.driverController = CommandJoystick(0)
+
+        # the operators controller
+        self.opController = CommandXboxController(OIConstants.kOpControllerPort)
 
         # Configure the button bindings
         self.configureButtonBindings()
@@ -51,7 +66,7 @@ class RobotContainer:
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
                     * 0.3,
-                    wpimath.applyDeadband(
+                    -wpimath.applyDeadband(
                         self.driverController.getRawAxis(0),
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
@@ -74,6 +89,13 @@ class RobotContainer:
         instantiating a :GenericHID or one of its subclasses (Joystick or XboxController),
         and then passing it to a JoystickButton.
         """
+        # intaking
+        self.opController.x().whileTrue(IntakeSuck(0.4, self.intake))
+        self.opController.y().whileTrue(IntakeSuck(-0.4, self.intake))
+
+        # moving intake
+        self.opController.pov(0).whileTrue(IntakeRotationMAN(1, self.intake))  # out
+        self.opController.pov(180).whileTrue(IntakeRotationMAN(-1, self.intake))  # in
 
     def disablePIDSubsystems(self) -> None:
         """Disables all ProfiledPIDSubsystem and PIDSubsystem instances.

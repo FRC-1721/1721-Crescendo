@@ -121,8 +121,13 @@ class ModuleConstants:
 
 
 class OIConstants:
+    # driver controller
     kDriverControllerPort = 0
     kDriveDeadband = 0.075
+
+    # operator controller
+    kOpControllerPort = 1
+    kIntakeButton = 1
 
 
 class AutoConstants:
@@ -139,3 +144,22 @@ class AutoConstants:
     kThetaControllerConstraints = TrapezoidProfileRadians.Constraints(
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared
     )
+
+
+class IntakeConstants:
+    # CANSparkMax ports
+    kliftCanId = 9
+    kIntakeCanId = 10
+
+    # inversion
+    kLiftInversion = False
+    kIntakeInversion = False
+
+    # conversion factor
+    kLiftConversion = 1  # Configured feb 12 by joe
+
+    # lift pid
+    kLiftP = 0
+    kLiftI = 0
+    kLiftD = 0
+    kLiftFF = 0
