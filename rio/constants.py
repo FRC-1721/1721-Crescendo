@@ -156,7 +156,7 @@ class IntakeConstants:
     kIntakeInversion = False
 
     # conversion factor
-    kLiftConversion = 1 # Configured feb 12 by joe
+    kLiftConversion = 1  # Configured feb 12 by joe
 
     # lift pid
     kLiftP = 0
