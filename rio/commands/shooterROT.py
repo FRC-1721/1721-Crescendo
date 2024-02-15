@@ -1,6 +1,5 @@
 import commands2
 
-
 class ShooterROT(commands2.Command):
     def __init__(self, angle, subsystem):
         super().__init__()

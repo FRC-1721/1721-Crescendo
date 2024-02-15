@@ -25,11 +25,12 @@ from constants import AutoConstants, DriveConstants, OIConstants
 from subsystems.drivesubsystem import DriveSubsystem
 from subsystems.shooter import Shooter
 from subsystems.intake import IntakeSubsystem
+from subsystems.limelight import limeLightCommands
 
 from commands.FlyWheelSpeed import FlyWheelSpeed
 from commands.intakeSuck import IntakeSuck
 from commands.intakeRotationMAN import IntakeRotationMAN
-
+from commands.SendToPos import sendToFieldPos
 
 class RobotContainer:
     """
@@ -44,6 +45,7 @@ class RobotContainer:
         self.robotDrive = DriveSubsystem()
         self.shooter = Shooter()
         self.intake = IntakeSubsystem()
+        self.limelight = limeLightCommands()
 
         # The driver's controller
         self.driverController = CommandJoystick(0)
@@ -88,6 +90,7 @@ class RobotContainer:
         instantiating a :GenericHID or one of its subclasses (Joystick or XboxController),
         and then passing it to a JoystickButton.
         """
+        self.opController.b().whileTrue(sendToFieldPos(8,4,0,self.robotDrive,self.limelight))
         # shooter keybinds
         # fly wheel spin
         self.opController.a().whileTrue(FlyWheelSpeed(1.00, self.shooter))
