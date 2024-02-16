@@ -36,10 +36,10 @@ class RobotContainer:
         self.climberSubsystem = ClimberSubsystem()
 
         # The driver's controller
-        self.driverController = CommandJoystick(0)
+        self.driverController = CommandXboxController(OIConstants.kDriverControllerPort)
 
         # operator controller
-        self.opController = CommandXboxController(1)
+        self.opController = CommandXboxController(OIConstants.kOpControllerPort)
 
         # Configure the button bindings
         self.configureButtonBindings()
@@ -50,21 +50,18 @@ class RobotContainer:
             # Turning is controlled by the X axis of the right stick.
             commands2.cmd.run(
                 lambda: self.robotDrive.drive(
-                    # -0.1,
-                    # 0,
-                    # 0,
-                    wpimath.applyDeadband(
+                    -wpimath.applyDeadband(
                         self.driverController.getRawAxis(1),
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
-                    * 0.3,
-                    wpimath.applyDeadband(
+                    * 0.25,
+                    -wpimath.applyDeadband(
                         self.driverController.getRawAxis(0),
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
-                    * 0.3,
+                    * 0.25,
                     -wpimath.applyDeadband(
-                        self.driverController.getRawAxis(2),
+                        self.driverController.getRawAxis(4),
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
                     * 0.3,
@@ -81,13 +78,9 @@ class RobotContainer:
         instantiating a :GenericHID or one of its subclasses (Joystick or XboxController),
         and then passing it to a JoystickButton.
         """
-        self.opController.pov(0).onTrue(
-            commands2.cmd.run(lambda: Climb(1), self.climberSubsystem)
-        )
 
-        self.opController.pov(180).onTrue(
-            commands2.cmd.run(lambda: Climb(-1), self.climberSubsystem)
-        )
+        self.opController.pov(0).onTrue(Climb(1, self.climberSubsystem))
+        self.opController.pov(180).onTrue(Climb(-1, self.climberSubsystem))
 
     def disablePIDSubsystems(self) -> None:
         """Disables all ProfiledPIDSubsystem and PIDSubsystem instances.

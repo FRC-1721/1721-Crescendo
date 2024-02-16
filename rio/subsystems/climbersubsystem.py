@@ -31,9 +31,10 @@ class ClimberSubsystem(commands2.Subsystem):
 
     def periodic(self) -> None:
         self.sd.putNumber("Thermals/Climber", self.motor.getMotorTemperature())
+        self.servo.getPosition()
 
     def setClimberMotorSpeed(self, speed):
         self.motor.set(speed)
 
     def setServoAngle(self, angle):
-        self.servo.setAngle(angle)
+        self.servo.setPosition(angle)
