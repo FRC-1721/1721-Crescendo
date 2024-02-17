@@ -152,5 +152,5 @@ class ClimberConstants:
     kInversion = False
 
     # servo angles
-    kservolock = 10
-    kservoOpen = 15
+    kservolock = 0.0
+    kservoOpen = 0.165

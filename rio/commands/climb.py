@@ -4,7 +4,7 @@ from constants import ClimberConstants
 
 
 class Climb(commands2.Command):
-    def __init__(self, subsystem, speed):
+    def __init__(self, speed, subsystem):
         """
         rotates the climber
         """
@@ -18,8 +18,8 @@ class Climb(commands2.Command):
 
     def initialize(self):
         self.climberSubsystem.setServoAngle(ClimberConstants.kservoOpen)
-        self.climberSubsystem.setClimberMotorSpeed(self.speed)
+        # self.climberSubsystem.setClimberMotorSpeed(self.speed)
 
     def end(self, interrupted: bool):
-        self.climberSubsystem.setClimberMotorSpeed(0)
+        # self.climberSubsystem.setClimberMotorSpeed(0)
         self.climberSubsystem.setServoAngle(ClimberConstants.kservolock)

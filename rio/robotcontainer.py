@@ -79,7 +79,7 @@ class RobotContainer:
         and then passing it to a JoystickButton.
         """
 
-        self.opController.pov(0).onTrue(Climb(1, self.climberSubsystem))
+        self.opController.pov(0).whileTrue(Climb(1, self.climberSubsystem))
         self.opController.pov(180).onTrue(Climb(-1, self.climberSubsystem))
 
     def disablePIDSubsystems(self) -> None:
