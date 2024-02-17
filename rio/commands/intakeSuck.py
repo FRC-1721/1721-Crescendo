@@ -20,7 +20,13 @@ class IntakeSuck(commands2.Command):
         self.intakeSubsystem.intakeCurrentLimit(30)
 
     def execute(self):
-        self.intakeSubsystem.intake(self.speed)
+        if self.speed > 0:
+            if not self.intakeSubsystem.switchPress():
+                commands2.waitcommand(0.25)
+                self.intakeSubsystem.intake(self.speed)
+
+        else:
+            self.intakeSubsystem.intake(self.speed)
 
     def end(self, interrupted: bool):
         self.intakeSubsystem.intake(0)
