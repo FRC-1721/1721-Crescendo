@@ -16,10 +16,8 @@ class Climb(commands2.Command):
         # local var of speed
         self.speed = speed
 
-    def initialize(self):
-        self.climberSubsystem.setServoAngle(ClimberConstants.kservoOpen)
-        # self.climberSubsystem.setClimberMotorSpeed(self.speed)
+    def execute(self):
+        self.climberSubsystem.setClimberMotorSpeed(self.speed)
 
     def end(self, interrupted: bool):
-        # self.climberSubsystem.setClimberMotorSpeed(0)
-        self.climberSubsystem.setServoAngle(ClimberConstants.kservolock)
+        self.climberSubsystem.setClimberMotorSpeed(0)

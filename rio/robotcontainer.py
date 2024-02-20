@@ -20,6 +20,7 @@ from subsystems.drivesubsystem import DriveSubsystem
 from subsystems.climbersubsystem import ClimberSubsystem
 
 from commands.climb import Climb
+from commands.lock import Lock
 
 
 class RobotContainer:
@@ -79,8 +80,13 @@ class RobotContainer:
         and then passing it to a JoystickButton.
         """
 
+        # moving the climber
         self.opController.pov(0).whileTrue(Climb(1, self.climberSubsystem))
-        self.opController.pov(180).onTrue(Climb(-1, self.climberSubsystem))
+        self.opController.pov(180).whileTrue(Climb(-1, self.climberSubsystem))
+
+        # locking
+        self.opController.button(5).onTrue(Lock(self.climberSubsystem, "lock"))
+        self.opController.button(6).onTrue(Lock(self.climberSubsystem, "unlock"))
 
     def disablePIDSubsystems(self) -> None:
         """Disables all ProfiledPIDSubsystem and PIDSubsystem instances.
