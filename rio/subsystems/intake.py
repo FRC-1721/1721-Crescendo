@@ -77,9 +77,3 @@ class IntakeSubsystem(commands2.Subsystem):
 
     def lift(self, angle: float):
         self.liftPID.setReference(angle, CANSparkMax.ControlType.kPosition)
-
-    def liftCurrentLimit(self, current):
-        self.liftMotor.setSmartCurrentLimit(current)
-
-    def intakeCurrentLimit(self, current):
-        self.intakeMotor.setSmartCurrentLimit(current)

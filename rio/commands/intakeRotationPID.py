@@ -18,9 +18,6 @@ class IntakeRotationPID(commands2.Command):
         # requested speed
         self.angle = angle
 
-        # TODO change current limit later in amps
-        self.intakeSubsystem.liftCurrentLimit(1)
-
     def initialize(self):
         self.intakeSubsystem.lift(self.angle)
 
