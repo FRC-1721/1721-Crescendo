@@ -160,6 +160,6 @@ class IntakeConstants:
 
     # lift pid
     kLiftP = 1.2
-    kLiftI = 0.001
-    kLiftD = 0.2
+    kLiftI = 0.0001
+    kLiftD = 0.5
     kLiftFF = 0

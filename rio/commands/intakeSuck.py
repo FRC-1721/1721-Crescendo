@@ -19,7 +19,6 @@ class IntakeSuck(commands2.Command):
     def execute(self):
         if self.speed > 0:
             if not self.intakeSubsystem.switchPress():
-                commands2.waitcommand(0.25)
                 self.intakeSubsystem.intake(self.speed)
 
         else:

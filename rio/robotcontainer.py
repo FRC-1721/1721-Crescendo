@@ -94,10 +94,11 @@ class RobotContainer:
         self.opController.y().whileTrue(IntakeSuck(-0.4, self.intake))
 
         # moving intake
-        # self.opController.pov(0).whileTrue(IntakeRotationMAN(1, self.intake))  # out
-        # self.opController.pov(180).whileTrue(IntakeRotationMAN(-1, self.intake))  # in
+        self.opController.pov(0).whileTrue(IntakeRotationMAN(1, self.intake))  # out
+        self.opController.pov(180).whileTrue(IntakeRotationMAN(-1, self.intake))  # in
 
-        self.opController.pov(0).onTrue(IntakeRotationPID(25, self.intake))
+        self.opController.a().whileTrue(IntakeRotationPID(0, self.intake))
+        self.opController.b().whileTrue(IntakeRotationPID(60, self.intake))
 
     def disablePIDSubsystems(self) -> None:
         """Disables all ProfiledPIDSubsystem and PIDSubsystem instances.

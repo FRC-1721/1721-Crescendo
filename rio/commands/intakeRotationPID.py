@@ -20,7 +20,8 @@ class IntakeRotationPID(commands2.Command):
 
     def initialize(self):
         self.intakeSubsystem.lift(self.angle)
+        print("HELP")
 
     def end(self, interrupted: bool):
-        self.intakeSubsystem.lift(0)
+        print("END")
         return True
