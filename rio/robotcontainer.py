@@ -91,16 +91,22 @@ class RobotContainer:
         and then passing it to a JoystickButton.
         """
         # shooter keybinds
-        # fly wheel spin
-        self.opController.a().whileTrue(FlyWheelSpeed(0.25, self.shooter))
+        # fly wheel spin for speaker
+        self.opController.a().whileTrue(FlyWheelSpeed(1.0, self.shooter)) #high speed
 
+        self.opController.b().whileTrue(FlyWheelSpeed(0.05, self.shooter)) #low speed
+
+        #moving shooter
         self.opController.pov(0).whileTrue(manualROT(0.5, self.shooter))
         self.opController.pov(180).whileTrue(manualROT(-0.5, self.shooter))
 
         # intake keybinds
+
         # intaking
         self.opController.x().whileTrue(IntakeSuck(0.4, self.intake))
+        # handoff
         self.opController.y().whileTrue(IntakeSuck(-0.4, self.intake))
+        
 
         # moving intake
         self.opController.pov(90).whileTrue(IntakeRotationMAN(1, self.intake))  # out

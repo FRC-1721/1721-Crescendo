@@ -50,6 +50,7 @@ class Shooter(Subsystem):
 
     def rotateManual(self,speed):
         self.rotateMotor.set(speed)
+        
     def setRotateAngle(self, angle: float):
         self.rotatePIDController.setReference(angle, CANSparkMax.ControlType.kPosition)
-        print("GAH")
+
