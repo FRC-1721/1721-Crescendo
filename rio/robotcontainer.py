@@ -25,8 +25,8 @@ from constants import AutoConstants, DriveConstants, OIConstants
 from subsystems.drivesubsystem import DriveSubsystem
 from subsystems.intake import IntakeSubsystem
 
-from commands.intakeSuck import IntakeSuck
-from commands.intakeRotationPID import IntakeRotationPID
+from commands.setIntakeSpeed import SetIntakeSpeed
+from commands.rotateIntake import RotateIntake
 from commands.intakeRotationMAN import IntakeRotationMAN
 
 
@@ -90,15 +90,15 @@ class RobotContainer:
         and then passing it to a JoystickButton.
         """
         # intaking
-        self.opController.x().whileTrue(IntakeSuck(0.4, self.intake))
-        self.opController.y().whileTrue(IntakeSuck(-0.4, self.intake))
+        self.opController.x().whileTrue(RotateIntake(0.4, self.intake))
+        self.opController.y().whileTrue(RotateIntake(-0.4, self.intake))
 
         # moving intake
         self.opController.pov(0).whileTrue(IntakeRotationMAN(1, self.intake))  # out
         self.opController.pov(180).whileTrue(IntakeRotationMAN(-1, self.intake))  # in
 
-        self.opController.a().whileTrue(IntakeRotationPID(0, self.intake))
-        self.opController.b().whileTrue(IntakeRotationPID(60, self.intake))
+        self.opController.a().whileTrue(RotateIntake(0, self.intake))
+        self.opController.b().whileTrue(RotateIntake(60, self.intake))
 
     def disablePIDSubsystems(self) -> None:
         """Disables all ProfiledPIDSubsystem and PIDSubsystem instances.

@@ -72,6 +72,10 @@ class IntakeSubsystem(commands2.Subsystem):
     def switchPress(self):
         return self.limtSwitch.get()
 
+    def getAngle(self) -> float:
+        """Return the current angle"""
+        return self.liftEncoder.getPosition()
+
     def manualLift(self, speed):
         self.liftMotor.set(speed)
 
