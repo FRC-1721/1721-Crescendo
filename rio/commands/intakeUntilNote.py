@@ -1,9 +1,10 @@
+import logging
 import commands2
 
 from subsystems.intake import IntakeSubsystem
 
 
-class IntakeSuck(commands2.Command):
+class intakeUntilNote(commands2.Command):
     def __init__(self, speed: float, subsystem: IntakeSubsystem):
         """
         takes in the rings
@@ -16,12 +17,16 @@ class IntakeSuck(commands2.Command):
         # requested speed
         self.speed = speed
 
-        # TODO change current limit later in amps
-        self.intakeSubsystem.intakeCurrentLimit(30)
+    def initialize(self):
+        logging.debug(f"Running command Intake Suck (manual) with speed {self.speed}")
 
     def execute(self):
         self.intakeSubsystem.intake(self.speed)
 
+    def isFinished(self):
+        return self.intakeSubsystem.switchPress()
+
     def end(self, interrupted: bool):
         self.intakeSubsystem.intake(0)
+        logging.debug(f"Intake suck done")
         return True

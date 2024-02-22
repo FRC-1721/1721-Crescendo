@@ -26,11 +26,13 @@ from subsystems.drivesubsystem import DriveSubsystem
 from subsystems.shooter import Shooter
 from subsystems.intake import IntakeSubsystem
 
+from commands.setIntakeSpeed import SetIntakeSpeed
+from commands.rotateIntake import RotateIntake
 from commands.FlyWheelSpeed import FlyWheelSpeed
-from commands.intakeSuck import IntakeSuck
 from commands.intakeRotationMAN import IntakeRotationMAN
 from commands.shooterROT import ShooterROT
 from commands.manualRot import manualROT
+from commands.intakeUntilNote import intakeUntilNote
 
 
 class RobotContainer:
@@ -90,44 +92,36 @@ class RobotContainer:
         instantiating a :GenericHID or one of its subclasses (Joystick or XboxController),
         and then passing it to a JoystickButton.
         """
-        #_____INTAKE_KEYBINDS_____
+        # _____INTAKE_KEYBINDS_____
 
         # intaking
-        self.opController.x().whileTrue(IntakeSuck(0.4, self.intake))
+
+        self.opController.x().onTrue(
+            commands2.SequentialCommand(
+                RotateIntake(60, self.intake),
+                intakeUntilNote(0.5, self.intake),
+                RotateIntake(0, self.intake),
+            )
+        )
+        self.opController.y().whileTrue(RotateIntake(-0.5, self.intake))
 
         # moving intake
         self.opController.pov(90).whileTrue(IntakeRotationMAN(1, self.intake))  # out
         self.opController.pov(270).whileTrue(IntakeRotationMAN(-1, self.intake))  # in
 
-        #_____POST_INTAKE_KEYBINDS_____
+        # _____POST_INTAKE_KEYBINDS_____
 
-        #speaker command group
-        self.opController.a().whileTrue(
-            commands2.SequentialCommandGroup(        
-                FlyWheelSpeed(1.0, self.shooter),    #power flywheels
-                commands2.WaitCommand(3),            #wait for flywheels to get up to speed
-                IntakeSuck(-0.4, self.intake)        #push note out of intake
-            )
-            )
-
-        #amp command group
-        self.opController.b().whileTrue(
-            commands2.ParallelCommandGroup(        
-                FlyWheelSpeed(0.05, self.shooter),    #power flywheels at highly reduced speed
-                IntakeSuck(-0.4, self.intake)        #push note out of intake
-            )
-            )
-
-        #moving shooter
+        # moving shooter
         self.opController.pov(0).whileTrue(manualROT(0.5, self.shooter))
         self.opController.pov(180).whileTrue(manualROT(-0.5, self.shooter))
 
-        #PID shooter rotation (NOT CURRENTLY WORKING)
-        
-        #self.opController.pov(0).whileTrue(ShooterROT(0,self.shooter))  # out
-        #self.opController.pov(180).whileTrue(ShooterROT(40,self.shooter))  # out
+        # PID shooter rotation (NOT CURRENTLY WORKING)
 
+        # self.opController.pov(0).whileTrue(ShooterROT(0,self.shooter))  # out
+        # self.opController.pov(180).whileTrue(ShooterROT(40,self.shooter))  # out
 
+        self.opController.a().whileTrue(RotateIntake(0, self.intake))
+        self.opController.b().whileTrue(RotateIntake(60, self.intake))
 
     def disablePIDSubsystems(self) -> None:
         """Disables all ProfiledPIDSubsystem and PIDSubsystem instances.

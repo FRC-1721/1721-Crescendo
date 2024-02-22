@@ -7,6 +7,7 @@
 
 import commands2
 import wpilib
+import logging
 
 from robotcontainer import RobotContainer
 
@@ -17,6 +18,12 @@ class MyRobot(commands2.TimedCommandRobot):
         # autonomous chooser on the dashboard.
         self.container = RobotContainer()
         self.autonomousCommand = None
+
+        if not wpilib.RobotBase.isReal():
+            # Do some things if the robot is NOT real
+
+            # Ovverride default logging
+            logging.basicConfig(level=logging.DEBUG)
 
     def autonomousInit(self) -> None:
         self.autonomousCommand = self.container.getAutonomousCommand()

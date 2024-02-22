@@ -173,7 +173,7 @@ class IntakeConstants:
     kLiftConversion = 1  # Configured feb 12 by joe
 
     # lift pid
-    kLiftP = 0
-    kLiftI = 0
-    kLiftD = 0
+    kLiftP = 1.2
+    kLiftI = 0.0001
+    kLiftD = 0.5
     kLiftFF = 0

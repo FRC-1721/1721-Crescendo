@@ -169,5 +169,13 @@ networktables.json
 # Add to tree but only when neccicary (adding a map or smthn)
 simgui-window.json
 
+# ===========
+# Dashboard
+# ===========
+
+.parcel-cache/
+node_modules/
+dashboard.zip
+
 # sysid ignores
 *.SysId

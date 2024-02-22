@@ -15,3 +15,6 @@ robotpy-commands-v2 = "2024.2.1"
 
 [requires]
 python_version = "3.11"
+
+[pipenv]
+allow_prereleases = true
