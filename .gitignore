@@ -176,3 +176,6 @@ simgui-window.json
 .parcel-cache/
 node_modules/
 dashboard.zip
+
+# sysid ignores
+*.SysId

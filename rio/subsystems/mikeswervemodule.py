@@ -1,29 +1,29 @@
-import math
-import rev
-
 from rev import CANSparkMax, SparkMaxAbsoluteEncoder, CANSparkLowLevel
 from wpimath.geometry import Rotation2d
 from wpimath.kinematics import SwerveModuleState, SwerveModulePosition
 
-# from constants.complexConstants import ModuleConstants
-from constants.getConstants import getConstants
+from constants import ModuleConstants
 
 
 class MikeSwerveModule:
-    def __init__(self, swerveConfig: dict, moduleConfig: str) -> None:
-        """
-        Construct a custom swerve module, this model is similar to a MAXSwerveModule but
-        using our custom construction.
+    def __init__(
+        self, drivingCANId: int, turningCANId: int, chassisAngularOffset: float
+    ) -> None:
+        """Constructs a Mike Swerve Module, a custom module designed in house.
+
+        This code is based on Rev's swerve module the Max Swerve module, and
+        the original code for that can be found here
+        https://github.com/robotpy/robotpy-rev/blob/main/examples/maxswerve/subsystems/maxswervemodule.py
         """
 
-        self.chassisAngularOffset = 0  # Fix me later?
+        self.chassisAngularOffset = 0
         self.desiredState = SwerveModuleState(0.0, Rotation2d())
 
         self.drivingSparkMax = CANSparkMax(
-            moduleConfig["CANDriveID"], rev.CANSparkLowLevel.MotorType.kBrushless
+            drivingCANId, CANSparkLowLevel.MotorType.kBrushless
         )
         self.turningSparkMax = CANSparkMax(
-            moduleConfig["CANSteerID"], rev.CANSparkLowLevel.MotorType.kBrushless
+            turningCANId, CANSparkLowLevel.MotorType.kBrushless
         )
 
         # Factory reset, so we get the SPARKS MAX to a known state before configuring
@@ -45,24 +45,25 @@ class MikeSwerveModule:
         # native units for position and velocity are rotations and RPM, respectively,
         # but we want meters and meters per second to use with WPILib's swerve APIs.
         self.drivingEncoder.setPositionConversionFactor(
-            swerveConfig["drivePosConversionFactor"]
+            ModuleConstants.kDrivingEncoderPositionFactor
         )
         self.drivingEncoder.setVelocityConversionFactor(
-            swerveConfig["driveVelConversionFactor"]
+            ModuleConstants.kDrivingEncoderVelocityFactor
         )
 
         # Apply position and velocity conversion factors for the turning encoder. We
         # want these in radians and radians per second to use with WPILib's swerve
         # APIs.
         self.turningEncoder.setPositionConversionFactor(
-            swerveConfig["steerPosConversionFactor"]
+            ModuleConstants.kTurningEncoderPositionFactor
         )
         self.turningEncoder.setVelocityConversionFactor(
-            swerveConfig["steerVelConversionFactor"]
+            ModuleConstants.kTurningEncoderVelocityFactor
         )
 
-        # Uncomment to invert the encoders
-        # self.turningEncoder.setInverted(true)
+        # Invert the turning encoder, since the output shaft rotates in the opposite direction of
+        # the steering motor in the MAXSwerve Module.
+        self.turningEncoder.setInverted(ModuleConstants.kTurningEncoderInverted)
 
         # Enable PID wrap around for the turning motor. This will allow the PID
         # controller to go through 0 to get to the setpoint i.e. going from 350 degrees
@@ -70,41 +71,39 @@ class MikeSwerveModule:
         # longer route.
         self.turningPIDController.setPositionPIDWrappingEnabled(True)
         self.turningPIDController.setPositionPIDWrappingMinInput(
-            swerveConfig["minimumPIDInput"]
+            ModuleConstants.kTurningEncoderPositionPIDMinInput
         )
         self.turningPIDController.setPositionPIDWrappingMaxInput(
-            math.tau
-        )  # Tau 1 radian
+            ModuleConstants.kTurningEncoderPositionPIDMaxInput
+        )
 
         # Set the PID gains for the driving motor. Note these are example gains, and you
         # may need to tune them for your own robot!
-        self.drivingPIDController.setP(swerveConfig["kDrivingP"])
-        self.drivingPIDController.setI(swerveConfig["kDrivingI"])
-        self.drivingPIDController.setD(swerveConfig["kDrivingD"])
-        self.drivingPIDController.setFF(
-            swerveConfig["kDrivingFF"]
-        )  # TODO: Calculate seperatly! look at complexConstants.py
+        self.drivingPIDController.setP(ModuleConstants.kDrivingP)
+        self.drivingPIDController.setI(ModuleConstants.kDrivingI)
+        self.drivingPIDController.setD(ModuleConstants.kDrivingD)
+        self.drivingPIDController.setFF(ModuleConstants.kDrivingFF)
         self.drivingPIDController.setOutputRange(
-            swerveConfig["kDrivingMinOutput"], swerveConfig["kDrivingMaxOutput"]
+            ModuleConstants.kDrivingMinOutput, ModuleConstants.kDrivingMaxOutput
         )
 
         # Set the PID gains for the turning motor. Note these are example gains, and you
         # may need to tune them for your own robot!
-        self.turningPIDController.setP(swerveConfig["kTurningP"])
-        self.turningPIDController.setI(swerveConfig["kTurningI"])
-        self.turningPIDController.setD(swerveConfig["kTurningD"])
-        self.turningPIDController.setFF(swerveConfig["kTurningFF"])
+        self.turningPIDController.setP(ModuleConstants.kTurningP)
+        self.turningPIDController.setI(ModuleConstants.kTurningI)
+        self.turningPIDController.setD(ModuleConstants.kTurningD)
+        self.turningPIDController.setFF(ModuleConstants.kTurningFF)
         self.turningPIDController.setOutputRange(
-            swerveConfig["kTurningMinOutput"], swerveConfig["kTurningMaxOutput"]
+            ModuleConstants.kTurningMinOutput, ModuleConstants.kTurningMaxOutput
         )
 
-        self.drivingSparkMax.setIdleMode(CANSparkMax.IdleMode.kBrake)  # Brake mode!
-        self.turningSparkMax.setIdleMode(CANSparkMax.IdleMode.kBrake)  # Brake mode!
+        self.drivingSparkMax.setIdleMode(ModuleConstants.kDrivingMotorIdleMode)
+        self.turningSparkMax.setIdleMode(ModuleConstants.kTurningMotorIdleMode)
         self.drivingSparkMax.setSmartCurrentLimit(
-            swerveConfig["kDrivingMotorCurrentLimit"]
+            ModuleConstants.kDrivingMotorCurrentLimit
         )
         self.turningSparkMax.setSmartCurrentLimit(
-            swerveConfig["kTurningMotorCurrentLimit"]
+            ModuleConstants.kTurningMotorCurrentLimit
         )
 
         # Save the SPARK MAX configurations. If a SPARK MAX browns out during
@@ -112,10 +111,7 @@ class MikeSwerveModule:
         self.drivingSparkMax.burnFlash()
         self.turningSparkMax.burnFlash()
 
-        # ===================================
-        # TODO: Calculate the angular offset!
-        # ===================================
-        self.chassisAngularOffset = 0
+        self.chassisAngularOffset = chassisAngularOffset
         self.desiredState.angle = Rotation2d(self.turningEncoder.getPosition())
         self.drivingEncoder.setPosition(0)
 
@@ -152,7 +148,7 @@ class MikeSwerveModule:
         # Apply chassis angular offset to the desired state.
         correctedDesiredState = SwerveModuleState()
         correctedDesiredState.speed = desiredState.speed
-        correctedDesiredState.angle = desiredState.angle + Rotation2d(
+        correctedDesiredState.angle = -desiredState.angle + Rotation2d(
             self.chassisAngularOffset
         )
 
@@ -166,8 +162,7 @@ class MikeSwerveModule:
             optimizedDesiredState.speed, CANSparkMax.ControlType.kVelocity
         )
         self.turningPIDController.setReference(
-            optimizedDesiredState.angle.radians(),
-            CANSparkMax.ControlType.kPosition,
+            optimizedDesiredState.angle.radians(), CANSparkMax.ControlType.kPosition
         )
 
         self.desiredState = desiredState

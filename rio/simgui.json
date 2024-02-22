@@ -1,16 +1,21 @@
 {
+  "HALProvider": {
+    "Other Devices": {
+      "ADIS16448[4]": {
+        "header": {
+          "open": true
+        }
+      }
+    }
+  },
   "NTProvider": {
     "types": {
-      "/FMSInfo": "FMSInfo",
-      "/SmartDashboard/Field": "Field2d"
+      "/FMSInfo": "FMSInfo"
     }
   },
   "NetworkTables": {
     "transitory": {
       "SmartDashboard": {
-        "Audio": {
-          "open": true
-        },
         "Swerve": {
           "open": true
         },
@@ -19,28 +24,6 @@
     }
   },
   "NetworkTables Info": {
-    "Clients": {
-      "open": true
-    },
-    "Connections": {
-      "open": true
-    },
     "visible": true
-  },
-  "NetworkTables View": {
-    "visible": false
-  },
-  "Window": {
-    "/SmartDashboard/Autonomous": {
-      "window": {
-        "visible": true
-      }
-    },
-    "/SmartDashboard/Field": {
-      "image": "../dashboard/src/assets/field.png",
-      "window": {
-        "visible": true
-      }
-    }
   }
 }

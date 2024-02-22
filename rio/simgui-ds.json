@@ -63,6 +63,10 @@
     {
       "guid": "Keyboard0",
       "name": "Driver Joystick"
+    },
+    {
+      "guid": "030000006d0400001dc2000014400000",
+      "useGamepad": true
     }
   ]
 }
