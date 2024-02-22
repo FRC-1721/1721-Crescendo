@@ -29,6 +29,8 @@ from subsystems.intake import IntakeSubsystem
 from commands.FlyWheelSpeed import FlyWheelSpeed
 from commands.intakeSuck import IntakeSuck
 from commands.intakeRotationMAN import IntakeRotationMAN
+from commands.shooterROT import ShooterROT
+from commands.manualRot import manualROT
 
 
 class RobotContainer:
@@ -90,7 +92,10 @@ class RobotContainer:
         """
         # shooter keybinds
         # fly wheel spin
-        self.opController.a().whileTrue(FlyWheelSpeed(1.00, self.shooter))
+        self.opController.a().whileTrue(FlyWheelSpeed(0.25, self.shooter))
+
+        self.opController.pov(0).whileTrue(manualROT(0.5, self.shooter))
+        self.opController.pov(180).whileTrue(manualROT(-0.5, self.shooter))
 
         # intake keybinds
         # intaking
@@ -98,8 +103,13 @@ class RobotContainer:
         self.opController.y().whileTrue(IntakeSuck(-0.4, self.intake))
 
         # moving intake
-        self.opController.pov(0).whileTrue(IntakeRotationMAN(1, self.intake))  # out
-        self.opController.pov(180).whileTrue(IntakeRotationMAN(-1, self.intake))  # in
+        self.opController.pov(90).whileTrue(IntakeRotationMAN(1, self.intake))  # out
+        self.opController.pov(270).whileTrue(IntakeRotationMAN(-1, self.intake))  # in
+
+        #self.opController.pov(0).whileTrue(ShooterROT(0,self.shooter))  # out
+        #self.opController.pov(180).whileTrue(ShooterROT(40,self.shooter))  # out
+
+
 
     def disablePIDSubsystems(self) -> None:
         """Disables all ProfiledPIDSubsystem and PIDSubsystem instances.

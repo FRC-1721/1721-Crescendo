@@ -5,7 +5,7 @@ from commands2 import Subsystem
 from rev import (
     CANSparkLowLevel,
     CANSparkMax,
-    SparkMaxAbsoluteEncoder,
+    SparkAbsoluteEncoder,
     SparkMaxLimitSwitch,
 )
 
@@ -30,9 +30,7 @@ class Shooter(Subsystem):
 
         # encoders
         self.flyEncoder = self.flyMotor.getEncoder()
-        self.rotateEncoder = self.rotateMotor.getAbsoluteEncoder(
-            SparkMaxAbsoluteEncoder.Type.kDutyCycle
-        )
+        self.rotateEncoder = self.rotateMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle)
 
         # PID values
         self.rotatePIDController = self.rotateMotor.getPIDController()
@@ -42,6 +40,7 @@ class Shooter(Subsystem):
         self.rotatePIDController.getD(SuperStrucConstants.kD)
         self.rotatePIDController.getFF(SuperStrucConstants.kFF)
 
+
     def periodic(self) -> None:
         self.sd.putNumber("Thermals/rotate", self.rotateMotor.getMotorTemperature())
         self.sd.putNumber("Thermals/fly", self.flyMotor.getMotorTemperature())
@@ -49,5 +48,8 @@ class Shooter(Subsystem):
     def setFlyWheelSpeed(self, speed):
         self.flyMotor.set(speed)
 
+    def rotateManual(self,speed):
+        self.rotateMotor.set(speed)
     def setRotateAngle(self, angle: float):
         self.rotatePIDController.setReference(angle, CANSparkMax.ControlType.kPosition)
+        print("GAH")

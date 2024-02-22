@@ -153,15 +153,11 @@ class SuperStrucConstants:
     guideID = 13
 
     # PID values
-    kP = 0
-    kI = 0
-    kD = 0
+    kP = 2
+    kI = 1
+    kD = 1
     kFF = 0
 
-    # current limits
-    rotateCurrentLimit = 1
-    flyCurrentLimit = 1
-    guideCurrentLimit = 1
 
 
 class IntakeConstants:
