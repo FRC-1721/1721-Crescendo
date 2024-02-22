@@ -35,7 +35,7 @@ class DriveConstants:
     # Chassis configuration
     kTrackWidth = units.inchesToMeters(20.3937)
     # Distance between centers of right and left wheels on robot
-    kWheelBase = units.inchesToMeters(20.25)
+    kWheelBase = units.inchesToMeters(20.5)
 
     # Distance between front and back wheels on robot
     kModulePositions = [
@@ -144,6 +144,24 @@ class AutoConstants:
     kThetaControllerConstraints = TrapezoidProfileRadians.Constraints(
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared
     )
+
+
+class SuperStrucConstants:
+    # CANSpark IDS
+    rotateID = 11
+    flyID = 12
+    guideID = 13
+
+    # PID values
+    kP = 0
+    kI = 0
+    kD = 0
+    kFF = 0
+
+    # current limits
+    rotateCurrentLimit = 1
+    flyCurrentLimit = 1
+    guideCurrentLimit = 1
 
 
 class IntakeConstants:
