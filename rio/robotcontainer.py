@@ -5,7 +5,7 @@ import wpilib
 
 import wpimath
 from commands2 import cmd
-from commands2.button import CommandJoystick
+from commands2.button import CommandJoystick, CommandXboxController
 
 from wpimath.controller import (
     PIDController,
@@ -23,11 +23,14 @@ from commands2.button import CommandJoystick, CommandXboxController
 from constants import AutoConstants, DriveConstants, OIConstants
 
 from subsystems.drivesubsystem import DriveSubsystem
+from subsystems.shooter import Shooter
 from subsystems.intake import IntakeSubsystem
 
-from commands.intakeSuck import IntakeSuck
-from commands.intakeRotationPID import IntakeRotationPID
+from commands.setIntakeSpeed import SetIntakeSpeed
+from commands.rotateIntake import RotateIntake
+from commands.FlyWheelSpeed import FlyWheelSpeed
 from commands.intakeRotationMAN import IntakeRotationMAN
+from commands.intakeUntilNote import intakeUntilNote
 
 
 class RobotContainer:
@@ -41,6 +44,7 @@ class RobotContainer:
     def __init__(self) -> None:
         # The robot's subsystems
         self.robotDrive = DriveSubsystem()
+        self.shooter = Shooter()
         self.intake = IntakeSubsystem()
 
         # The driver's controller
@@ -58,24 +62,21 @@ class RobotContainer:
             # Turning is controlled by the X axis of the right stick.
             commands2.cmd.run(
                 lambda: self.robotDrive.drive(
-                    # -0.1,
-                    # 0,
-                    # 0,
-                    wpimath.applyDeadband(
+                    -wpimath.applyDeadband(
                         self.driverController.getRawAxis(1),
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
-                    * 0.3,
+                    * 0.5,
                     -wpimath.applyDeadband(
                         self.driverController.getRawAxis(0),
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
-                    * 0.3,
+                    * 0.5,
                     -wpimath.applyDeadband(
-                        self.driverController.getRawAxis(2),
+                        self.driverController.getRawAxis(4),
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
-                    * 0.3,
+                    * 0.6,
                     False,
                     True,
                 ),
@@ -89,13 +90,27 @@ class RobotContainer:
         instantiating a :GenericHID or one of its subclasses (Joystick or XboxController),
         and then passing it to a JoystickButton.
         """
+        # shooter keybinds
+        # fly wheel spin
+        self.opController.a().whileTrue(FlyWheelSpeed(1.00, self.shooter))
+
+        # intake keybinds
         # intaking
-        self.opController.x().whileTrue(IntakeSuck(0.4, self.intake))
-        self.opController.y().whileTrue(IntakeSuck(-0.4, self.intake))
+        self.opController.x().onTrue(
+            commands2.SequentialCommand(
+                RotateIntake(60, self.intake),
+                intakeUntilNote(0.5, self.intake),
+                RotateIntake(0, self.intake),
+            )
+        )
+        self.opController.y().whileTrue(RotateIntake(-0.5, self.intake))
 
         # moving intake
         self.opController.pov(0).whileTrue(IntakeRotationMAN(1, self.intake))  # out
         self.opController.pov(180).whileTrue(IntakeRotationMAN(-1, self.intake))  # in
+
+        self.opController.a().whileTrue(RotateIntake(0, self.intake))
+        self.opController.b().whileTrue(RotateIntake(60, self.intake))
 
     def disablePIDSubsystems(self) -> None:
         """Disables all ProfiledPIDSubsystem and PIDSubsystem instances.

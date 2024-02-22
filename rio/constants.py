@@ -35,7 +35,7 @@ class DriveConstants:
     # Chassis configuration
     kTrackWidth = units.inchesToMeters(20.3937)
     # Distance between centers of right and left wheels on robot
-    kWheelBase = units.inchesToMeters(20.25)
+    kWheelBase = units.inchesToMeters(20.5)
 
     # Distance between front and back wheels on robot
     kModulePositions = [
@@ -146,6 +146,24 @@ class AutoConstants:
     )
 
 
+class SuperStrucConstants:
+    # CANSpark IDS
+    rotateID = 11
+    flyID = 12
+    guideID = 13
+
+    # PID values
+    kP = 0
+    kI = 0
+    kD = 0
+    kFF = 0
+
+    # current limits
+    rotateCurrentLimit = 1
+    flyCurrentLimit = 1
+    guideCurrentLimit = 1
+
+
 class IntakeConstants:
     # CANSparkMax ports
     kliftCanId = 9
@@ -159,7 +177,7 @@ class IntakeConstants:
     kLiftConversion = 1  # Configured feb 12 by joe
 
     # lift pid
-    kLiftP = 0
-    kLiftI = 0
-    kLiftD = 0
+    kLiftP = 1.2
+    kLiftI = 0.0001
+    kLiftD = 0.5
     kLiftFF = 0

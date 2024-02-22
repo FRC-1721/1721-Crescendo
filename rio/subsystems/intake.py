@@ -53,11 +53,11 @@ class IntakeSubsystem(commands2.Subsystem):
         self.liftPID.setFF(IntakeConstants.kLiftFF)
 
         # limit switches
-        self.rightLimitSwitch = self.intakeMotor.getForwardLimitSwitch(
+        self.limtSwitch = self.intakeMotor.getForwardLimitSwitch(
             SparkMaxLimitSwitch.Type.kNormallyOpen
         )
 
-        self.rightLimitSwitch.enableLimitSwitch(True)
+        self.limtSwitch.enableLimitSwitch(True)
 
         self.intakeMotor.burnFlash()
 
@@ -67,20 +67,17 @@ class IntakeSubsystem(commands2.Subsystem):
         self.sd.putNumber("Thermals/Lift", self.liftMotor.getMotorTemperature())
 
     def intake(self, speed):
-        if speed > 0:
-            if not self.rightLimitSwitch.get():
-                self.intakeMotor.set(speed)
-        else:
-            self.intakeMotor.set(speed)
+        self.intakeMotor.set(speed)
+
+    def switchPress(self):
+        return self.limtSwitch.get()
+
+    def getAngle(self) -> float:
+        """Return the current angle"""
+        return self.liftEncoder.getPosition()
 
     def manualLift(self, speed):
         self.liftMotor.set(speed)
 
     def lift(self, angle: float):
         self.liftPID.setReference(angle, CANSparkMax.ControlType.kPosition)
-
-    def liftCurrentLimit(self, current):
-        self.liftMotor.setSmartCurrentLimit(current)
-
-    def intakeCurrentLimit(self, current):
-        self.intakeMotor.setSmartCurrentLimit(current)
