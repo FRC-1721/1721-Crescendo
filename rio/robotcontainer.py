@@ -28,6 +28,7 @@ from subsystems.intake import IntakeSubsystem
 from commands.setIntakeSpeed import SetIntakeSpeed
 from commands.rotateIntake import RotateIntake
 from commands.intakeRotationMAN import IntakeRotationMAN
+from commands.intakeUntilNote import intakeUntilNote
 
 
 class RobotContainer:
@@ -90,8 +91,14 @@ class RobotContainer:
         and then passing it to a JoystickButton.
         """
         # intaking
-        self.opController.x().whileTrue(RotateIntake(0.4, self.intake))
-        self.opController.y().whileTrue(RotateIntake(-0.4, self.intake))
+        self.opController.x().onTrue(
+            commands2.SequentialCommand(
+                RotateIntake(60, self.intake),
+                intakeUntilNote(0.5,self.intake),
+                RotateIntake(0, self.intake)
+            )
+        )
+        self.opController.y().whileTrue(RotateIntake(-0.5, self.intake))
 
         # moving intake
         self.opController.pov(0).whileTrue(IntakeRotationMAN(1, self.intake))  # out
