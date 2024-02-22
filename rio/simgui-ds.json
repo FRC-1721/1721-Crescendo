@@ -16,13 +16,7 @@
         }
       ],
       "axisCount": 3,
-      "buttonCount": 10,
-      "buttonKeys": [
-        90,
-        88,
-        67,
-        86
-      ],
+      "buttonCount": 0,
       "povCount": 0
     },
     {
@@ -39,12 +33,10 @@
       "axisCount": 2,
       "buttonCount": 6,
       "buttonKeys": [
-        260,
-        268,
-        266,
-        261,
-        269,
-        267
+        65,
+        66,
+        88,
+        89
       ],
       "povCount": 0
     },
@@ -65,8 +57,8 @@
       "name": "Driver Joystick"
     },
     {
-      "guid": "030000006d0400001dc2000014400000",
-      "useGamepad": true
+      "guid": "Keyboard1",
+      "name": "Operator Stick"
     }
   ]
 }
