@@ -3,6 +3,8 @@ from ntcore import NetworkTableInstance
 
 from wpilib import RobotBase
 
+from numpy import *
+
 import commands2
 import json
 
@@ -14,7 +16,12 @@ class limeLightCommands(commands2.Subsystem):
         self.nt = NetworkTableInstance.getDefault()
         self.sd = self.nt.getTable("SmartDashboard")
         self.ll = self.nt.getTable("limelight-jack")
+        
+        #field size in goofy limelight units
         self.fieldSize = [16, 8]
+
+        self.xFifo = array([0] * 10)
+        self.yFifo = array([0] * 10)
 
     def setPipeline(self, PipeLine:int) -> None:
         self.ll.getEntry("pipeline").setDouble(PipeLine)
@@ -75,3 +82,32 @@ class limeLightCommands(commands2.Subsystem):
         #print(correctPos)                                                                                 IS THE ROBOT IN THE RIGHT PLACE
             
         driver.drive(driveX,driveY,driveZ,False,True)       
+
+    def findObj(self) -> None:
+        posX = self.ll.getEntry("tx").getDouble(0)
+        append(self.xFifo, posX)
+        self.xFifo = delete(self.xFifo, 0)
+
+        posY = self.ll.getEntry("ty").getDouble(0)
+        append(self.yFifo, posY)
+        self.xFifo = delete(self.yFifo, 0)
+
+        self.distX = mean(posX)
+        self.distY = mean(posY)
+
+    def goToObj(self,driver) -> None:
+        if self.distY > 3.5:
+            driveY = 0.1
+        else:
+            driveY = 0
+
+        if self.distX > 0.5:
+            driveX = 0.1
+
+        elif self.distX < -0.5:
+            driveX = -0.1
+
+        else:
+            driveX = 0
+
+        driver.drive(driveX,driveY,0,False,True) 

@@ -31,6 +31,7 @@ from commands.FlyWheelSpeed import FlyWheelSpeed
 from commands.intakeSuck import IntakeSuck
 from commands.intakeRotationMAN import IntakeRotationMAN
 from commands.SendToPos import sendToFieldPos
+from commands.SendToObj import sendToObject
 
 class RobotContainer:
     """
@@ -90,10 +91,11 @@ class RobotContainer:
         instantiating a :GenericHID or one of its subclasses (Joystick or XboxController),
         and then passing it to a JoystickButton.
         """
+        self.opController.a().whileTrue(Send)
         self.opController.b().whileTrue(sendToFieldPos(8,4,0,self.robotDrive,self.limelight))
         # shooter keybinds
         # fly wheel spin
-        self.opController.a().whileTrue(FlyWheelSpeed(1.00, self.shooter))
+        
 
         # intake keybinds
         # intaking
