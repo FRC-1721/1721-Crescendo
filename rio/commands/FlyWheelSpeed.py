@@ -1,3 +1,4 @@
+import logging
 import commands2
 
 
@@ -12,8 +13,15 @@ class FlyWheelSpeed(commands2.Command):
         self.speed = speed
 
     def initialize(self):
+        logging.info("Spinning up...")
+
+    def execute(self):
         self.subsystem.setFlyWheelSpeed(self.speed)
 
+    def isFinished(self):
+        return self.subsystem.isReady()
+
     def end(self, interrupted: bool):
-        self.subsystem.setFlyWheelSpeed(0)
+        logging.info(f"Done, up to speed is {self.isFinished()}")
+        # self.subsystem.setFlyWheelSpeed(0)
         return True

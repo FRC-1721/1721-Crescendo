@@ -44,6 +44,7 @@ class Shooter(Subsystem):
     def periodic(self) -> None:
         self.sd.putNumber("Thermals/rotate", self.rotateMotor.getMotorTemperature())
         self.sd.putNumber("Thermals/fly", self.flyMotor.getMotorTemperature())
+        # print(self.flyEncoder.getVelocity())
 
     def setFlyWheelSpeed(self, speed):
         self.flyMotor.set(speed)
@@ -54,3 +55,5 @@ class Shooter(Subsystem):
     def setRotateAngle(self, angle: float):
         self.rotatePIDController.setReference(angle, CANSparkMax.ControlType.kPosition)
 
+    def isReady(self):
+        return self.flyEncoder.getVelocity() > 5500 # Magic

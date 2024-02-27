@@ -33,6 +33,7 @@ from commands.intakeRotationMAN import IntakeRotationMAN
 from commands.shooterROT import ShooterROT
 from commands.manualRot import manualROT
 from commands.intakeUntilNote import intakeUntilNote
+from commands.setIntakeSpeed import SetIntakeSpeed
 
 
 class RobotContainer:
@@ -97,14 +98,21 @@ class RobotContainer:
         # intaking
 
         self.opController.x().onTrue(
-            commands2.SequentialCommand(
-                RotateIntake(60, self.intake),
+            commands2.SequentialCommandGroup(
+                RotateIntake(120, self.intake),
                 intakeUntilNote(0.5, self.intake),
                 RotateIntake(0, self.intake),
             )
         )
-        self.opController.y().whileTrue(RotateIntake(-0.5, self.intake))
-
+        self.opController.y().onTrue(
+            commands2.SequentialCommandGroup(       
+                RotateIntake(0, self.intake), 
+                FlyWheelSpeed(1.0, self.shooter),    #power flywheels
+                commands2.WaitCommand(3),            #wait for flywheels to get up to speed
+                SetIntakeSpeed(-0.4, self.intake)  ,
+                FlyWheelSpeed(0.0, self.shooter),
+            )
+        )
         # moving intake
         self.opController.pov(90).whileTrue(IntakeRotationMAN(1, self.intake))  # out
         self.opController.pov(270).whileTrue(IntakeRotationMAN(-1, self.intake))  # in
