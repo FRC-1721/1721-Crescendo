@@ -1,5 +1,4 @@
 import wpilib
-
 from ntcore import NetworkTableInstance
 from commands2 import Subsystem
 from rev import (
@@ -34,12 +33,21 @@ class Shooter(Subsystem):
 
         # PID values
         self.rotatePIDController = self.rotateMotor.getPIDController()
+        self.rotatePIDController.setFeedbackDevice(self.rotateEncoder)
 
         self.rotatePIDController.getP(SuperStrucConstants.kP)
         self.rotatePIDController.getI(SuperStrucConstants.kI)
         self.rotatePIDController.getD(SuperStrucConstants.kD)
         self.rotatePIDController.getFF(SuperStrucConstants.kFF)
 
+        # limit switches
+        self.limtSwitch = self.flyMotor.getReverseLimitSwitch(
+            SparkMaxLimitSwitch.Type.kNormallyOpen
+        )
+        
+        self.limtSwitch.enableLimitSwitch(True)
+
+        self.flyMotor.burnFlash()
 
     def periodic(self) -> None:
         self.sd.putNumber("Thermals/rotate", self.rotateMotor.getMotorTemperature())
@@ -48,7 +56,12 @@ class Shooter(Subsystem):
 
     def setFlyWheelSpeed(self, speed):
         self.flyMotor.set(speed)
-
+    
+    def setIdleBrake(self):
+        self.flyMotor.setIdleMode()
+    def switchPress(self):
+        return self.limtSwitch.get()
+    
     def rotateManual(self,speed):
         self.rotateMotor.set(speed)
         
