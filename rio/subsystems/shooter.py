@@ -29,7 +29,9 @@ class Shooter(Subsystem):
 
         # encoders
         self.flyEncoder = self.flyMotor.getEncoder()
-        self.rotateEncoder = self.rotateMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle)
+        self.rotateEncoder = self.rotateMotor.getAbsoluteEncoder(
+            SparkAbsoluteEncoder.Type.kDutyCycle
+        )
 
         # PID values
         self.rotatePIDController = self.rotateMotor.getPIDController()
@@ -44,8 +46,11 @@ class Shooter(Subsystem):
         self.limtSwitch = self.flyMotor.getReverseLimitSwitch(
             SparkMaxLimitSwitch.Type.kNormallyOpen
         )
-        
+
         self.limtSwitch.enableLimitSwitch(True)
+
+        # these are defaults
+        self.flyMotor.setIdleMode("brake")
 
         self.flyMotor.burnFlash()
 
@@ -56,17 +61,26 @@ class Shooter(Subsystem):
 
     def setFlyWheelSpeed(self, speed):
         self.flyMotor.set(speed)
-    
+
     def setIdleBrake(self):
         self.flyMotor.setIdleMode()
+
     def switchPress(self):
         return self.limtSwitch.get()
-    
-    def rotateManual(self,speed):
+
+    def rotateManual(self, speed):
         self.rotateMotor.set(speed)
-        
+
     def setRotateAngle(self, angle: float):
         self.rotatePIDController.setReference(angle, CANSparkMax.ControlType.kPosition)
 
     def isReady(self):
-        return self.flyEncoder.getVelocity() > 5500 # Magic
+        return self.flyEncoder.getVelocity() > 5500  # Magic
+
+    def setIdleBrake(self):
+        self.flyMotor.setIdleMode("brake")
+        self.flyMotor.burnFlash()
+
+    def setIdleCoast(self):
+        self.flyMotor.setIdleMode("coast")
+        self.flyMotor.burnFlash()

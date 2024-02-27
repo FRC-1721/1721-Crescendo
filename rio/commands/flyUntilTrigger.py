@@ -14,6 +14,7 @@ class FlyUntilTrigger(commands2.Command):
 
     def initialize(self):
         logging.info("Spinning up...")
+        self.subsystem.setIdleBrake()
 
     def execute(self):
         self.subsystem.setFlyWheelSpeed(self.speed)
@@ -24,6 +25,6 @@ class FlyUntilTrigger(commands2.Command):
 
     def end(self, interrupted: bool):
         self.subsystem.setFlyWheelSpeed(0)
+        self.subsystem.setIdleCoast()
         logging.info(f"Done, up to speed is {self.isFinished()}")
-        # self.subsystem.setFlyWheelSpeed(0)
         return True
