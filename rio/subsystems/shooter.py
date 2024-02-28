@@ -6,6 +6,7 @@ from rev import (
     CANSparkMax,
     SparkAbsoluteEncoder,
     SparkMaxLimitSwitch,
+    CANSparkBase
 )
 
 from constants import SuperStrucConstants
@@ -50,7 +51,7 @@ class Shooter(Subsystem):
         self.limtSwitch.enableLimitSwitch(True)
 
         # these are defaults
-        self.flyMotor.setIdleMode("brake")
+        self.flyMotor.setIdleMode(CANSparkBase.IdleMode.kBrake)
 
         self.flyMotor.burnFlash()
 
@@ -61,9 +62,6 @@ class Shooter(Subsystem):
 
     def setFlyWheelSpeed(self, speed):
         self.flyMotor.set(speed)
-
-    def setIdleBrake(self):
-        self.flyMotor.setIdleMode()
 
     def switchPress(self):
         return self.limtSwitch.get()
@@ -78,9 +76,9 @@ class Shooter(Subsystem):
         return self.flyEncoder.getVelocity() > 5500  # Magic
 
     def setIdleBrake(self):
-        self.flyMotor.setIdleMode("brake")
+        self.flyMotor.setIdleMode(CANSparkBase.IdleMode.kBrake)
         self.flyMotor.burnFlash()
 
     def setIdleCoast(self):
-        self.flyMotor.setIdleMode("coast")
+        self.flyMotor.setIdleMode(CANSparkBase.IdleMode.kCoast)
         self.flyMotor.burnFlash()
