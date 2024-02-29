@@ -5,7 +5,7 @@ from subsystems.shooter import Shooter
 
 
 class FlyWheelSpeed(commands2.Command):
-    def __init__(self, speed, _shooter: Shooter, stopWhenComplete = True):
+    def __init__(self, speed, _shooter: Shooter, stopWhenComplete=True):
         super().__init__()
 
         # local subsystem instance
@@ -27,7 +27,7 @@ class FlyWheelSpeed(commands2.Command):
         logging.debug(f"Flywheel at speed {self.shooter.currentSpeed()}")
 
     def isFinished(self):
-        return self.shooter.isReady() or self.speed <= 0.01
+        return self.shooter.isReady() or self.speed < 0.9
 
     def end(self, interrupted: bool):
         if not interrupted:

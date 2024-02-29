@@ -111,6 +111,7 @@ class RobotContainer:
         # Drop intake (controller x)
         self.driverController.x().onTrue(
             commands2.SequentialCommandGroup(
+                ShooterROT(SuperStrucConstants.LoadPos, self.shooter),
                 FlyWheelSpeed(0, self.shooter),  # Stop shooter (if its running)
                 RotateIntake(120, self.intake),  # Put intake down
                 intakeUntilNote(0.5, self.intake),  # Intake till note
@@ -139,7 +140,7 @@ class RobotContainer:
             commands2.SequentialCommandGroup(
                 RotateIntake(0, self.intake),  # Rotate to fully closed
                 # SetIntakeSpeed(-0.6, self.intake),  # Eject slowly
-                LoadMagazine(0.10, self.shooter, self.intake),  # Load the magazine
+                LoadMagazine(self.shooter, self.intake),  # Load the magazine
                 # SetIntakeSpeed(0, self.intake),  # Stop ejecting
                 ShooterROT(
                     SuperStrucConstants.ShootPos, self.shooter
@@ -152,6 +153,7 @@ class RobotContainer:
         self.driverController.b().onTrue(
             commands2.SequentialCommandGroup(
                 FlyWheelSpeed(0.25, self.shooter, False),  # rotates the Flywheel
+                commands2.WaitCommand(2),
                 ShooterROT(
                     SuperStrucConstants.LoadPos, self.shooter
                 ),  # Rotate the shooter
@@ -184,6 +186,10 @@ class RobotContainer:
 
         # Cancel all when x is pressed
         self.opController.x().onTrue(commands2.InstantCommand(self.cancelAll))
+
+        self.opController.back().onTrue(
+            commands2.InstantCommand(self.intake.zeroIntake)
+        )
 
     def cancelAll(self) -> None:
         """

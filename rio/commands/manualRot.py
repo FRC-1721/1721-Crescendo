@@ -10,6 +10,8 @@ class manualROT(commands2.Command):
         self.speed = speed
         # requested speed
 
+        self.addRequirements(self.subsystem)
+
     def execute(self):
         self.subsystem.rotateManual(self.speed)
 

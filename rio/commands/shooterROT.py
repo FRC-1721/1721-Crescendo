@@ -24,6 +24,9 @@ class ShooterROT(commands2.Command):
 
         logging.debug(f"Still moving... {self.subsystem.getAngle()} to {self.angle}")
 
+    def isFinished(self) -> bool:
+        return abs(self.subsystem.getAngle() - self.angle) < 10
+
     def end(self, interrupted: bool):
         if not interrupted:
             logging.info(f"Done shooter moved to {self.subsystem.getAngle()}")

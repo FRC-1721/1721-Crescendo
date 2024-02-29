@@ -56,10 +56,10 @@ class Shooter(Subsystem):
         self.flyPIDController = self.flyMotor.getPIDController()
         self.flyPIDController.setFeedbackDevice(self.flyEncoder)
 
-        # self.rotatePIDController.setP(SuperStrucConstants.kflyP)
-        # self.rotatePIDController.setI(SuperStrucConstants.kflyI)
-        # self.rotatePIDController.setD(SuperStrucConstants.kflyD)
-        # self.rotatePIDController.setFF(SuperStrucConstants.kflyFF)
+        self.flyPIDController.setP(SuperStrucConstants.kflyP)
+        self.flyPIDController.setI(SuperStrucConstants.kflyI)
+        self.flyPIDController.setD(SuperStrucConstants.kflyD)
+        self.flyPIDController.setFF(SuperStrucConstants.kflyFF)
 
         # limit switches
         self.magazineSwitch = self.flyMotor.getForwardLimitSwitch(
@@ -71,6 +71,10 @@ class Shooter(Subsystem):
         # Disable soft limits
         self.flyMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kForward, False)
         self.flyMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kReverse, False)
+
+        # Set dir
+        # (joe added this, its bad)
+        self.flyPIDController.setOutputRange(-1, 1)
 
         # Burn flymotor configuration
         self.flyMotor.burnFlash()
@@ -102,7 +106,7 @@ class Shooter(Subsystem):
 
     def isReady(self):
         return self.flyEncoder.getVelocity() > 5000  # Magic
-    
+
     def currentSpeed(self) -> float:
         return self.flyEncoder.getVelocity()
 
@@ -119,3 +123,9 @@ class Shooter(Subsystem):
 
     def zeroFly(self):
         self.flyEncoder.setPosition(0)
+
+    def getVelocity(self) -> float:
+        return self.flyEncoder.getVelocity()
+
+    def setFlyVelocity(self, velocity):
+        self.flyPIDController.setReference(velocity, CANSparkMax.ControlType.kVelocity)
