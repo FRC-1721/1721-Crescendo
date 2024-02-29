@@ -35,8 +35,10 @@ class MyRobot(commands2.TimedCommandRobot):
         if self.autonomousCommand:
             self.autonomousCommand.cancel()
 
-    # def teleopPeriodic(self) -> None:
-    #     self.container.robotDrive.drive(0.1, 0.1, 0, False, False)
+    def disabledInit(self) -> None:
+        # Joe added this
+        commands2.CommandScheduler.getInstance().cancelAll()
+        logging.info("All commands canceled when entering disabled")
 
     def testInit(self) -> None:
         commands2.CommandScheduler.getInstance().cancelAll()

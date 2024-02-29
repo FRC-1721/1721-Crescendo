@@ -2,6 +2,7 @@ import math
 
 # vendor libs
 import wpilib
+import logging
 
 import wpimath
 from commands2 import cmd
@@ -94,7 +95,10 @@ class RobotContainer:
         instantiating a :GenericHID or one of its subclasses (Joystick or XboxController),
         and then passing it to a JoystickButton.
         """
-        # _____INTAKE_KEYBINDS_____
+
+        # ==============================
+        #        Driver Commands
+        # ==============================
 
         # Drop intake (controller x)
         self.driverController.x().onTrue(
@@ -134,6 +138,11 @@ class RobotContainer:
                 # power flywheels
             )
         )
+
+        # ==============================
+        #        Operator Commands
+        # ==============================
+
         # moving intake
         self.opController.pov(90).whileTrue(IntakeRotationMAN(1, self.intake))  # out
         self.opController.pov(270).whileTrue(IntakeRotationMAN(-1, self.intake))  # in
@@ -152,6 +161,17 @@ class RobotContainer:
         # self.opController.pov(180).whileTrue(ShooterROT(40,self.shooter))  # out
 
         self.opController.b().whileTrue(RotateIntake(60, self.intake))
+
+        # Cancel all when x is pressed
+        self.opController.x().onTrue(commands2.InstantCommand(self.cancelAll))
+
+    def cancelAll(self) -> None:
+        """
+        Joe wrote this so the operator could stop everything!
+        """
+
+        logging.warning("CANCELING ALL COMMANDS!")
+        commands2.CommandScheduler.getInstance().cancelAll()
 
     def disablePIDSubsystems(self) -> None:
         """Disables all ProfiledPIDSubsystem and PIDSubsystem instances.

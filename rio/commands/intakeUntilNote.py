@@ -18,7 +18,12 @@ class intakeUntilNote(commands2.Command):
         self.speed = speed
 
     def initialize(self):
-        logging.info(f"Running command Intake Suck (manual) with speed {self.speed}")
+        if not self.intakeSubsystem.switchPress():
+            logging.info(
+                f"Running command Intake Suck (manual) with speed {self.speed}"
+            )
+        else:
+            logging.warn("Switch is jammed at start of command!")
 
     def execute(self):
         self.intakeSubsystem.intake(self.speed)
