@@ -102,7 +102,7 @@ class RobotContainer:
         
         self.opController.x().onTrue(
             commands2.SequentialCommandGroup(
-                RotateIntake(115, self.intake),
+                RotateIntake(120, self.intake),
                 intakeUntilNote(0.5, self.intake),
                 RotateIntake(0, self.intake),
             )
@@ -121,9 +121,10 @@ class RobotContainer:
         self.opController.a().onTrue(
             commands2.SequentialCommandGroup(       
                 RotateIntake(0, self.intake),  
-                SetIntakeSpeed(-0.4, self.intake),
-                FlyUntilTrigger(0.25,self.shooter)
-                
+                SetIntakeSpeed(-0.6, self.intake),
+                FlyUntilTrigger(0.15,self.shooter),
+                SetIntakeSpeed(0,self.intake),
+                ShooterROT(118.3,self.shooter)
                    #power flywheels
             )
         )

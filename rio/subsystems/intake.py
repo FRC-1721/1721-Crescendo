@@ -2,7 +2,7 @@ import commands2
 import logging
 
 from ntcore import NetworkTableInstance
-from rev import CANSparkMax, CANSparkLowLevel, SparkAbsoluteEncoder, SparkMaxLimitSwitch
+from rev import CANSparkMax, CANSparkLowLevel, SparkAbsoluteEncoder, SparkMaxLimitSwitch, CANSparkBase
 from constants import IntakeConstants
 
 
@@ -57,6 +57,9 @@ class IntakeSubsystem(commands2.Subsystem):
         )
 
         self.limtSwitch.enableLimitSwitch(True)
+
+        self.intakeMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kForward,False)
+        self.intakeMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kReverse,False)
 
         self.intakeMotor.burnFlash()
 

@@ -152,10 +152,12 @@ class SuperStrucConstants:
     flyID = 12
     guideID = 13
 
+    kRotConversion = 360  # Configured feb 12 by joe
+
     # PID values
-    kP = 2
-    kI = 1
-    kD = 1
+    kP = 0.8
+    kI = 0.00001
+    kD = 1.6
     kFF = 0
 
 
@@ -173,7 +175,7 @@ class IntakeConstants:
     kLiftConversion = 1  # Configured feb 12 by joe
 
     # lift pid
-    kLiftP = 1.2
-    kLiftI = 0.0001
-    kLiftD = 0.5
+    kLiftP = 0.8
+    kLiftI = 0.00001
+    kLiftD = 1.6
     kLiftFF = 0

@@ -22,9 +22,10 @@ class FlyUntilTrigger(commands2.Command):
 
     def isFinished(self):
         return self.subsystem.switchPress()
+        
 
     def end(self, interrupted: bool):
         self.subsystem.setFlyWheelSpeed(0)
-        self.subsystem.setIdleCoast()
+        #self.subsystem.setIdleCoast()
         logging.info(f"Done, up to speed is {self.isFinished()}")
         return True

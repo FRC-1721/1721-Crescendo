@@ -22,6 +22,7 @@ class intakeUntilNote(commands2.Command):
 
     def execute(self):
         self.intakeSubsystem.intake(self.speed)
+        print(self.intakeSubsystem.switchPress)
 
     def isFinished(self):
         return self.intakeSubsystem.switchPress()

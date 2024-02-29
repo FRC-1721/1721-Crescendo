@@ -30,39 +30,47 @@ class Shooter(Subsystem):
 
         # encoders
         self.flyEncoder = self.flyMotor.getEncoder()
+        
         self.rotateEncoder = self.rotateMotor.getAbsoluteEncoder(
             SparkAbsoluteEncoder.Type.kDutyCycle
         )
+
+        self.rotateEncoder.setPositionConversionFactor(SuperStrucConstants.kRotConversion)
 
         # PID values
         self.rotatePIDController = self.rotateMotor.getPIDController()
         self.rotatePIDController.setFeedbackDevice(self.rotateEncoder)
 
-        self.rotatePIDController.getP(SuperStrucConstants.kP)
-        self.rotatePIDController.getI(SuperStrucConstants.kI)
-        self.rotatePIDController.getD(SuperStrucConstants.kD)
-        self.rotatePIDController.getFF(SuperStrucConstants.kFF)
+        self.rotatePIDController.setP(SuperStrucConstants.kP)
+        self.rotatePIDController.setI(SuperStrucConstants.kI)
+        self.rotatePIDController.setD(SuperStrucConstants.kD)
+        self.rotatePIDController.setFF(SuperStrucConstants.kFF)
 
         # limit switches
-        self.limtSwitch = self.flyMotor.getReverseLimitSwitch(
+        self.limtSwitch = self.flyMotor.getForwardLimitSwitch(
             SparkMaxLimitSwitch.Type.kNormallyOpen
         )
 
         self.limtSwitch.enableLimitSwitch(True)
 
+        self.flyMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kForward,False)
+        self.flyMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kReverse,False)
         # these are defaults
-        self.flyMotor.setIdleMode(CANSparkBase.IdleMode.kBrake)
 
         self.flyMotor.burnFlash()
 
     def periodic(self) -> None:
         self.sd.putNumber("Thermals/rotate", self.rotateMotor.getMotorTemperature())
         self.sd.putNumber("Thermals/fly", self.flyMotor.getMotorTemperature())
-        # print(self.flyEncoder.getVelocity())
+        print(self.rotateEncoder.getPosition())
 
     def setFlyWheelSpeed(self, speed):
         self.flyMotor.set(speed)
-
+    
+    def getAngle(self) -> float:
+        """Return the current angle"""
+        return self.rotateEncoder.getPosition()
+    
     def switchPress(self):
         return self.limtSwitch.get()
 
