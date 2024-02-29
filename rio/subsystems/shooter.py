@@ -41,6 +41,8 @@ class Shooter(Subsystem):
 
         self.rotateEncoder.setInverted(SuperStrucConstants.krotateInversion)
 
+        # self.rotateEncoder.setZeroOffset(1 - 0.3482)  # F*cking love rev sometimes
+
         # PID values
         # rotate pid
         self.rotatePIDController = self.rotateMotor.getPIDController()
