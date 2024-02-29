@@ -6,7 +6,7 @@ from rev import (
     CANSparkMax,
     SparkAbsoluteEncoder,
     SparkMaxLimitSwitch,
-    CANSparkBase
+    CANSparkBase,
 )
 
 from constants import SuperStrucConstants
@@ -30,12 +30,14 @@ class Shooter(Subsystem):
 
         # encoders
         self.flyEncoder = self.flyMotor.getEncoder()
-        
+
         self.rotateEncoder = self.rotateMotor.getAbsoluteEncoder(
             SparkAbsoluteEncoder.Type.kDutyCycle
         )
 
-        self.rotateEncoder.setPositionConversionFactor(SuperStrucConstants.kRotConversion)
+        self.rotateEncoder.setPositionConversionFactor(
+            SuperStrucConstants.kRotConversion
+        )
 
         # PID values
         self.rotatePIDController = self.rotateMotor.getPIDController()
@@ -47,32 +49,36 @@ class Shooter(Subsystem):
         self.rotatePIDController.setFF(SuperStrucConstants.kFF)
 
         # limit switches
-        self.limtSwitch = self.flyMotor.getForwardLimitSwitch(
+        self.magazineSwitch = self.flyMotor.getForwardLimitSwitch(
             SparkMaxLimitSwitch.Type.kNormallyOpen
         )
 
-        self.limtSwitch.enableLimitSwitch(True)
+        self.magazineSwitch.enableLimitSwitch(False)
 
-        self.flyMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kForward,False)
-        self.flyMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kReverse,False)
-        # these are defaults
+        # Disable soft limits
+        self.flyMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kForward, False)
+        self.flyMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kReverse, False)
 
+        # Burn flymotor configuration
         self.flyMotor.burnFlash()
 
     def periodic(self) -> None:
         self.sd.putNumber("Thermals/rotate", self.rotateMotor.getMotorTemperature())
         self.sd.putNumber("Thermals/fly", self.flyMotor.getMotorTemperature())
-        print(self.rotateEncoder.getPosition())
 
     def setFlyWheelSpeed(self, speed):
         self.flyMotor.set(speed)
-    
+
     def getAngle(self) -> float:
         """Return the current angle"""
         return self.rotateEncoder.getPosition()
-    
-    def switchPress(self):
-        return self.limtSwitch.get()
+
+    def isMagazineLoaded(self):
+        """
+        Returns true when the magazine is loaded with a note
+        """
+
+        return self.magazineSwitch.get()
 
     def rotateManual(self, speed):
         self.rotateMotor.set(speed)

@@ -34,7 +34,7 @@ from commands.shooterROT import ShooterROT
 from commands.manualRot import manualROT
 from commands.intakeUntilNote import intakeUntilNote
 from commands.setIntakeSpeed import SetIntakeSpeed
-from commands.flyUntilTrigger import FlyUntilTrigger
+from commands.flyUntilTrigger import LoadMagazine
 
 
 class RobotContainer:
@@ -98,8 +98,6 @@ class RobotContainer:
 
         # intaking
 
-        
-        
         self.opController.x().onTrue(
             commands2.SequentialCommandGroup(
                 RotateIntake(120, self.intake),
@@ -108,24 +106,24 @@ class RobotContainer:
             )
         )
         self.opController.y().onTrue(
-            commands2.SequentialCommandGroup(       
-                RotateIntake(0, self.intake), 
-                FlyWheelSpeed(1.0, self.shooter),    #power flywheels
-                commands2.WaitCommand(3),            #wait for flywheels to get up to speed
+            commands2.SequentialCommandGroup(
+                RotateIntake(0, self.intake),
+                FlyWheelSpeed(1.0, self.shooter),  # power flywheels
+                commands2.WaitCommand(3),  # wait for flywheels to get up to speed
                 SetIntakeSpeed(-0.4, self.intake),
-                commands2.WaitCommand(3), 
+                commands2.WaitCommand(3),
                 FlyWheelSpeed(0.0, self.shooter),
-                SetIntakeSpeed(0, self.intake)
+                SetIntakeSpeed(0, self.intake),
             )
         )
         self.opController.a().onTrue(
-            commands2.SequentialCommandGroup(       
-                RotateIntake(0, self.intake),  
+            commands2.SequentialCommandGroup(
+                RotateIntake(0, self.intake),
                 SetIntakeSpeed(-0.6, self.intake),
-                FlyUntilTrigger(0.15,self.shooter),
-                SetIntakeSpeed(0,self.intake),
-                ShooterROT(118.3,self.shooter)
-                   #power flywheels
+                LoadMagazine(0.15, self.shooter),
+                SetIntakeSpeed(0, self.intake),
+                ShooterROT(118.3, self.shooter),
+                # power flywheels
             )
         )
         # moving intake
@@ -143,7 +141,6 @@ class RobotContainer:
         # self.opController.pov(0).whileTrue(ShooterROT(0,self.shooter))  # out
         # self.opController.pov(180).whileTrue(ShooterROT(40,self.shooter))  # out
 
-        
         self.opController.b().whileTrue(RotateIntake(60, self.intake))
 
     def disablePIDSubsystems(self) -> None:
