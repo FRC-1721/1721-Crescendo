@@ -2,7 +2,13 @@ import commands2
 import logging
 
 from ntcore import NetworkTableInstance
-from rev import CANSparkMax, CANSparkLowLevel, SparkAbsoluteEncoder, SparkMaxLimitSwitch
+from rev import (
+    CANSparkMax,
+    CANSparkLowLevel,
+    SparkAbsoluteEncoder,
+    SparkMaxLimitSwitch,
+    CANSparkBase,
+)
 from constants import IntakeConstants
 
 
@@ -34,9 +40,8 @@ class IntakeSubsystem(commands2.Subsystem):
         self.intakeMotor.setInverted(True)
 
         # encoders
-        self.liftEncoder = self.liftMotor.getAbsoluteEncoder(
-            SparkAbsoluteEncoder.Type.kDutyCycle
-        )
+        self.liftEncoder = self.liftMotor.getEncoder()
+
         self.liftEncoder.setPositionConversionFactor(IntakeConstants.kLiftConversion)
 
         self.intakeEncoder = self.intakeMotor.getEncoder()
@@ -59,12 +64,20 @@ class IntakeSubsystem(commands2.Subsystem):
 
         self.limtSwitch.enableLimitSwitch(True)
 
+        self.intakeMotor.enableSoftLimit(
+            CANSparkBase.SoftLimitDirection.kForward, False
+        )
+        self.intakeMotor.enableSoftLimit(
+            CANSparkBase.SoftLimitDirection.kReverse, False
+        )
+
         self.intakeMotor.burnFlash()
 
     def periodic(self) -> None:
         self.sd.putNumber("Thermals/Intake", self.intakeMotor.getMotorTemperature())
         self.sd.putNumber("Intake/IntakeAngle", self.intakeEncoder.getPosition())
         self.sd.putNumber("Thermals/Lift", self.liftMotor.getMotorTemperature())
+        # print(self.liftEncoder.getPosition())
 
     def intake(self, speed):
         self.intakeMotor.set(speed)
@@ -81,3 +94,6 @@ class IntakeSubsystem(commands2.Subsystem):
 
     def lift(self, angle: float):
         self.liftPID.setReference(angle, CANSparkMax.ControlType.kPosition)
+
+    def zeroIntake(self):
+        self.liftEncoder.setPosition(0)

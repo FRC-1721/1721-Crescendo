@@ -19,12 +19,14 @@ class RotateIntake(commands2.Command):
         # requested speed
         self.angle = angle
 
+        self.addRequirements(self.intakeSubsystem)
+
     def initialize(self):
         logging.info(f"Moving intake to {self.angle}")
 
     def execute(self):
         self.intakeSubsystem.lift(self.angle)
-        logging.info(
+        logging.debug(
             f"Still moving... {self.intakeSubsystem.getAngle()} to {self.angle}"
         )
 
@@ -34,5 +36,8 @@ class RotateIntake(commands2.Command):
         return abs(self.intakeSubsystem.getAngle() - self.angle) < e
 
     def end(self, interrupted: bool):
-        logging.info(f"Done moving! Finished normally: {interrupted}")
+        if not interrupted:
+            logging.info(f"Done intake moved to {self.intakeSubsystem.getAngle()}")
+        else:
+            logging.warn("RotateIntake was interrupted!")
         return True
