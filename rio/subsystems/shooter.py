@@ -101,7 +101,10 @@ class Shooter(Subsystem):
         self.rotatePIDController.setReference(angle, CANSparkMax.ControlType.kPosition)
 
     def isReady(self):
-        return self.flyEncoder.getVelocity() > 5500  # Magic
+        return self.flyEncoder.getVelocity() > 5000  # Magic
+    
+    def currentSpeed(self) -> float:
+        return self.flyEncoder.getVelocity()
 
     def setIdleBrake(self):
         self.flyMotor.setIdleMode(CANSparkBase.IdleMode.kBrake)

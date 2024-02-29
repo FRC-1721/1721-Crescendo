@@ -124,33 +124,34 @@ class RobotContainer:
                 RotateIntake(
                     0, self.intake
                 ),  # Put intake fully inside (if it wasn't already)
-                FlyWheelSpeed(1.0, self.shooter),  # Power up the flywheels (?)
-                commands2.WaitCommand(3),  # Wait for full speed TODO: REMOVE ME
+                FlyWheelSpeed(1.0, self.shooter, False),  # Power up the flywheels (?)
                 SetIntakeSpeed(
                     -0.6, self.intake
                 ),  # Load magazine? (but without ending)
-                commands2.WaitCommand(3),  # Wait again.... TODO: REMOVE ME
+                commands2.WaitCommand(3),
                 FlyWheelSpeed(0.0, self.shooter),  # Stop flywheel
                 SetIntakeSpeed(0, self.intake),  # Stop intake
             )
         )
 
-        # Shoot to amp (button a)
+        # Deliver to amp (button a), part a
         self.driverController.a().onTrue(
             commands2.SequentialCommandGroup(
                 RotateIntake(0, self.intake),  # Rotate to fully closed
-                SetIntakeSpeed(-0.6, self.intake),  # Eject slowly
-                LoadMagazine(0.10, self.shooter),  # Load the magazine
-                SetIntakeSpeed(0, self.intake),  # Stop ejecting
+                # SetIntakeSpeed(-0.6, self.intake),  # Eject slowly
+                LoadMagazine(0.10, self.shooter, self.intake),  # Load the magazine
+                # SetIntakeSpeed(0, self.intake),  # Stop ejecting
                 ShooterROT(
                     SuperStrucConstants.ShootPos, self.shooter
                 ),  # Rotate the shooter
                 # power flywheels
             )
         )
+
+        # Deliver to amp (button b), part b
         self.driverController.b().onTrue(
             commands2.SequentialCommandGroup(
-                FlyWheelSpeed(0.25, self.shooter),  # rotates the Flywheel
+                FlyWheelSpeed(0.25, self.shooter, False),  # rotates the Flywheel
                 ShooterROT(
                     SuperStrucConstants.LoadPos, self.shooter
                 ),  # Rotate the shooter
@@ -269,7 +270,7 @@ class RobotContainer:
         # Run path following command, then stop at the end.
         return swerveControllerCommand.andThen(
             cmd.run(
-                lambda: self.robotDrive.drive(0, 0, 0, False, False),
+                lambda: self.robotDrive.drive(0, 0, 0, True, False),
                 self.robotDrive,
             )
         )
