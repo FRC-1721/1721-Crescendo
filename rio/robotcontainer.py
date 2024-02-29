@@ -171,7 +171,7 @@ class RobotContainer:
         # Climbing
         self.opController.rightBumper().whileTrue(
             Climb(
-                self.opController.getRightTriggerAxis()
+                lambda: self.opController.getRightTriggerAxis()
                 - self.opController.getLeftTriggerAxis(),
                 self.climber,
                 self.shooter,

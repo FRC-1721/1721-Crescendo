@@ -198,10 +198,10 @@ class ClimberConstants:
     kServoID = 0
 
     # inversions
-    kInversion = False
+    kInversion = True
 
     # servo angles
-    kServoLock = 0.0
+    kServoLock = -0.1
     kservoOpen = 0.165
 
     # Relationship between climber speed and shooter angle (rough but ugh..)
