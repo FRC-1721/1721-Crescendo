@@ -190,3 +190,20 @@ class IntakeConstants:
     kLiftI = 0.00001
     kLiftD = 1.6
     kLiftFF = 0
+
+
+class ClimberConstants:
+    # ids
+    kmotorID = 14
+    kServoID = 0
+
+    # inversions
+    kInversion = False
+
+    # servo angles
+    kServoLock = 0.0
+    kservoOpen = 0.165
+
+    # Relationship between climber speed and shooter angle (rough but ugh..)
+    kClimberShooterForward = 0.3  # Down
+    kClimberShooterBackward = 0.5  # Up

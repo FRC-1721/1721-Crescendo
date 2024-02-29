@@ -24,6 +24,7 @@ from constants import AutoConstants, DriveConstants, OIConstants, SuperStrucCons
 from subsystems.drivesubsystem import DriveSubsystem
 from subsystems.shooter import Shooter
 from subsystems.intake import IntakeSubsystem
+from subsystems.climber import Climber
 
 # Commands
 from commands.setIntakeSpeed import SetIntakeSpeed
@@ -35,6 +36,7 @@ from commands.manualRot import manualROT
 from commands.intakeUntilNote import intakeUntilNote
 from commands.setIntakeSpeed import SetIntakeSpeed
 from commands.loadMagazine import LoadMagazine
+from commands.climb import Climb
 
 # NetworkTables
 from ntcore import NetworkTableInstance
@@ -56,6 +58,7 @@ class RobotContainer:
         self.robotDrive = DriveSubsystem()
         self.shooter = Shooter()
         self.intake = IntakeSubsystem()
+        self.climber = Climber()
 
         # The driver's controller
         self.driverController = CommandXboxController(0)
@@ -165,7 +168,17 @@ class RobotContainer:
         #        Operator Commands
         # ==============================
 
-        # moving intake
+        # Climbing
+        self.opController.rightBumper().whileTrue(
+            Climb(
+                self.opController.getRightTriggerAxis()
+                - self.opController.getLeftTriggerAxis(),
+                self.climber,
+                self.shooter,
+            )
+        )
+
+        # Moving intake
         self.opController.pov(90).whileTrue(IntakeRotationMAN(1, self.intake))  # out
         self.opController.pov(270).whileTrue(IntakeRotationMAN(-1, self.intake))  # in
 
