@@ -19,7 +19,7 @@ class FlyWheelSpeed(commands2.Command):
         self.subsystem.setFlyWheelSpeed(self.speed)
 
     def isFinished(self):
-        return self.subsystem.isReady() or self.speed <= 0.1
+        return self.subsystem.isReady() or self.speed <= 0.01
 
     def end(self, interrupted: bool):
         if not interrupted:
