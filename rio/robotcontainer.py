@@ -21,7 +21,7 @@ import commands2
 from commands2 import cmd
 from commands2.button import CommandJoystick, CommandXboxController
 
-from constants import AutoConstants, DriveConstants, OIConstants
+from constants import AutoConstants, DriveConstants, OIConstants, SuperStrucConstants
 
 from subsystems.drivesubsystem import DriveSubsystem
 from subsystems.shooter import Shooter
@@ -134,8 +134,15 @@ class RobotContainer:
                 SetIntakeSpeed(-0.6, self.intake),  # Eject slowly
                 LoadMagazine(0.10, self.shooter),  # Load the magazine
                 SetIntakeSpeed(0, self.intake),  # Stop ejecting
-                # ShooterROT(118.3, self.shooter), # Rotate the shooter
+                ShooterROT(SuperStrucConstants.ShootPos, self.shooter), # Rotate the shooter
                 # power flywheels
+            )
+        )
+        self.driverController.b().onTrue(
+            commands2.SequentialCommandGroup(
+                FlyWheelSpeed(0.25, self.shooter), #rotates the Flywheel
+                ShooterROT(SuperStrucConstants.LoadPos, self.shooter), # Rotate the shooter
+                FlyWheelSpeed(0, self.shooter), #stops the Flywheel
             )
         )
 
@@ -143,6 +150,8 @@ class RobotContainer:
         #        Operator Commands
         # ==============================
 
+
+        
         # moving intake
         self.opController.pov(90).whileTrue(IntakeRotationMAN(1, self.intake))  # out
         self.opController.pov(270).whileTrue(IntakeRotationMAN(-1, self.intake))  # in
