@@ -40,7 +40,7 @@ from commands.loadMagazine import LoadMagazine
 from ntcore import NetworkTableInstance
 
 # Misc
-from extras.deployData import getDeployData
+from utils.deploydata import getDeployData
 
 
 class RobotContainer:
