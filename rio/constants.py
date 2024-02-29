@@ -154,12 +154,18 @@ class SuperStrucConstants:
 
     kRotConversion = 360  # Configured feb 12 by joe
 
-    # PID values
-    kP = 0.8
-    kI = 0.00001
-    kD = 1.6
-    kFF = 0
+    krotateInversion = True
 
+    # PID values
+    krotateP = 0.04
+    krotateI = 0.00001
+    krotateD = 0.04
+    krotateFF = 0
+
+    kflyP = 0.1
+    kflyI = 0.0001
+    kflyD = 0.1
+    kflyFF = 0
 
 
 class IntakeConstants:

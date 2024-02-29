@@ -24,6 +24,9 @@ class LoadMagazine(commands2.Command):
 
     def execute(self):
         self.shooter.setFlyWheelSpeed(self.speed)
+        if self.shooter.isMagazineLoaded():
+            self.shooter.zeroFly()
+            self.shooter.setFlyAngle(0)
 
     def isFinished(self):
         return self.shooter.isMagazineLoaded()

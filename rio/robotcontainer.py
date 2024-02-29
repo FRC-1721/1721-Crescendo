@@ -52,7 +52,7 @@ class RobotContainer:
         self.intake = IntakeSubsystem()
 
         # The driver's controller
-        self.driverController = CommandJoystick(0)
+        self.driverController = CommandXboxController(0)
 
         # the operators controller
         self.opController = CommandXboxController(OIConstants.kOpControllerPort)
@@ -97,7 +97,7 @@ class RobotContainer:
         # _____INTAKE_KEYBINDS_____
 
         # Drop intake (controller x)
-        self.opController.x().onTrue(
+        self.driverController.x().onTrue(
             commands2.SequentialCommandGroup(
                 FlyWheelSpeed(0, self.shooter),  # Stop shooter (if its running)
                 RotateIntake(120, self.intake),  # Put intake down
@@ -107,7 +107,7 @@ class RobotContainer:
         )
 
         # Shoot to speaker (button y)
-        self.opController.y().onTrue(
+        self.driverController.y().onTrue(
             commands2.SequentialCommandGroup(
                 RotateIntake(
                     0, self.intake
@@ -115,7 +115,7 @@ class RobotContainer:
                 FlyWheelSpeed(1.0, self.shooter),  # Power up the flywheels (?)
                 commands2.WaitCommand(3),  # Wait for full speed TODO: REMOVE ME
                 SetIntakeSpeed(
-                    -0.4, self.intake
+                    -0.6, self.intake
                 ),  # Load magazine? (but without ending)
                 commands2.WaitCommand(3),  # Wait again.... TODO: REMOVE ME
                 FlyWheelSpeed(0.0, self.shooter),  # Stop flywheel
@@ -124,7 +124,7 @@ class RobotContainer:
         )
 
         # Shoot to amp (button a)
-        self.opController.a().onTrue(
+        self.driverController.a().onTrue(
             commands2.SequentialCommandGroup(
                 RotateIntake(0, self.intake),  # Rotate to fully closed
                 SetIntakeSpeed(-0.6, self.intake),  # Eject slowly
@@ -143,6 +143,8 @@ class RobotContainer:
         # moving shooter
         self.opController.pov(0).whileTrue(manualROT(0.5, self.shooter))
         self.opController.pov(180).whileTrue(manualROT(-0.5, self.shooter))
+
+        self.driverController.pov(0).whileTrue(ShooterROT(60, self.shooter))
 
         # PID shooter rotation (NOT CURRENTLY WORKING)
 

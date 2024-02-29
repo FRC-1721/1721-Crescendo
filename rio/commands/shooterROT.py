@@ -1,16 +1,20 @@
 import commands2
 import logging
 
+from subsystems.shooter import Shooter
+
 
 class ShooterROT(commands2.Command):
-    def __init__(self, angle, subsystem):
+    def __init__(self, angle: float, _shooter=Shooter):
         super().__init__()
 
         # local subsystem instance
-        self.subsystem = subsystem
+        self.subsystem = _shooter
 
         # requested speed
         self.angle = angle
+
+        self.addRequirements(self.subsystem)
 
     def initialize(self):
         logging.info(f"Moving shooter to {self.angle}")

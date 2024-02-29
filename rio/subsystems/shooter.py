@@ -39,14 +39,27 @@ class Shooter(Subsystem):
             SuperStrucConstants.kRotConversion
         )
 
+        self.rotateEncoder.setInverted(SuperStrucConstants.krotateInversion)
+
         # PID values
+        # rotate pid
         self.rotatePIDController = self.rotateMotor.getPIDController()
         self.rotatePIDController.setFeedbackDevice(self.rotateEncoder)
+        self.rotatePIDController.setPositionPIDWrappingEnabled(False)
 
-        self.rotatePIDController.setP(SuperStrucConstants.kP)
-        self.rotatePIDController.setI(SuperStrucConstants.kI)
-        self.rotatePIDController.setD(SuperStrucConstants.kD)
-        self.rotatePIDController.setFF(SuperStrucConstants.kFF)
+        self.rotatePIDController.setP(SuperStrucConstants.krotateP)
+        self.rotatePIDController.setI(SuperStrucConstants.krotateI)
+        self.rotatePIDController.setD(SuperStrucConstants.krotateD)
+        self.rotatePIDController.setFF(SuperStrucConstants.krotateFF)
+
+        # fly pid
+        self.flyPIDController = self.flyMotor.getPIDController()
+        self.flyPIDController.setFeedbackDevice(self.flyEncoder)
+
+        # self.rotatePIDController.setP(SuperStrucConstants.kflyP)
+        # self.rotatePIDController.setI(SuperStrucConstants.kflyI)
+        # self.rotatePIDController.setD(SuperStrucConstants.kflyD)
+        # self.rotatePIDController.setFF(SuperStrucConstants.kflyFF)
 
         # limit switches
         self.magazineSwitch = self.flyMotor.getForwardLimitSwitch(
@@ -65,6 +78,7 @@ class Shooter(Subsystem):
     def periodic(self) -> None:
         self.sd.putNumber("Thermals/rotate", self.rotateMotor.getMotorTemperature())
         self.sd.putNumber("Thermals/fly", self.flyMotor.getMotorTemperature())
+        print(self.rotateEncoder.getPosition())
 
     def setFlyWheelSpeed(self, speed):
         self.flyMotor.set(speed)
@@ -96,3 +110,9 @@ class Shooter(Subsystem):
     def setIdleCoast(self):
         self.flyMotor.setIdleMode(CANSparkBase.IdleMode.kCoast)
         self.flyMotor.burnFlash()
+
+    def setFlyAngle(self, angle: float):
+        self.flyPIDController.setReference(angle, CANSparkMax.ControlType.kPosition)
+
+    def zeroFly(self):
+        self.flyEncoder.setPosition(0)
