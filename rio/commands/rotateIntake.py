@@ -26,7 +26,7 @@ class RotateIntake(commands2.Command):
 
     def execute(self):
         self.intakeSubsystem.lift(self.angle)
-        logging.info(
+        logging.debug(
             f"Still moving... {self.intakeSubsystem.getAngle()} to {self.angle}"
         )
 
@@ -36,4 +36,8 @@ class RotateIntake(commands2.Command):
         return abs(self.intakeSubsystem.getAngle() - self.angle) < e
 
     def end(self, interrupted: bool):
+        if not interrupted:
+            logging.info(f"Done intake moved to {self.intakeSubsystem.getAngle()}")
+        else:
+            logging.warn("RotateIntake was interrupted!")
         return True

@@ -18,16 +18,19 @@ class intakeUntilNote(commands2.Command):
         self.speed = speed
 
     def initialize(self):
-        logging.debug(f"Running command Intake Suck (manual) with speed {self.speed}")
+        logging.info(f"Running command Intake Suck (manual) with speed {self.speed}")
 
     def execute(self):
         self.intakeSubsystem.intake(self.speed)
-        print(self.intakeSubsystem.switchPress)
+        logging.debug(self.intakeSubsystem.switchPress)
 
     def isFinished(self):
         return self.intakeSubsystem.switchPress()
 
     def end(self, interrupted: bool):
         self.intakeSubsystem.intake(0)
-        logging.debug(f"Intake suck done")
+        if not interrupted:
+            logging.info(f"Intake suck done")
+        else:
+            logging.warn("intakeUntilNote was interrupted!")
         return True

@@ -19,9 +19,12 @@ class FlyWheelSpeed(commands2.Command):
         self.subsystem.setFlyWheelSpeed(self.speed)
 
     def isFinished(self):
-        return self.subsystem.isReady()
+        return self.subsystem.isReady() or self.speed <= 0.1
 
     def end(self, interrupted: bool):
-        logging.info(f"Done, up to speed is {self.isFinished()}")
+        if not interrupted:
+            logging.info(f"Done, up to speed is {self.isFinished()}")
+        else:
+            logging.warn("FlyWheelSpeed was interrupted!")
         # self.subsystem.setFlyWheelSpeed(0)
         return True

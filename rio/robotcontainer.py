@@ -34,7 +34,7 @@ from commands.shooterROT import ShooterROT
 from commands.manualRot import manualROT
 from commands.intakeUntilNote import intakeUntilNote
 from commands.setIntakeSpeed import SetIntakeSpeed
-from commands.flyUntilTrigger import LoadMagazine
+from commands.loadMagazine import LoadMagazine
 
 
 class RobotContainer:
@@ -96,33 +96,41 @@ class RobotContainer:
         """
         # _____INTAKE_KEYBINDS_____
 
-        # intaking
-
+        # Drop intake (controller x)
         self.opController.x().onTrue(
             commands2.SequentialCommandGroup(
-                RotateIntake(120, self.intake),
-                intakeUntilNote(0.5, self.intake),
-                RotateIntake(0, self.intake),
+                FlyWheelSpeed(0, self.shooter),  # Stop shooter (if its running)
+                RotateIntake(120, self.intake),  # Put intake down
+                intakeUntilNote(0.5, self.intake),  # Intake till note
+                RotateIntake(0, self.intake),  # Put intake back up
             )
         )
+
+        # Shoot to speaker (button y)
         self.opController.y().onTrue(
             commands2.SequentialCommandGroup(
-                RotateIntake(0, self.intake),
-                FlyWheelSpeed(1.0, self.shooter),  # power flywheels
-                commands2.WaitCommand(3),  # wait for flywheels to get up to speed
-                SetIntakeSpeed(-0.4, self.intake),
-                commands2.WaitCommand(3),
-                FlyWheelSpeed(0.0, self.shooter),
-                SetIntakeSpeed(0, self.intake),
+                RotateIntake(
+                    0, self.intake
+                ),  # Put intake fully inside (if it wasn't already)
+                FlyWheelSpeed(1.0, self.shooter),  # Power up the flywheels (?)
+                commands2.WaitCommand(3),  # Wait for full speed TODO: REMOVE ME
+                SetIntakeSpeed(
+                    -0.4, self.intake
+                ),  # Load magazine? (but without ending)
+                commands2.WaitCommand(3),  # Wait again.... TODO: REMOVE ME
+                FlyWheelSpeed(0.0, self.shooter),  # Stop flywheel
+                SetIntakeSpeed(0, self.intake),  # Stop intake
             )
         )
+
+        # Shoot to amp (button a)
         self.opController.a().onTrue(
             commands2.SequentialCommandGroup(
-                RotateIntake(0, self.intake),
-                SetIntakeSpeed(-0.6, self.intake),
-                LoadMagazine(0.15, self.shooter),
-                SetIntakeSpeed(0, self.intake),
-                ShooterROT(118.3, self.shooter),
+                RotateIntake(0, self.intake),  # Rotate to fully closed
+                SetIntakeSpeed(-0.6, self.intake),  # Eject slowly
+                LoadMagazine(0.10, self.shooter),  # Load the magazine
+                SetIntakeSpeed(0, self.intake),  # Stop ejecting
+                # ShooterROT(118.3, self.shooter), # Rotate the shooter
                 # power flywheels
             )
         )

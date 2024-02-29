@@ -20,7 +20,7 @@ class LoadMagazine(commands2.Command):
 
     def initialize(self):
         logging.info("Spinning up...")
-        self.shooter.setIdleCoast()
+        self.shooter.setIdleBrake()
 
     def execute(self):
         self.shooter.setFlyWheelSpeed(self.speed)
@@ -30,5 +30,5 @@ class LoadMagazine(commands2.Command):
 
     def end(self, interrupted: bool):
         self.shooter.setFlyWheelSpeed(0)
-        self.shooter.setIdleBrake()
+        self.shooter.setIdleCoast()
         logging.info(f"Done, magazine loaded")
