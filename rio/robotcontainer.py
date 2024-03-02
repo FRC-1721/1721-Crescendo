@@ -164,12 +164,8 @@ class RobotContainer:
             )
         )
 
-        # ==============================
-        #        Operator Commands
-        # ==============================
-
         # Climbing
-        self.opController.rightBumper().whileTrue(
+        self.driverController.rightBumper().whileTrue(  
             Climb(
                 lambda: self.opController.getRightTriggerAxis()
                 - self.opController.getLeftTriggerAxis(),
@@ -178,28 +174,31 @@ class RobotContainer:
             )
         )
 
-        # Moving intake
+        # ==============================
+        #        Operator Commands
+        # ==============================
+
+        
+        # Rotating intake but Manually
         self.opController.pov(90).whileTrue(IntakeRotationMAN(1, self.intake))  # out
         self.opController.pov(270).whileTrue(IntakeRotationMAN(-1, self.intake))  # in
 
-        # _____POST_INTAKE_KEYBINDS_____
+        # Rotating shooter but Manually
+        self.opController.pov(0).whileTrue(manualROT(0.5, self.shooter))  # out
+        self.opController.pov(180).whileTrue(manualROT(-0.5, self.shooter)) # in
 
-        # moving shooter
-        self.opController.pov(0).whileTrue(manualROT(0.5, self.shooter))
-        self.opController.pov(180).whileTrue(manualROT(-0.5, self.shooter))
+        # Spinning intake wheels but Manually
+        self.opController.a().whileTrue(SetIntakeSpeed(0.5, self.intake))  # suck
+        self.opController.b().whileTrue(SetIntakeSpeed(-0.5, self.intake)) # blow
 
-        self.driverController.pov(0).whileTrue(ShooterROT(60, self.shooter))
-
-        # PID shooter rotation (NOT CURRENTLY WORKING)
-
-        # self.opController.pov(0).whileTrue(ShooterROT(0,self.shooter))  # out
-        # self.opController.pov(180).whileTrue(ShooterROT(40,self.shooter))  # out
-
-        self.opController.b().whileTrue(RotateIntake(60, self.intake))
+        # Spinning flywheel but Manually
+        self.opController.rightBumper().whileTrue(FlyWheelSpeed(0.5, self.intake))  # shoot
+        self.opController.leftBumper().whileTrue(FlyWheelSpeed(-0.5, self.intake)) # reject
 
         # Cancel all when x is pressed
-        self.opController.x().onTrue(commands2.InstantCommand(self.cancelAll))
+        self.opController.x().onTrue(commands2.InstantCommand(self.cancelAll)) 
 
+        # Zeroes the intake
         self.opController.back().onTrue(
             commands2.InstantCommand(self.intake.zeroIntake)
         )

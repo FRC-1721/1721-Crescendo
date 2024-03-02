@@ -5,7 +5,7 @@ from subsystems.intake import IntakeSubsystem
 
 
 class RotateIntake(commands2.Command):
-    def __init__(self, angle: float, subsystem: IntakeSubsystem):
+    def __init__(self, angle: float, _intake: IntakeSubsystem):
         """
         rotates the intake
         supposed to be used with
@@ -14,11 +14,12 @@ class RotateIntake(commands2.Command):
         super().__init__()
 
         # local subsystem instance
-        self.intakeSubsystem = subsystem
+        self.intakeSubsystem = _intake
 
         # requested speed
         self.angle = angle
 
+        # Command requirements
         self.addRequirements(self.intakeSubsystem)
 
     def initialize(self):
