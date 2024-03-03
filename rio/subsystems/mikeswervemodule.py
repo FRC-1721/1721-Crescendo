@@ -166,9 +166,16 @@ class MikeSwerveModule:
         )
 
         self.desiredState = desiredState
-
+    
     def resetEncoders(self) -> None:
         """
         Zeroes all the SwerveModule encoders.
         """
         self.drivingEncoder.setPosition(0)
+
+    def getDriveTemp(self) -> float:
+        return self.drivingSparkMax.getMotorTemperature()
+    
+    def getTurnTemp(self) -> float:
+        return self.turningSparkMax.getMotorTemperature()
+        

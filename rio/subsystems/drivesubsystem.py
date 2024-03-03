@@ -119,6 +119,17 @@ class DriveSubsystem(Subsystem):
         self.sd.putNumber("Swerve/RL", self.rearLeft.getState().angle.degrees())
         self.sd.putNumber("Swerve/RR", self.rearRight.getState().angle.degrees())
 
+
+        # TODO Thermals
+        self.sd.putNumber("Thermals/Swerve/FL/drive", self.frontLeft.getDriveTemp())
+        self.sd.putNumber("Thermals/Swerve/FR/drive", self.frontRight.getDriveTemp())
+        self.sd.putNumber("Thermals/Swerve/RL/drive", self.rearLeft.getDriveTemp())
+        self.sd.putNumber("Thermals/Swerve/RR/drive", self.rearRight.getDriveTemp())
+        self.sd.putNumber("Thermals/Swerve/FL/turn", self.frontLeft.getTurnTemp())
+        self.sd.putNumber("Thermals/Swerve/FR/turn", self.frontRight.getTurnTemp())
+        self.sd.putNumber("Thermals/Swerve/RL/turn", self.rearLeft.getTurnTemp())
+        self.sd.putNumber("Thermals/Swerve/RR/turn", self.rearRight.getTurnTemp())
+
     def getPose(self) -> Pose2d:
         """Returns the currently-estimated pose of the robot.
 
