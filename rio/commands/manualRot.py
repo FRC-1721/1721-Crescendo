@@ -3,11 +3,11 @@ import commands2
 from subsystems.shooter import Shooter
 
 class manualROT(commands2.Command):
-    def __init__(self, speed, _shooter:Shooter):
+    def __init__(self, speed, _shooter: Shooter):
         super().__init__()
 
         # local subsystem instance
-        self.subsystem = Shooter
+        self.subsystem = _shooter
 
         # requested speed
         self.speed = speed
