@@ -161,7 +161,10 @@ class DriveSubsystem(Subsystem):
         xSpeed: float,
         ySpeed: float,
         rot: float,
-        fieldRelative: typing.Callable,
+        fieldRelative: typing.Callable[
+            [],
+            bool,
+        ],
         rateLimit: bool,
     ) -> None:
         """Method to drive the robot using joystick info.
@@ -252,7 +255,7 @@ class DriveSubsystem(Subsystem):
                 rotDelivered,
                 Rotation2d.fromDegrees(self.gyro.getAngle()),
             )
-            if fieldRelative()
+            if fieldRelative
             else ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered)
         )
         fl, fr, rl, rr = SwerveDrive4Kinematics.desaturateWheelSpeeds(

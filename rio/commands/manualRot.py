@@ -2,6 +2,7 @@ import commands2
 
 from subsystems.shooter import Shooter
 
+
 class manualROT(commands2.Command):
     def __init__(self, speed, _shooter: Shooter):
         super().__init__()
@@ -11,7 +12,7 @@ class manualROT(commands2.Command):
 
         # requested speed
         self.speed = speed
-        
+
         # Command requirements
         self.addRequirements(self.subsystem)
 
