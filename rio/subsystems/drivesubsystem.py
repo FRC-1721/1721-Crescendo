@@ -101,28 +101,43 @@ class DriveSubsystem(Subsystem):
             ),
         )
 
-        # desired
+        # Desired Positions
         self.sd.putNumber(
-            "Swerve/FL desired", self.frontLeft.desiredState.angle.degrees()
+            "Swerve/FL/desired",
+            self.frontLeft.desiredState.angle.degrees(),
         )
         self.sd.putNumber(
-            "Swerve/FR desired", self.frontRight.desiredState.angle.degrees()
+            "Swerve/FR/desired",
+            self.frontRight.desiredState.angle.degrees(),
         )
         self.sd.putNumber(
-            "Swerve/RL desired", self.rearLeft.desiredState.angle.degrees()
+            "Swerve/RL/desired",
+            self.rearLeft.desiredState.angle.degrees(),
         )
         self.sd.putNumber(
-            "Swerve/RR desired", self.rearRight.desiredState.angle.degrees()
+            "Swerve/RR/desired",
+            self.rearRight.desiredState.angle.degrees(),
         )
 
-        # actual
-        self.sd.putNumber("Swerve/FL", self.frontLeft.getState().angle.degrees())
-        self.sd.putNumber("Swerve/FR", self.frontRight.getState().angle.degrees())
-        self.sd.putNumber("Swerve/RL", self.rearLeft.getState().angle.degrees())
-        self.sd.putNumber("Swerve/RR", self.rearRight.getState().angle.degrees())
+        # Actual Positions
+        self.sd.putNumber(
+            "Swerve/FL/actual",
+            self.frontLeft.getState().angle.degrees(),
+        )
+        self.sd.putNumber(
+            "Swerve/FR/actual",
+            self.frontRight.getState().angle.degrees(),
+        )
+        self.sd.putNumber(
+            "Swerve/RL/actual",
+            self.rearLeft.getState().angle.degrees(),
+        )
+        self.sd.putNumber(
+            "Swerve/RR/actual",
+            self.rearRight.getState().angle.degrees(),
+        )
 
-
-        # TODO Thermals
+        # Thermals
         self.sd.putNumber("Thermals/Swerve/FL/drive", self.frontLeft.getDriveTemp())
         self.sd.putNumber("Thermals/Swerve/FR/drive", self.frontRight.getDriveTemp())
         self.sd.putNumber("Thermals/Swerve/RL/drive", self.rearLeft.getDriveTemp())
