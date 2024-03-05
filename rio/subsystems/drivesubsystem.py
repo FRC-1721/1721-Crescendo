@@ -87,6 +87,8 @@ class DriveSubsystem(Subsystem):
             ),
         )
 
+        # self.gyro.setAngleAdjustment(90)
+
     def periodic(self) -> None:
         # Update the odometry in the periodic block
         self.odometry.update(
@@ -148,7 +150,7 @@ class DriveSubsystem(Subsystem):
         xSpeed: float,
         ySpeed: float,
         rot: float,
-        fieldRelative: bool,
+        fieldRelative: typing.Callable,
         rateLimit: bool,
     ) -> None:
         """Method to drive the robot using joystick info.
@@ -239,7 +241,7 @@ class DriveSubsystem(Subsystem):
                 rotDelivered,
                 Rotation2d.fromDegrees(self.gyro.getAngle()),
             )
-            if fieldRelative
+            if fieldRelative()
             else ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered)
         )
         fl, fr, rl, rr = SwerveDrive4Kinematics.desaturateWheelSpeeds(
