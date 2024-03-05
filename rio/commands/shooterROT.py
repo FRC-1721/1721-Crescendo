@@ -13,7 +13,7 @@ class ShooterROT(commands2.Command):
 
         # requested speed
         self.angle = angle
-        
+
         # Command requirements
         self.addRequirements(self.subsystem)
 
