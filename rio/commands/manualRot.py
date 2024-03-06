@@ -8,7 +8,7 @@ class manualROT(commands2.Command):
         super().__init__()
 
         # local subsystem instance
-        self.subsystem = Shooter
+        self.subsystem = _shooter
 
         # requested speed
         self.speed = speed
