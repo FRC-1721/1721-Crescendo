@@ -93,7 +93,7 @@ class RobotContainer:
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
                     * 0.6,
-                    False,
+                    True,
                     True,
                 ),
                 self.robotDrive,

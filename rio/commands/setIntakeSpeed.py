@@ -16,9 +16,6 @@ class SetIntakeSpeed(commands2.Command):
 
         # requested speed
         self.speed = speed
-
-        # Command requirements
-        self.addRequirements(self.intakeSubsystem)
         
     def initialize(self):
         logging.debug(f"Running command Intake Suck (manual) with speed {self.speed}")
