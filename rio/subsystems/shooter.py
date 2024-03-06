@@ -78,6 +78,9 @@ class Shooter(Subsystem):
         # (joe added this, its bad)
         self.flyPIDController.setOutputRange(-1, 1)
 
+        # curr limit so the motor doesn't die
+        self.rotateMotor.setSmartCurrentLimit(8)
+
         # Burn flymotor configuration
         self.flyMotor.burnFlash()
 
