@@ -147,7 +147,6 @@ class AutoConstants:
 
 
 class SuperStrucConstants:
-
     # angles for shooter
     ShootPos = 324
     LoadPos = 208
