@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "a5920a227460aa36650da0191c2abb324e77b43b043b1b456fa51d6bfc67eada"
+            "sha256": "e14910012202cd962f307929c674307774193831e3338a43dfedd41e8e550f81"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -273,7 +273,6 @@
             "version": "==2.1.2"
         },
         "robotpy": {
-            "extras": [],
             "hashes": [
                 "sha256:234006897942d8af5f9c8bfaaac116bce8372d4c18c3d5c64dcd11849f658885",
                 "sha256:5d76e6207280378bace891af54d13dc9dc7f8b27d5b3f3d2677e411292dd46cf"
@@ -365,28 +364,6 @@
             ],
             "markers": "platform_machine != 'roborio' and platform_machine != 'armv7l' and platform_machine != 'aarch64'",
             "version": "==2024.2.2"
-        },
-        "robotpy-navx": {
-            "hashes": [
-                "sha256:00282c61864bfcbd104cbe2ee10b0bcfb517adb27586f43cc89a631c9d471189",
-                "sha256:004b6b3a88cafda02b7258203687d844c91f921d2c204dd8838390f17a5febed",
-                "sha256:0c3e382fe21196d3eeaa906d9e82b18711af7690d159cb7af999b8a733d39ebb",
-                "sha256:1e24ba17aa30bd926569cd3def6ae1c96b64ba1a02a7c87a42c51b16d82a613a",
-                "sha256:383e7cdc303934932fabfe33a7fae536d8dbc133d7135a08fc26f821592cdbfd",
-                "sha256:44bbf7bbfaa26ecf59a8a361842f5e89bb7ab44116e4b6a82675d98813c7e045",
-                "sha256:5c7e5edf7c51d9e9280215cd182a3c71d65fafdf1a1f9e2ef6c98cbd2bb0ff9a",
-                "sha256:5e5b7389dac357825c76fe69e09475d00477c2a1de2b6b6b7ef00f4461e6cf06",
-                "sha256:6e2fc4c871a20d305fb9f6ba5cb5cb424f9a31b78327b77c3f7e28c2437f84d8",
-                "sha256:816d52d172ff1bfc87f10a91fbbeb36f873f6e02a1c16fb3befdcad73cf266f2",
-                "sha256:82598483738393ad7e94fb3ad73628c2ee842329ef526e1b52a05b7945ca10f4",
-                "sha256:a56f6c71678b23cd3f9ce376d7040243b921c01dda8d0de8a828b4a2db45d6e2",
-                "sha256:a6757655b2aaa1d8028068f22b4c0fbddcb38d3189f9efcaa6f97204d70d2632",
-                "sha256:ba22ed1be09525ebb35e9a5ee1a4eca7953848a8b0fec167398e167db9490025",
-                "sha256:d896a66171b18f47d7d47c4516a00c47da77cc7e68f91c182dfa38adb61fdc64",
-                "sha256:ebc481d6d8b3921d7fb58a9d7820fd7ccc94d1aac2fe189ac35dfcc38c6bfa91"
-            ],
-            "index": "pypi",
-            "version": "==2024.1.0"
         },
         "robotpy-rev": {
             "hashes": [
