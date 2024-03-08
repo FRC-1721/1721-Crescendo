@@ -3,8 +3,11 @@ class DummyGyro:
     def __init__(self):
         pass
 
-    def getAngle(self) -> float:
+    def getYaw(self) -> float:
         return 0.0
+
+    def configMountPose(self, x, y, z):
+        pass
 
     def getBoardYawAxis(self) -> None:
         return None
