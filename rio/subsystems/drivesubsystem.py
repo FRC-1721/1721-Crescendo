@@ -87,6 +87,8 @@ class DriveSubsystem(Subsystem):
             ),
         )
 
+        # self.gyro.setAngleAdjustment(90)
+
     def periodic(self) -> None:
         # Update the odometry in the periodic block
         self.odometry.update(
@@ -99,25 +101,51 @@ class DriveSubsystem(Subsystem):
             ),
         )
 
-        # desired
+        # Desired Positions
         self.sd.putNumber(
-            "Swerve/FL desired", self.frontLeft.desiredState.angle.degrees()
+            "Swerve/FL/desired",
+            self.frontLeft.desiredState.angle.degrees(),
         )
         self.sd.putNumber(
-            "Swerve/FR desired", self.frontRight.desiredState.angle.degrees()
+            "Swerve/FR/desired",
+            self.frontRight.desiredState.angle.degrees(),
         )
         self.sd.putNumber(
-            "Swerve/RL desired", self.rearLeft.desiredState.angle.degrees()
+            "Swerve/RL/desired",
+            self.rearLeft.desiredState.angle.degrees(),
         )
         self.sd.putNumber(
-            "Swerve/RR desired", self.rearRight.desiredState.angle.degrees()
+            "Swerve/RR/desired",
+            self.rearRight.desiredState.angle.degrees(),
         )
 
-        # actual
-        self.sd.putNumber("Swerve/FL", self.frontLeft.getState().angle.degrees())
-        self.sd.putNumber("Swerve/FR", self.frontRight.getState().angle.degrees())
-        self.sd.putNumber("Swerve/RL", self.rearLeft.getState().angle.degrees())
-        self.sd.putNumber("Swerve/RR", self.rearRight.getState().angle.degrees())
+        # Actual Positions
+        self.sd.putNumber(
+            "Swerve/FL/actual",
+            self.frontLeft.getState().angle.degrees(),
+        )
+        self.sd.putNumber(
+            "Swerve/FR/actual",
+            self.frontRight.getState().angle.degrees(),
+        )
+        self.sd.putNumber(
+            "Swerve/RL/actual",
+            self.rearLeft.getState().angle.degrees(),
+        )
+        self.sd.putNumber(
+            "Swerve/RR/actual",
+            self.rearRight.getState().angle.degrees(),
+        )
+
+        # Thermals
+        self.sd.putNumber("Thermals/Swerve/FL/drive", self.frontLeft.getDriveTemp())
+        self.sd.putNumber("Thermals/Swerve/FR/drive", self.frontRight.getDriveTemp())
+        self.sd.putNumber("Thermals/Swerve/RL/drive", self.rearLeft.getDriveTemp())
+        self.sd.putNumber("Thermals/Swerve/RR/drive", self.rearRight.getDriveTemp())
+        self.sd.putNumber("Thermals/Swerve/FL/turn", self.frontLeft.getTurnTemp())
+        self.sd.putNumber("Thermals/Swerve/FR/turn", self.frontRight.getTurnTemp())
+        self.sd.putNumber("Thermals/Swerve/RL/turn", self.rearLeft.getTurnTemp())
+        self.sd.putNumber("Thermals/Swerve/RR/turn", self.rearRight.getTurnTemp())
 
     def getPose(self) -> Pose2d:
         """Returns the currently-estimated pose of the robot.
@@ -148,7 +176,10 @@ class DriveSubsystem(Subsystem):
         xSpeed: float,
         ySpeed: float,
         rot: float,
-        fieldRelative: bool,
+        fieldRelative: typing.Callable[
+            [],
+            bool,
+        ],
         rateLimit: bool,
     ) -> None:
         """Method to drive the robot using joystick info.

@@ -2,13 +2,14 @@
 
 <html>
     <head>
+        <meta charset="UTF-8">
         <title>DASHBOURDE</title>
-        <link rel="stylesheet" href="style.scss" />
+        <link rel="stylesheet" href="style.scss" type="text/css" />
     </head>
     <body>
         <main>
             <div class="buttons">
-                <div class="button"></div>
+                <div id="fieldrelative" class="button" onclick="fieldRelativeToggle()"></div>
             </div>
             <div class="cameras">
                 <!--<img src="asset/doh.png" alt="" />
@@ -42,7 +43,12 @@
             <p></p>
             <script src="main.js"></script>
             <!--<script src="canvas.js"></script>-->
-            <div id="nt-table"></div>
+            <div id="nt-table">
+                <div id="_" class="nt-div disabled">
+                    <div class="nt-title" id="__title" onClick="ntToggle(this)">NetworkTables</div>
+                    <div class="nt-div-container" id="_-"></div>
+                </div>
+            </div>
         </main>
         <!--
          camera

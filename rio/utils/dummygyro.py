@@ -5,3 +5,9 @@ class DummyGyro:
 
     def getAngle(self) -> float:
         return 0.0
+
+    def getBoardYawAxis(self) -> None:
+        return None
+
+    def setAngleAdjustment(self, num):
+        pass

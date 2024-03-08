@@ -12,7 +12,7 @@ import logging
 from robotcontainer import RobotContainer
 
 
-class MyRobot(commands2.TimedCommandRobot):
+class HolyToaster(commands2.TimedCommandRobot):
     def robotInit(self):
         # Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         # autonomous chooser on the dashboard.
@@ -45,4 +45,4 @@ class MyRobot(commands2.TimedCommandRobot):
 
 
 if __name__ == "__main__":
-    wpilib.run(MyRobot)
+    wpilib.run(HolyToaster)

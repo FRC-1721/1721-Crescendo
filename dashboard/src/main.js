@@ -1,3 +1,5 @@
+var fieldRelative = false;
+
 $(function () {
     // sets a function that will be called when the websocket connects/disconnects
     NetworkTables.addWsConnectionListener(onNetworkTablesConnection, true);
@@ -44,6 +46,48 @@ function onNetworkTablesConnection(connected) {
     }
 }
 
+function ntToggle(event) {
+    $(event.parentElement).toggleClass("disabled");
+}
+
+function put(items, path, value) {
+    var [x, ...xs] = items;
+    if (items.length > 1) {
+        if ($("#nt-table #" + path + "-" + x).length == 0) {
+            var div = $(" <div /> ", {
+                id: path + "-" + x,
+                class: "nt-div disabled",
+            });
+            $("<div />", {
+                id: path + "-" + x + "_title",
+                class: "nt-title",
+                text: x,
+                onClick: "ntToggle(this)"
+            }).appendTo(div);
+            $("<div />", {
+                id: path + "-" + x + "-",
+                class: "nt-div-container"
+            }).appendTo(div);
+            $("#nt-table #" + path + "-").append(div);
+        }
+        put(xs, path + "-" + x, value);
+    } else {
+        var item = $(" <div /> ", {
+            id: path + "-" + x,
+            class: "nt-item",
+        });
+        $(" <div /> ", {
+            class: "nt-key",
+            text: "path" + "-" + x
+        }).appendTo(item);
+        $(" <div /> ", {
+            class: "nt-value",
+            text: value
+        }).appendTo(item);
+        $("#nt-table #" + path + "-").append(item);
+    }
+}
+
 function onValueChanged(key, value, isNew) {
     // key thing here: we're using the various NetworkTable keys as
     // the id of the elements that we're appending, for simplicity. However,
@@ -51,12 +95,8 @@ function onValueChanged(key, value, isNew) {
     // the NetworkTables.keyToId() function to convert them appropriately
 
     if (isNew) {
-        var tr = $('<div class="table-info"></div>').appendTo($("#nt-table"));
-        $('<div class="table-label"></div>').text(key).appendTo(tr);
-        $('<div class="table-area"></div>')
-            .attr("id", NetworkTables.keyToId(key))
-            .text(value)
-            .appendTo(tr);
+        var [_, ...path] = key.split("/");
+        put(path, "_", value)
     } else {
         // similarly, use keySelector to convert the key to a valid jQuery
         // selector. This should work for class names also, not just for ids
@@ -75,15 +115,14 @@ function onValueChanged(key, value, isNew) {
 
     if (key.includes("/SmartDashboard/Swerve/")) {
         if (key.includes("desired")) {
-            wheel = key.split("/").at(-1);
+            wheel = key.split("/").at(-2);
             console.log(wheel);
-            $(".swerve-desired ." + wheel).css(
+            $(".swerve-desired ." + wheel + "d").css(
                 "transform",
                 "rotate(" + value + "deg)"
             );
         } else {
-            wheel = key.split("/").at(-1).replace(" desired", "");
-            console.log(wheel);
+            wheel = key.split("/").at(-2);
             $(".swerve ." + wheel).css("transform", "rotate(" + value + "deg)");
         }
     }

@@ -17,6 +17,7 @@ class LoadMagazine(commands2.Command):
         self.shooter = _shooter
         self.intake = _intake
 
+        # Command requirements
         self.addRequirements((self.shooter, self.intake))
 
     def initialize(self):

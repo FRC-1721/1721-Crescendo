@@ -17,6 +17,7 @@ class FlyWheelSpeed(commands2.Command):
         # Whether to stop when done or not
         self.swc = stopWhenComplete
 
+        # Command requirements
         self.addRequirements(self.shooter)
 
     def initialize(self):
