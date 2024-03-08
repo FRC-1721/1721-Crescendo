@@ -5,6 +5,7 @@ from wpilib import RobotBase
 
 from numpy import *
 
+import logging
 import commands2
 import json
 
@@ -20,8 +21,11 @@ class limeLightCommands(commands2.Subsystem):
         #field size in goofy limelight units
         self.fieldSize = [16, 8]
 
-        self.xFifo = array([0] * 10)
-        self.yFifo = array([0] * 10)
+        self.xFifo = array([0] * 10, dtype=double)
+        self.yFifo = array([0] * 10, dtype=double)
+
+        print(self.xFifo.shape)
+        print(self.xFifo.dtype)
 
     def setPipeline(self, PipeLine:int) -> None:
         self.ll.getEntry("pipeline").setDouble(PipeLine)
@@ -83,31 +87,39 @@ class limeLightCommands(commands2.Subsystem):
             
         driver.drive(driveX,driveY,driveZ,False,True)       
 
-    def findObj(self) -> None:
-        posX = self.ll.getEntry("tx").getDouble(0)
-        append(self.xFifo, posX)
-        self.xFifo = delete(self.xFifo, 0)
+    def findObj(self) -> bool:
+        posX = self.ll.getEntry("tx").getDouble(0)          # trys to recieve the objects distance from 
+        posY = self.ll.getEntry("ty").getDouble(0)          # the robot via NetworkTables
+        
+        if (posX == 0) and (posY == 0):
+            logging.warn("No note in view of limelight")    # TODO: run an estimated guess on whether or not the 
+            return False                                    #       Intake is obscuring the note
+        else:
+            append(self.xFifo, posX)                        # Append newly collected Pos to array of data to 
+            append(self.yFifo, posY)                        # collect an average distance
 
-        posY = self.ll.getEntry("ty").getDouble(0)
-        append(self.yFifo, posY)
-        self.xFifo = delete(self.yFifo, 0)
+            #self.xFifo = delete(self.xFifo, 0)              # Deletes old Pos variables that we don't really need
+            #self.yFifo = delete(self.yFifo, 0)              
 
-        self.distX = mean(posX)
-        self.distY = mean(posY)
+            self.distX = mean(posX)                         # TODO: change pos variables to numpy array variables
+            self.distY = mean(posY) 
+            return True  
 
+        
     def goToObj(self,driver) -> None:
-        if self.distY > 3.5:
+        if self.distY > -21:                                # ALL OF THIS SET TO BE CHANGED. FOR TESTING PURPOSES ONLY
             driveY = 0.1
         else:
             driveY = 0
 
-        if self.distX > 0.5:
+        if self.distX > -3.5:
             driveX = 0.1
 
-        elif self.distX < -0.5:
+        elif self.distX < -2.5:
             driveX = -0.1
 
         else:
             driveX = 0
-
+        print(driveX)
+        print(driveY)
         driver.drive(driveX,driveY,0,False,True) 

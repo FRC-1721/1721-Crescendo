@@ -13,3 +13,4 @@ robotpy-hal
 robotpy-rev
 robotpy-navx
 wpilib
+numpy

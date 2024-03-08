@@ -4,7 +4,7 @@ from subsystems.limelight import limeLightCommands
 from subsystems.drivesubsystem import DriveSubsystem
 
 class sendToObject(commands2.Command):
-    def __init__(self, X:int,Y:int,Z:int, drive:DriveSubsystem, subsystem: limeLightCommands):
+    def __init__(self, drive:DriveSubsystem, subsystem: limeLightCommands):
         """
         Sends the robot to a note that it detects
         """
@@ -18,10 +18,8 @@ class sendToObject(commands2.Command):
         self.Limelight.setPipeline(1) # sets the Limelight to the Detector pipeline 
 
     def execute(self):
-        self.Limelight.findObj()
+        if self.Limelight.findObj() == True:
+            self.Limelight.goToObj(self.drive)
 
-        self.Limelight.goToObj(self.drive)
-
-    def end(self):
-        pass
+    def end(self, inturrupted:bool):
         return True
