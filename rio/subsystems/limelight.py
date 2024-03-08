@@ -1,5 +1,7 @@
 from ntcore import NetworkTableInstance
 
+from subsystems.drivesubsystem import DriveSubsystem
+
 from wpilib import RobotBase
 
 from numpy import *
@@ -22,7 +24,6 @@ class limeLightCommands(commands2.Subsystem):
 
         self.xFifo = array([0] * 10, dtype=double)
         self.yFifo = array([0] * 10, dtype=double)
-
 
     def setPipeline(self, PipeLine: int) -> None:
         self.ll.getEntry("pipeline").setDouble(PipeLine)
@@ -122,16 +123,16 @@ class limeLightCommands(commands2.Subsystem):
             self.distY = mean(posY)
             return True
 
-    def goToObj(self, driver) -> None:
+    def goToObj(self, driver: DriveSubsystem) -> None:
         if self.distY > -21:  # ALL OF THIS SET TO BE CHANGED. FOR TESTING PURPOSES ONLY
-            driveY = 0.1
+            driveY = 0.25
         else:
             driveY = 0
 
-        if self.distX > -3.5:
+        if self.distX < -3.5:
             driveX = 0.1
 
-        elif self.distX < -2.5:
+        elif self.distX > -2.5:
             driveX = -0.1
 
         else:

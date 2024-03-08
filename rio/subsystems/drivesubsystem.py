@@ -98,7 +98,7 @@ class DriveSubsystem(Subsystem):
 
     def periodic(self) -> None:
         # Update the odometry in the periodic block
-        print(self.getHeading())
+        # print(self.getHeading())
         self.odometry.update(
             Rotation2d.fromDegrees(self.gyro.getYaw()),
             (
@@ -199,7 +199,7 @@ class DriveSubsystem(Subsystem):
                               field.
         :param rateLimit:     Whether to enable rate limiting for smoother control.
         """
-
+        print(xSpeed)
         xSpeedCommanded = xSpeed
         ySpeedCommanded = ySpeed
 
@@ -342,3 +342,6 @@ class DriveSubsystem(Subsystem):
         :returns: The turn rate of the robot, in degrees per second
         """
         return self.gyro.getRate() * (-1.0 if DriveConstants.kGyroReversed else 1.0)
+
+    def resetYaw(self) -> None:
+        self.gyro.setYaw(0,100)

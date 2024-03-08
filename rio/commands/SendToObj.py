@@ -14,6 +14,7 @@ class sendToObject(commands2.Command):
         # local subsystem instance
         self.Limelight = subsystem
         self.drive = drive
+        self.addRequirements(self.drive)
 
     def initialize(self):
         self.Limelight.setPipeline(1)  # sets the Limelight to the Detector pipeline
