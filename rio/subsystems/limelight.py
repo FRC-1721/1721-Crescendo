@@ -23,8 +23,6 @@ class limeLightCommands(commands2.Subsystem):
         self.xFifo = array([0] * 10, dtype=double)
         self.yFifo = array([0] * 10, dtype=double)
 
-        print(self.xFifo.shape)
-        print(self.xFifo.dtype)
 
     def setPipeline(self, PipeLine: int) -> None:
         self.ll.getEntry("pipeline").setDouble(PipeLine)

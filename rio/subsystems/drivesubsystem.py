@@ -91,6 +91,7 @@ class DriveSubsystem(Subsystem):
 
     def periodic(self) -> None:
         # Update the odometry in the periodic block
+        print(self.getHeading())
         self.odometry.update(
             Rotation2d.fromDegrees(self.gyro.getAngle()),
             (
