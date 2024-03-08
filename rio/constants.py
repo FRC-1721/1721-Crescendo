@@ -147,7 +147,6 @@ class AutoConstants:
 
 
 class SuperStrucConstants:
-
     # angles for shooter
     ShootPos = 321
     LoadPos =  204
@@ -190,6 +189,15 @@ class IntakeConstants:
     kLiftI = 0.00001
     kLiftD = 1.6
     kLiftFF = 0
+
+
+class GyroConstants:
+    id = 0
+
+    # pose
+    yawPose = 0
+    pitchPose = 0
+    rollPose = 0
 
 
 class ClimberConstants:

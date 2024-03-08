@@ -13,11 +13,11 @@ from wpimath.kinematics import (
     SwerveDrive4Odometry,
 )
 
-from navx import AHRS
+from phoenix5.sensors import Pigeon2
 
 from ntcore import NetworkTableInstance
 
-from constants import DriveConstants
+from constants import DriveConstants, GyroConstants
 
 import utils.swerveutils as swerveutils
 
@@ -61,10 +61,17 @@ class DriveSubsystem(Subsystem):
 
         # The gyro sensor
         if wpilib.RobotBase.isReal():
-            self.gyro = AHRS.create_spi()
+            self.gyro = Pigeon2(GyroConstants.id)
         else:
             # Bug with navx init! For sim/unit testing just use the ADIS
             self.gyro = DummyGyro()
+
+        # the mounting pose for the gyro
+        self.gyro.configMountPose(
+            GyroConstants.yawPose,
+            GyroConstants.pitchPose,
+            GyroConstants.rollPose,
+        )
 
         # Slew rate filter variables for controlling lateral acceleration
         self.currentRotation = 0.0
@@ -78,7 +85,7 @@ class DriveSubsystem(Subsystem):
         # Odometry class for tracking robot pose
         self.odometry = SwerveDrive4Odometry(
             DriveConstants.kDriveKinematics,
-            Rotation2d.fromDegrees(self.gyro.getAngle()),
+            Rotation2d.fromDegrees(self.gyro.getYaw()),
             (
                 self.frontLeft.getPosition(),
                 self.frontRight.getPosition(),
@@ -93,7 +100,7 @@ class DriveSubsystem(Subsystem):
         # Update the odometry in the periodic block
         print(self.getHeading())
         self.odometry.update(
-            Rotation2d.fromDegrees(self.gyro.getAngle()),
+            Rotation2d.fromDegrees(self.gyro.getYaw()),
             (
                 self.frontLeft.getPosition(),
                 self.frontRight.getPosition(),
@@ -162,7 +169,7 @@ class DriveSubsystem(Subsystem):
 
         """
         self.odometry.resetPosition(
-            Rotation2d.fromDegrees(self.gyro.getAngle()),
+            Rotation2d.fromDegrees(self.gyro.getYaw()),
             (
                 self.frontLeft.getPosition(),
                 self.frontRight.getPosition(),
@@ -269,7 +276,7 @@ class DriveSubsystem(Subsystem):
                 xSpeedDelivered,
                 ySpeedDelivered,
                 rotDelivered,
-                Rotation2d.fromDegrees(self.gyro.getAngle()),
+                Rotation2d.fromDegrees(self.gyro.getYaw()),
             )
             if fieldRelative
             else ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered)
@@ -318,14 +325,16 @@ class DriveSubsystem(Subsystem):
 
     def zeroHeading(self) -> None:
         """Zeroes the heading of the robot."""
-        self.gyro.reset()
+        # Pigeon2 doesn't have a reset command
+        # self.gyro.reset()
+        pass
 
     def getHeading(self) -> float:
         """Returns the heading of the robot.
 
         :returns: the robot's heading in degrees, from -180 to 180
         """
-        return Rotation2d.fromDegrees(self.gyro.getAngle()).degrees()
+        return Rotation2d.fromDegrees(self.gyro.getYaw()).degrees()
 
     def getTurnRate(self) -> float:
         """Returns the turn rate of the robot.
