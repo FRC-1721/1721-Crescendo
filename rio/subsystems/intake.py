@@ -2,7 +2,13 @@ import commands2
 import logging
 
 from ntcore import NetworkTableInstance
-from rev import CANSparkMax, CANSparkLowLevel, SparkAbsoluteEncoder, SparkMaxLimitSwitch
+from rev import (
+    CANSparkMax,
+    CANSparkLowLevel,
+    SparkAbsoluteEncoder,
+    SparkMaxLimitSwitch,
+    CANSparkBase,
+)
 from constants import IntakeConstants
 
 
@@ -34,9 +40,8 @@ class IntakeSubsystem(commands2.Subsystem):
         self.intakeMotor.setInverted(True)
 
         # encoders
-        self.liftEncoder = self.liftMotor.getAbsoluteEncoder(
-            SparkAbsoluteEncoder.Type.kDutyCycle
-        )
+        self.liftEncoder = self.liftMotor.getEncoder()
+
         self.liftEncoder.setPositionConversionFactor(IntakeConstants.kLiftConversion)
 
         self.intakeEncoder = self.intakeMotor.getEncoder()
@@ -53,11 +58,18 @@ class IntakeSubsystem(commands2.Subsystem):
         self.liftPID.setFF(IntakeConstants.kLiftFF)
 
         # limit switches
-        self.rightLimitSwitch = self.intakeMotor.getForwardLimitSwitch(
+        self.limtSwitch = self.intakeMotor.getForwardLimitSwitch(
             SparkMaxLimitSwitch.Type.kNormallyOpen
         )
 
-        self.rightLimitSwitch.enableLimitSwitch(True)
+        self.limtSwitch.enableLimitSwitch(True)
+
+        self.intakeMotor.enableSoftLimit(
+            CANSparkBase.SoftLimitDirection.kForward, False
+        )
+        self.intakeMotor.enableSoftLimit(
+            CANSparkBase.SoftLimitDirection.kReverse, False
+        )
 
         self.intakeMotor.burnFlash()
 
@@ -65,13 +77,17 @@ class IntakeSubsystem(commands2.Subsystem):
         self.sd.putNumber("Thermals/Intake", self.intakeMotor.getMotorTemperature())
         self.sd.putNumber("Intake/IntakeAngle", self.intakeEncoder.getPosition())
         self.sd.putNumber("Thermals/Lift", self.liftMotor.getMotorTemperature())
+        # print(self.liftEncoder.getPosition())
 
     def intake(self, speed):
-        if speed > 0:
-            if not self.rightLimitSwitch.get():
-                self.intakeMotor.set(speed)
-        else:
-            self.intakeMotor.set(speed)
+        self.intakeMotor.set(speed)
+
+    def switchPress(self):
+        return self.limtSwitch.get()
+
+    def getAngle(self) -> float:
+        """Return the current angle"""
+        return self.liftEncoder.getPosition()
 
     def manualLift(self, speed):
         self.liftMotor.set(speed)
@@ -79,8 +95,5 @@ class IntakeSubsystem(commands2.Subsystem):
     def lift(self, angle: float):
         self.liftPID.setReference(angle, CANSparkMax.ControlType.kPosition)
 
-    def liftCurrentLimit(self, current):
-        self.liftMotor.setSmartCurrentLimit(current)
-
-    def intakeCurrentLimit(self, current):
-        self.intakeMotor.setSmartCurrentLimit(current)
+    def zeroIntake(self):
+        self.liftEncoder.setPosition(0)

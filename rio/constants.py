@@ -147,21 +147,30 @@ class AutoConstants:
 
 
 class SuperStrucConstants:
+
+    # angles for shooter
+    ShootPos = 324
+    LoadPos = 208
+
     # CANSpark IDS
     rotateID = 11
     flyID = 12
     guideID = 13
 
-    # PID values
-    kP = 0
-    kI = 0
-    kD = 0
-    kFF = 0
+    kRotConversion = 360  # Configured feb 12 by joe
 
-    # current limits
-    rotateCurrentLimit = 1
-    flyCurrentLimit = 1
-    guideCurrentLimit = 1
+    krotateInversion = True
+
+    # PID values
+    krotateP = 0.01
+    krotateI = 0.0
+    krotateD = 0.0
+    krotateFF = 0
+
+    kflyP = 1
+    kflyI = 0.00001
+    kflyD = 0.0002
+    kflyFF = 0
 
 
 class IntakeConstants:
@@ -177,7 +186,7 @@ class IntakeConstants:
     kLiftConversion = 1  # Configured feb 12 by joe
 
     # lift pid
-    kLiftP = 0
-    kLiftI = 0
-    kLiftD = 0
+    kLiftP = 0.8
+    kLiftI = 0.00001
+    kLiftD = 1.6
     kLiftFF = 0

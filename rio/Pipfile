@@ -16,3 +16,6 @@ numpy = "1.26.4"
 
 [requires]
 python_version = "3.11"
+
+[pipenv]
+allow_prereleases = true
