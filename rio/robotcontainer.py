@@ -24,6 +24,7 @@ from constants import AutoConstants, DriveConstants, OIConstants, SuperStrucCons
 from subsystems.drivesubsystem import DriveSubsystem
 from subsystems.shooter import Shooter
 from subsystems.intake import IntakeSubsystem
+from subsystems.climber import Climber
 
 # Commands
 from commands.setIntakeSpeed import SetIntakeSpeed
@@ -35,6 +36,7 @@ from commands.manualRot import manualROT
 from commands.intakeUntilNote import intakeUntilNote
 from commands.setIntakeSpeed import SetIntakeSpeed
 from commands.loadMagazine import LoadMagazine
+from commands.climb import Climb
 
 # NetworkTables
 from ntcore import NetworkTableInstance
@@ -56,6 +58,7 @@ class RobotContainer:
         self.robotDrive = DriveSubsystem()
         self.shooter = Shooter()
         self.intake = IntakeSubsystem()
+        self.climber = Climber()
 
         # The driver's controller
         self.driverController = CommandXboxController(0)
@@ -90,7 +93,7 @@ class RobotContainer:
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
                     * 0.6,
-                    False,
+                    lambda: self.fieldCentricChooser.getSelected(),
                     True,
                 ),
                 self.robotDrive,
@@ -161,32 +164,44 @@ class RobotContainer:
             )
         )
 
+        # Climbing
+        self.driverController.rightBumper().whileTrue(
+            Climb(
+                lambda: self.opController.getRightTriggerAxis()
+                - self.opController.getLeftTriggerAxis(),
+                self.climber,
+                self.shooter,
+            )
+        )
+
         # ==============================
         #        Operator Commands
         # ==============================
 
-        # moving intake
+        # Rotating intake but Manually
         self.opController.pov(90).whileTrue(IntakeRotationMAN(1, self.intake))  # out
         self.opController.pov(270).whileTrue(IntakeRotationMAN(-1, self.intake))  # in
 
-        # _____POST_INTAKE_KEYBINDS_____
+        # Rotating shooter but Manually
+        self.opController.pov(0).whileTrue(manualROT(0.5, self.shooter))  # out
+        self.opController.pov(180).whileTrue(manualROT(-0.5, self.shooter))  # in
 
-        # moving shooter
-        self.opController.pov(0).whileTrue(manualROT(0.5, self.shooter))
-        self.opController.pov(180).whileTrue(manualROT(-0.5, self.shooter))
+        # Spinning intake wheels but Manually
+        self.opController.a().whileTrue(SetIntakeSpeed(0.5, self.intake))  # suck
+        self.opController.b().whileTrue(SetIntakeSpeed(-0.5, self.intake))  # blow
 
-        self.driverController.pov(0).whileTrue(ShooterROT(60, self.shooter))
-
-        # PID shooter rotation (NOT CURRENTLY WORKING)
-
-        # self.opController.pov(0).whileTrue(ShooterROT(0,self.shooter))  # out
-        # self.opController.pov(180).whileTrue(ShooterROT(40,self.shooter))  # out
-
-        self.opController.b().whileTrue(RotateIntake(60, self.intake))
+        # Spinning flywheel but Manually
+        self.opController.rightBumper().whileTrue(
+            FlyWheelSpeed(0.5, self.intake)
+        )  # shoot
+        self.opController.leftBumper().whileTrue(
+            FlyWheelSpeed(-0.5, self.intake)
+        )  # reject
 
         # Cancel all when x is pressed
         self.opController.x().onTrue(commands2.InstantCommand(self.cancelAll))
 
+        # Zeroes the intake
         self.opController.back().onTrue(
             commands2.InstantCommand(self.intake.zeroIntake)
         )
@@ -221,12 +236,32 @@ class RobotContainer:
             key_entry = self.build_table.getEntry(str(key))
             key_entry.setString(str(data[key]))
 
+        # Use sendable choosers for some settings
+        self.fieldCentricChooser = wpilib.SendableChooser()
+        self.fieldCentricChooser.setDefaultOption("Field Centric", True)
+        self.fieldCentricChooser.addOption("Robot Centric", False)
+        wpilib.SmartDashboard.putData("FieldCentric", self.fieldCentricChooser)
+
     def getAutonomousCommand(self) -> commands2.Command:
         """Use this to pass the autonomous command to the main {@link Robot} class.
 
         :returns:
         command to run in autonomous
         """
+
+        # # Create a sendable chooser
+        # self.autoChooser = wpilib.SendableChooser()
+
+        # # Add options
+        # self.autoChooser.setDefaultOption("No Auto", NoAuto())
+
+        # # Put the chooser on the dashboard
+        # wpilib.SmartDashboard.putData("Autonomous", self.autoChooser)
+
+        # ===========================
+        # DEFAULT STUFF
+        # ===========================
+
         # Create config for trajectory
         config = TrajectoryConfig(
             AutoConstants.kMaxSpeedMetersPerSecond,

@@ -5,7 +5,7 @@ from subsystems.shooter import Shooter
 
 
 class ShooterROT(commands2.Command):
-    def __init__(self, angle: float, _shooter=Shooter):
+    def __init__(self, angle: float, _shooter: Shooter):
         super().__init__()
 
         # local subsystem instance
@@ -14,6 +14,7 @@ class ShooterROT(commands2.Command):
         # requested speed
         self.angle = angle
 
+        # Command requirements
         self.addRequirements(self.subsystem)
 
     def initialize(self):
@@ -22,7 +23,9 @@ class ShooterROT(commands2.Command):
     def execute(self):
         self.subsystem.setRotateAngle(self.angle)
 
-        logging.debug(f"Still moving... {self.subsystem.getAngle()} to {self.angle}")
+        logging.info(
+            f"Shooter still moving... {self.subsystem.getAngle()} to {self.angle}"
+        )
 
     def isFinished(self) -> bool:
         return abs(self.subsystem.getAngle() - self.angle) < 10

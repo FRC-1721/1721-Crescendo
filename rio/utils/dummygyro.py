@@ -8,3 +8,9 @@ class DummyGyro:
 
     def configMountPose(self, x, y, z):
         pass
+
+    def getBoardYawAxis(self) -> None:
+        return None
+
+    def setAngleAdjustment(self, num):
+        pass
