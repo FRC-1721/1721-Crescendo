@@ -50,42 +50,56 @@ function ntToggle(event) {
     $(event.parentElement).toggleClass("disabled");
 }
 
-function put(items, path, value) {
-    var [x, ...xs] = items;
-    if (items.length > 1) {
-        if ($("#nt-table #" + path + "-" + x).length == 0) {
-            var div = $(" <div /> ", {
-                id: path + "-" + x,
-                class: "nt-div disabled",
+$(".nt-toggle").on("click", () => {
+    NetworkTables.putValue(
+        "/SmartDashboard/FieldCentric/.controllable",
+        $(this).is(".active")
+    );
+});
+
+function putNT(key, value) {
+    function put(items, path, data) {
+        var [x, ...xs] = items;
+        if (items.length > 1) {
+            if (
+                $("#" + NetworkTables.keySelector(path + "/" + x)).length == 0
+            ) {
+                var div = $(" <div /> ", {
+                    id: NetworkTables.keyToId(path + "/" + x),
+                    class: "nt-div disabled",
+                });
+                $("<div />", {
+                    id: NetworkTables.keyToId(path + "/" + x + "_title"),
+                    class: "nt-title",
+                    text: x,
+                    onClick: "ntToggle(this)",
+                }).appendTo(div);
+                $("<div />", {
+                    id: NetworkTables.keyToId(path + "/" + x + "/"),
+                    class: "nt-div-container",
+                }).appendTo(div);
+                $("#" + NetworkTables.keySelector(path + "/")).append(div);
+            }
+            put(xs, path + "/" + x, data);
+        } else {
+            var item = $(" <div /> ", {
+                id: NetworkTables.keyToId(path + "/" + x),
+                class: "nt-item",
             });
-            $("<div />", {
-                id: path + "-" + x + "_title",
-                class: "nt-title",
+            $(" <div /> ", {
+                class: "nt-key",
                 text: x,
-                onClick: "ntToggle(this)"
-            }).appendTo(div);
-            $("<div />", {
-                id: path + "-" + x + "-",
-                class: "nt-div-container"
-            }).appendTo(div);
-            $("#nt-table #" + path + "-").append(div);
+            }).appendTo(item);
+            $(" <div /> ", {
+                class: "nt-value",
+                id: NetworkTables.keyToId(path + "/" + x),
+                text: data,
+            }).appendTo(item);
+            $("#" + NetworkTables.keySelector(path + "/")).append(item);
         }
-        put(xs, path + "-" + x, value);
-    } else {
-        var item = $(" <div /> ", {
-            id: path + "-" + x,
-            class: "nt-item",
-        });
-        $(" <div /> ", {
-            class: "nt-key",
-            text: "path" + "-" + x
-        }).appendTo(item);
-        $(" <div /> ", {
-            class: "nt-value",
-            text: value
-        }).appendTo(item);
-        $("#nt-table #" + path + "-").append(item);
     }
+    var [_, ...items] = key.split("/");
+    put(items, "", value);
 }
 
 function onValueChanged(key, value, isNew) {
@@ -95,12 +109,11 @@ function onValueChanged(key, value, isNew) {
     // the NetworkTables.keyToId() function to convert them appropriately
 
     if (isNew) {
-        var [_, ...path] = key.split("/");
-        put(path, "_", value)
+        putNT(key, value);
     } else {
         // similarly, use keySelector to convert the key to a valid jQuery
         // selector. This should work for class names also, not just for ids
-        $("#" + NetworkTables.keySelector(key)).text(value);
+        $("#" + NetworkTables.keySelector(key) + " .nt-value").text(value);
     }
 
     if (key.includes("/SmartDashboard/Audio")) {
@@ -116,7 +129,6 @@ function onValueChanged(key, value, isNew) {
     if (key.includes("/SmartDashboard/Swerve/")) {
         if (key.includes("desired")) {
             wheel = key.split("/").at(-2);
-            console.log(wheel);
             $(".swerve-desired ." + wheel + "d").css(
                 "transform",
                 "rotate(" + value + "deg)"
@@ -125,5 +137,9 @@ function onValueChanged(key, value, isNew) {
             wheel = key.split("/").at(-2);
             $(".swerve ." + wheel).css("transform", "rotate(" + value + "deg)");
         }
+    }
+
+    if (key.includes("/SmartDashboard/FieldCentric/.controllable")) {
+        $("#fieldRelToggle");
     }
 }
