@@ -29,10 +29,14 @@ body {
     display: flex;
     flex-direction: column;
     background: #282828;
+    height: 100%;
+    overflow-y: scroll;
 }
 
-.cameras {
-    background: #1d2021;
+main {
+    display: grid;
+    grid-template:
+        240px auto / 240px 320px 320px auto
 }
 
 #nt-table {
@@ -96,21 +100,16 @@ body {
     }
 }
 
-main {
-    height: 100%;
-    overflow-y: scroll;
-}
-
 .swerve {
-    width: 320px;
-    height: 320px;
+    width: 240px;
+    height: 240px;
     background: #3c3836;
     position: relative;
 
     &-actual,
     &-desired {
-        width: 320px;
-        height: 320px;
+        width: 240px;
+        height: 240px;
         padding: 25px;
         display: flex;
         flex-direction: column;
@@ -130,7 +129,7 @@ main {
     }
 
     .wheel {
-        height: 120px;
-        width: 120px;
+        height: 80px;
+        width: 80px;
     }
 }

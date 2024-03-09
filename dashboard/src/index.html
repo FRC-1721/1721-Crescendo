@@ -8,14 +8,6 @@
     </head>
     <body>
         <main>
-            <div class="buttons">
-                <div id="fieldrelative" class="button" onclick="fieldRelativeToggle()"></div>
-            </div>
-            <div class="cameras">
-                <!--<img src="asset/doh.png" alt="" />
-                <img src="asset/doh.png" alt="" />-->
-                <!--<canvas id="cool" width="430" height="300"></canvas>-->
-            </div>
             <div class="swerve">
                 <div class="swerve-actual">
                     <div class="swerve-row">
@@ -38,18 +30,22 @@
                     </div>
                 </div>
             </div>
+            <img id="camera" src="http://10.17.21.11:5800" />
+            <div class="buttons">
+                <div id="fieldrelative" class="button"></div>
+            </div>
             <script src="d3.min.js"></script>
             <script src="jquery.min.js"></script>
             <p></p>
             <script src="main.js"></script>
             <!--<script src="canvas.js"></script>-->
-            <div id="nt-table">
-                <div id="_" class="nt-div disabled">
-                    <div class="nt-title" id="__title" onClick="ntToggle(this)">NetworkTables</div>
-                    <div class="nt-div-container" id="_-"></div>
-                </div>
-            </div>
         </main>
+        <div id="nt-table">
+            <div id="_" class="nt-div disabled">
+                <div class="nt-title" id="__title" onClick="ntToggle(this)">NetworkTables</div>
+                <div class="nt-div-container" id="_-"></div>
+            </div>
+        </div>
         <!--
          camera
          temps
