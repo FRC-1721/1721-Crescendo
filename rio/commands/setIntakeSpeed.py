@@ -29,7 +29,8 @@ class SetIntakeSpeed(commands2.Command):
 
     def isFinished(self):
         return True
-    
+
     def end(self, interrupted: bool):
+        self.intakeSubsystem.intake(False)
         logging.debug(f"Intake suck done")
         return True

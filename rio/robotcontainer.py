@@ -97,6 +97,15 @@ class RobotContainer:
             )
         )
 
+        self.shooter.setDefaultCommand(
+            commands2.cmd.run(
+                lambda: FlyWheelSpeed(
+                    self.opController.getRawAxis(2) - 0.16, self.shooter
+                ),
+                self.shooter,
+            )
+        )
+
     def configureButtonBindings(self) -> None:
         """
         Use this method to define your button->command mappings. Buttons can be created by
@@ -165,32 +174,6 @@ class RobotContainer:
         #        Operator Commands
         # ==============================
 
-        """
-        # moving intake
-        self.opController.pov(90).whileTrue(IntakeRotationMAN(1, self.intake))  # out
-        self.opController.pov(270).whileTrue(IntakeRotationMAN(-1, self.intake))  # in
-
-        # moving shooter
-        self.opController.pov(0).whileTrue(manualROT(0.5, self.shooter))
-        self.opController.pov(180).whileTrue(manualROT(-0.5, self.shooter))
-
-        self.driverController.pov(0).whileTrue(ShooterROT(60, self.shooter))
-
-        # PID shooter rotation (NOT CURRENTLY WORKING)
-
-        # self.opController.pov(0).whileTrue(ShooterROT(0,self.shooter))  # out
-        # self.opController.pov(180).whileTrue(ShooterROT(40,self.shooter))  # out
-
-        self.opController.b().whileTrue(RotateIntake(60, self.intake))
-
-        # Cancel all when x is pressed
-        self.opController.x().onTrue(commands2.InstantCommand(self.cancelAll))
-
-        self.opController.back().onTrue(
-            commands2.InstantCommand(self.intake.zeroIntake)
-        )
-        """
-
         # intake keybinds
         # intake movement
         self.opController.button(2).whileTrue(IntakeRotationMAN(1, self.intake))  # out
@@ -205,20 +188,14 @@ class RobotContainer:
         self.opController.button(3).whileTrue(manualROT(0.5, self.shooter))
         self.opController.button(4).whileTrue(manualROT(-0.5, self.shooter))
 
-        # fire command
-        # TODO fix this code later
-        if self.opController.getRawAxis(2) >= 250:
-            FlyWheelSpeed(1, self.intake)
-
-        else:
-            FlyWheelSpeed(0, self.intake)
-
+        """
         # climber
         if (
             self.opController.getRawAxis(0) > 0.1
             or self.opController.getRawAxis(0) > -0.1
         ):
-            manualROT(self.opController.getRawAxis(0))
+            climb(self.opController.getRawAxis(0),self.climber)
+        """
 
         # Cancel all
         self.opController.button(8).onTrue(commands2.InstantCommand(self.cancelAll))
