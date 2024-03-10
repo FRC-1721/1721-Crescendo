@@ -35,6 +35,7 @@ from commands.manualRot import manualROT
 from commands.intakeUntilNote import intakeUntilNote
 from commands.setIntakeSpeed import SetIntakeSpeed
 from commands.loadMagazine import LoadMagazine
+from commands.resetYaw import ResetYaw
 
 # NetworkTables
 from ntcore import NetworkTableInstance
@@ -168,6 +169,11 @@ class RobotContainer:
                 ),  # Rotate the shooter
                 FlyWheelSpeed(0, self.shooter),  # stops the Flywheel
             )
+        )
+        self.driverController.start().onTrue(ResetYaw(self.robotDrive))
+
+        self.driverController.back().onTrue(
+            commands2.InstantCommand(self.intake.zeroIntake)
         )
 
         # ==============================

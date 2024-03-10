@@ -301,3 +301,6 @@ class DriveSubsystem(Subsystem):
         :returns: The turn rate of the robot, in degrees per second
         """
         return self.gyro.getRate() * (-1.0 if DriveConstants.kGyroReversed else 1.0)
+
+    def resetYaw(self, angle) -> None:
+        self.gyro.setYaw(angle, 100)
