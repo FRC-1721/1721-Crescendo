@@ -16,7 +16,7 @@ from wpimath.trajectory import TrajectoryConfig, TrajectoryGenerator
 # CommandsV2
 import commands2
 from commands2 import cmd
-from commands2.button import CommandJoystick, CommandXboxController
+from commands2.button import CommandXboxController, CommandGenericHID
 
 from constants import AutoConstants, DriveConstants, OIConstants, SuperStrucConstants
 
@@ -90,7 +90,7 @@ class RobotContainer:
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
                     * 0.6,
-                    False,
+                    True,
                     True,
                 ),
                 self.robotDrive,
@@ -165,11 +165,10 @@ class RobotContainer:
         #        Operator Commands
         # ==============================
 
+        """
         # moving intake
         self.opController.pov(90).whileTrue(IntakeRotationMAN(1, self.intake))  # out
         self.opController.pov(270).whileTrue(IntakeRotationMAN(-1, self.intake))  # in
-
-        # _____POST_INTAKE_KEYBINDS_____
 
         # moving shooter
         self.opController.pov(0).whileTrue(manualROT(0.5, self.shooter))
@@ -190,6 +189,39 @@ class RobotContainer:
         self.opController.back().onTrue(
             commands2.InstantCommand(self.intake.zeroIntake)
         )
+        """
+
+        # intake keybinds
+        # intake movement
+        self.opController.button(2).whileTrue(IntakeRotationMAN(1, self.intake))  # out
+        self.opController.button(1).whileTrue(IntakeRotationMAN(-1, self.intake))  # in
+
+        # intake spin
+        self.opController.button(6).whileTrue(SetIntakeSpeed(0.6, self.intake))
+        self.opController.button(9).whileTrue(SetIntakeSpeed(-0.6, self.intake))
+
+        # shooter keybinds
+        # shooter movement
+        self.opController.button(3).whileTrue(manualROT(0.5, self.shooter))
+        self.opController.button(4).whileTrue(manualROT(-0.5, self.shooter))
+
+        # fire command
+        # TODO fix this code later
+        if self.opController.getRawAxis(2) >= 250:
+            FlyWheelSpeed(1, self.intake)
+
+        else:
+            FlyWheelSpeed(0, self.intake)
+
+        # climber
+        if (
+            self.opController.getRawAxis(0) > 0.1
+            or self.opController.getRawAxis(0) > -0.1
+        ):
+            manualROT(self.opController.getRawAxis(0))
+
+        # Cancel all
+        self.opController.button(8).onTrue(commands2.InstantCommand(self.cancelAll))
 
     def cancelAll(self) -> None:
         """
