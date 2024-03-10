@@ -78,13 +78,16 @@ class Shooter(Subsystem):
         # (joe added this, its bad)
         self.flyPIDController.setOutputRange(-1, 1)
 
+        # curr limit so the motor doesn't die
+        self.rotateMotor.setSmartCurrentLimit(8)
+
         # Burn flymotor configuration
         self.flyMotor.burnFlash()
 
     def periodic(self) -> None:
         self.sd.putNumber("Thermals/rotate", self.rotateMotor.getMotorTemperature())
         self.sd.putNumber("Thermals/fly", self.flyMotor.getMotorTemperature())
-        # print(self.rotateEncoder.getPosition())
+        print(self.rotateEncoder.getPosition())
 
     def setFlyWheelSpeed(self, speed):
         self.flyMotor.set(speed)

@@ -20,13 +20,17 @@
   },
   "NTProvider": {
     "types": {
-      "/FMSInfo": "FMSInfo"
+      "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/FieldCentric": "String Chooser"
     }
   },
   "NetworkTables": {
     "transitory": {
       "SmartDashboard": {
         "Swerve": {
+          "FL": {
+            "open": true
+          },
           "open": true
         },
         "open": true

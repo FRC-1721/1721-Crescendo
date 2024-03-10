@@ -3,6 +3,8 @@
     src: url("asset/FiraCodeNerdFontPropo-Retina.ttf") format("truetype");
 }
 
+@import "./nt.scss";
+
 html,
 body {
     margin: 0;
@@ -15,6 +17,7 @@ body {
 html {
     transform-origin: center;
     // transform: scale(0.65) rotate(30deg);
+    background-color: black;
 }
 
 * {
@@ -27,41 +30,53 @@ html {
 body {
     display: flex;
     flex-direction: column;
-    background: #ff0000;
-}
-
-.cameras {
-    background: #1d2021;
-}
-
-#nt-table {
-    .table-info {
-        display: flex;
-        flex-direction: row;
-        .table-label {
-            flex: 1;
-        }
-        .table-area {
-            flex: 2;
-        }
-    }
-}
-
-main {
+    background: #282828;
     height: 100%;
     overflow-y: scroll;
 }
 
+main {
+    display: grid;
+    grid-template: 240px auto / 320px 320px 240px auto;
+    grid-template-areas:
+        "cam cam swerve ."
+        "menu menu menu menu";
+}
+
+#fieldrelative {
+    grid-area: 1 / 4 / 1 / 5;
+    background-color: #1d2021;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#fieldrelative.active {
+    background-color: #458588;
+}
+
+#fieldrelative .text {
+    flex: 1;
+    display: inline;
+    text-align: center;
+}
+
+#fieldrelative .indicator {
+    width: 2rem;
+    display: inline;
+    text-align: center;
+}
+
 .swerve {
-    width: 320px;
-    height: 320px;
+    grid-area: swerve;
     background: #3c3836;
     position: relative;
 
     &-actual,
     &-desired {
-        width: 320px;
-        height: 320px;
+        width: 240px;
+        height: 240px;
         padding: 25px;
         display: flex;
         flex-direction: column;
@@ -81,7 +96,14 @@ main {
     }
 
     .wheel {
-        height: 120px;
-        width: 120px;
+        height: 80px;
+        width: 80px;
     }
+}
+
+#camera {
+    grid-area: cam;
+    background-image: url("./asset/doh.png");
+    width: 100%;
+    height: 100%;
 }

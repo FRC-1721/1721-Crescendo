@@ -147,10 +147,9 @@ class AutoConstants:
 
 
 class SuperStrucConstants:
-
     # angles for shooter
-    ShootPos = 324
-    LoadPos = 212
+    ShootPos = 321
+    LoadPos = 204
 
     # CANSpark IDS
     rotateID = 11
@@ -162,7 +161,7 @@ class SuperStrucConstants:
     krotateInversion = True
 
     # PID values
-    krotateP = 0.01
+    krotateP = 0.02
     krotateI = 0.0
     krotateD = 0.0
     krotateFF = 0
@@ -190,6 +189,15 @@ class IntakeConstants:
     kLiftI = 0.00001
     kLiftD = 1.6
     kLiftFF = 0
+
+
+class GyroConstants:
+    id = 0
+
+    # pose
+    yawPose = 0
+    pitchPose = 0
+    rollPose = 0
 
 
 class ClimberConstants:

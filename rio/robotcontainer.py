@@ -93,7 +93,7 @@ class RobotContainer:
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
                     * 0.6,
-                    True,
+                    lambda: self.fieldCentricChooser.getSelected(),
                     True,
                 ),
                 self.robotDrive,
@@ -165,7 +165,7 @@ class RobotContainer:
         )
 
         # Climbing
-        self.driverController.rightBumper().whileTrue(  
+        self.driverController.rightBumper().whileTrue(
             Climb(
                 lambda: self.opController.getRightTriggerAxis()
                 - self.opController.getLeftTriggerAxis(),
@@ -178,25 +178,28 @@ class RobotContainer:
         #        Operator Commands
         # ==============================
 
-        
         # Rotating intake but Manually
         self.opController.pov(90).whileTrue(IntakeRotationMAN(1, self.intake))  # out
         self.opController.pov(270).whileTrue(IntakeRotationMAN(-1, self.intake))  # in
 
         # Rotating shooter but Manually
         self.opController.pov(0).whileTrue(manualROT(0.5, self.shooter))  # out
-        self.opController.pov(180).whileTrue(manualROT(-0.5, self.shooter)) # in
+        self.opController.pov(180).whileTrue(manualROT(-0.5, self.shooter))  # in
 
         # Spinning intake wheels but Manually
         self.opController.a().whileTrue(SetIntakeSpeed(0.5, self.intake))  # suck
-        self.opController.b().whileTrue(SetIntakeSpeed(-0.5, self.intake)) # blow
+        self.opController.b().whileTrue(SetIntakeSpeed(-0.5, self.intake))  # blow
 
         # Spinning flywheel but Manually
-        self.opController.rightBumper().whileTrue(FlyWheelSpeed(0.5, self.intake))  # shoot
-        self.opController.leftBumper().whileTrue(FlyWheelSpeed(-0.5, self.intake)) # reject
+        self.opController.rightBumper().whileTrue(
+            FlyWheelSpeed(0.5, self.intake)
+        )  # shoot
+        self.opController.leftBumper().whileTrue(
+            FlyWheelSpeed(-0.5, self.intake)
+        )  # reject
 
         # Cancel all when x is pressed
-        self.opController.x().onTrue(commands2.InstantCommand(self.cancelAll)) 
+        self.opController.x().onTrue(commands2.InstantCommand(self.cancelAll))
 
         # Zeroes the intake
         self.opController.back().onTrue(
@@ -233,12 +236,32 @@ class RobotContainer:
             key_entry = self.build_table.getEntry(str(key))
             key_entry.setString(str(data[key]))
 
+        # Use sendable choosers for some settings
+        self.fieldCentricChooser = wpilib.SendableChooser()
+        self.fieldCentricChooser.setDefaultOption("Field Centric", True)
+        self.fieldCentricChooser.addOption("Robot Centric", False)
+        wpilib.SmartDashboard.putData("FieldCentric", self.fieldCentricChooser)
+
     def getAutonomousCommand(self) -> commands2.Command:
         """Use this to pass the autonomous command to the main {@link Robot} class.
 
         :returns:
         command to run in autonomous
         """
+
+        # # Create a sendable chooser
+        # self.autoChooser = wpilib.SendableChooser()
+
+        # # Add options
+        # self.autoChooser.setDefaultOption("No Auto", NoAuto())
+
+        # # Put the chooser on the dashboard
+        # wpilib.SmartDashboard.putData("Autonomous", self.autoChooser)
+
+        # ===========================
+        # DEFAULT STUFF
+        # ===========================
+
         # Create config for trajectory
         config = TrajectoryConfig(
             AutoConstants.kMaxSpeedMetersPerSecond,

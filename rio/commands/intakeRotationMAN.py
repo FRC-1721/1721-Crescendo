@@ -4,7 +4,7 @@ from subsystems.intake import IntakeSubsystem
 
 
 class IntakeRotationMAN(commands2.Command):
-    def __init__(self, angle: float, _intake:IntakeSubsystem):
+    def __init__(self, angle: float, _intake: IntakeSubsystem):
         """
         allows people to rotate the intake
         """

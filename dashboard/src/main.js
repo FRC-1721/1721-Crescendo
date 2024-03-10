@@ -1,3 +1,5 @@
+var fieldRelative = false;
+
 $(function () {
     // sets a function that will be called when the websocket connects/disconnects
     NetworkTables.addWsConnectionListener(onNetworkTablesConnection, true);
@@ -44,6 +46,72 @@ function onNetworkTablesConnection(connected) {
     }
 }
 
+function ntToggle(event) {
+    $(event.parentElement).toggleClass("disabled");
+}
+
+$("#fieldrelative").on("click", function () {
+    NetworkTables.putValue(
+        "/SmartDashboard/FieldCentric/.controllable",
+        !$(this).is(".active")
+    );
+});
+
+function putNT(key, value) {
+    function put(items, path, data) {
+        var [x, ...xs] = items;
+        if (xs.length) {
+            // if the item has children then it must be a folder
+            // CREATE folder IF NOT EXISTS
+            if (
+                $("#" + NetworkTables.keySelector(path + "/" + x)).length == 0
+            ) {
+                var div = $(" <div /> ", {
+                    id: NetworkTables.keyToId(path + "/" + x),
+                    class: "nt-div disabled",
+                });
+                // folder key label
+                $("<div />", {
+                    id: NetworkTables.keyToId(path + "/" + x + "_title"),
+                    class: "nt-title",
+                    text: x,
+                    onClick: "ntToggle(this)",
+                }).appendTo(div);
+                // folder children area
+                $("<div />", {
+                    id: NetworkTables.keyToId(path + "/" + x + "/"),
+                    class: "nt-div-container",
+                }).appendTo(div);
+                // add folder to parent folder
+                $("#" + NetworkTables.keySelector(path + "/")).append(div);
+            }
+            put(xs, path + "/" + x, data); // make current folder parent folder and call function again
+        } else {
+            // if the item doesn't have children then it must not be a folder
+            var item = $(" <div /> ", {
+                id: NetworkTables.keyToId(path + "/" + x),
+                class: "nt-item",
+            });
+            // item key
+            $(" <div /> ", {
+                class: "nt-key",
+                text: x,
+            }).appendTo(item);
+            // item value
+            $(" <div /> ", {
+                class: "nt-value",
+                id: NetworkTables.keyToId(path + "/" + x),
+                text: data,
+            }).appendTo(item);
+            // add item to parent folder
+            $("#" + NetworkTables.keySelector(path + "/")).append(item);
+        }
+    }
+    var [_, ...items] = key.split("/");
+    // start function with initial path blank
+    put(items, "", value);
+}
+
 function onValueChanged(key, value, isNew) {
     // key thing here: we're using the various NetworkTable keys as
     // the id of the elements that we're appending, for simplicity. However,
@@ -51,40 +119,32 @@ function onValueChanged(key, value, isNew) {
     // the NetworkTables.keyToId() function to convert them appropriately
 
     if (isNew) {
-        var tr = $('<div class="table-info"></div>').appendTo($("#nt-table"));
-        $('<div class="table-label"></div>').text(key).appendTo(tr);
-        $('<div class="table-area"></div>')
-            .attr("id", NetworkTables.keyToId(key))
-            .text(value)
-            .appendTo(tr);
+        putNT(key, value);
     } else {
         // similarly, use keySelector to convert the key to a valid jQuery
         // selector. This should work for class names also, not just for ids
-        $("#" + NetworkTables.keySelector(key)).text(value);
+        $("#" + NetworkTables.keySelector(key) + " .nt-value").text(value);
     }
 
     if (key.includes("/SmartDashboard/Audio")) {
         countDownAlerts(key, value);
     }
 
-    if (key === "/SmartDashboard/Autonomous/options") {
-        var options = NetworkTables.getValue(
-            "/SmartDashboard/Autonomous/options"
-        );
-    }
-
     if (key.includes("/SmartDashboard/Swerve/")) {
         if (key.includes("desired")) {
-            wheel = key.split("/").at(-1);
-            console.log(wheel);
-            $(".swerve-desired ." + wheel).css(
+            wheel = key.split("/").at(-2);
+            $(".swerve-desired ." + wheel + "d").css(
                 "transform",
                 "rotate(" + value + "deg)"
             );
         } else {
-            wheel = key.split("/").at(-1).replace(" desired", "");
-            console.log(wheel);
+            wheel = key.split("/").at(-2);
             $(".swerve ." + wheel).css("transform", "rotate(" + value + "deg)");
         }
+    }
+
+    if (key.includes("/SmartDashboard/FieldCentric/.controllable")) {
+        $("#fieldrelative").toggleClass("active", value);
+        $("#fieldrelative .indicator").text(value ? "⏽" : "⭘");
     }
 }
