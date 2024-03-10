@@ -50,17 +50,19 @@ function ntToggle(event) {
     $(event.parentElement).toggleClass("disabled");
 }
 
-$(".nt-toggle").on("click", () => {
+$("#fieldrelative").on("click", function () {
     NetworkTables.putValue(
         "/SmartDashboard/FieldCentric/.controllable",
-        $(this).is(".active")
+        !$(this).is(".active")
     );
 });
 
 function putNT(key, value) {
     function put(items, path, data) {
         var [x, ...xs] = items;
-        if (items.length > 1) {
+        if (xs.length) {
+            // if the item has children then it must be a folder
+            // CREATE folder IF NOT EXISTS
             if (
                 $("#" + NetworkTables.keySelector(path + "/" + x)).length == 0
             ) {
@@ -68,37 +70,45 @@ function putNT(key, value) {
                     id: NetworkTables.keyToId(path + "/" + x),
                     class: "nt-div disabled",
                 });
+                // folder key label
                 $("<div />", {
                     id: NetworkTables.keyToId(path + "/" + x + "_title"),
                     class: "nt-title",
                     text: x,
                     onClick: "ntToggle(this)",
                 }).appendTo(div);
+                // folder children area
                 $("<div />", {
                     id: NetworkTables.keyToId(path + "/" + x + "/"),
                     class: "nt-div-container",
                 }).appendTo(div);
+                // add folder to parent folder
                 $("#" + NetworkTables.keySelector(path + "/")).append(div);
             }
-            put(xs, path + "/" + x, data);
+            put(xs, path + "/" + x, data); // make current folder parent folder and call function again
         } else {
+            // if the item doesn't have children then it must not be a folder
             var item = $(" <div /> ", {
                 id: NetworkTables.keyToId(path + "/" + x),
                 class: "nt-item",
             });
+            // item key
             $(" <div /> ", {
                 class: "nt-key",
                 text: x,
             }).appendTo(item);
+            // item value
             $(" <div /> ", {
                 class: "nt-value",
                 id: NetworkTables.keyToId(path + "/" + x),
                 text: data,
             }).appendTo(item);
+            // add item to parent folder
             $("#" + NetworkTables.keySelector(path + "/")).append(item);
         }
     }
     var [_, ...items] = key.split("/");
+    // start function with initial path blank
     put(items, "", value);
 }
 
@@ -120,12 +130,6 @@ function onValueChanged(key, value, isNew) {
         countDownAlerts(key, value);
     }
 
-    if (key === "/SmartDashboard/Autonomous/options") {
-        var options = NetworkTables.getValue(
-            "/SmartDashboard/Autonomous/options"
-        );
-    }
-
     if (key.includes("/SmartDashboard/Swerve/")) {
         if (key.includes("desired")) {
             wheel = key.split("/").at(-2);
@@ -140,6 +144,7 @@ function onValueChanged(key, value, isNew) {
     }
 
     if (key.includes("/SmartDashboard/FieldCentric/.controllable")) {
-        $("#fieldRelToggle");
+        $("#fieldrelative").toggleClass("active", value);
+        $("#fieldrelative .indicator").text(value ? "⏽" : "⭘");
     }
 }

@@ -43,6 +43,31 @@ main {
         "menu menu menu menu";
 }
 
+#fieldrelative {
+    grid-area: 1 / 4 / 1 / 5;
+    background-color: #1d2021;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#fieldrelative.active {
+    background-color: #458588;
+}
+
+#fieldrelative .text {
+    flex: 1;
+    display: inline;
+    text-align: center;
+}
+
+#fieldrelative .indicator {
+    width: 2rem;
+    display: inline;
+    text-align: center;
+}
+
 .swerve {
     grid-area: swerve;
     background: #3c3836;
