@@ -33,7 +33,7 @@ from commands.rotateIntake import RotateIntake
 from commands.FlyWheelSpeed import FlyWheelSpeed
 from commands.intakeRotationMAN import IntakeRotationMAN
 from commands.SendToPos import sendToFieldPos
-from commands.SendToObj import sendToObject
+from commands.NavToObj import sendToObject
 from commands.shooterROT import ShooterROT
 from commands.manualRot import manualROT
 from commands.intakeUntilNote import intakeUntilNote
@@ -178,6 +178,10 @@ class RobotContainer:
             )
         )
 
+        self.driverController.leftBumper().whileTrue(
+            sendToObject(self.robotDrive, self.limelight)
+        )
+
         # ==============================
         #        Operator Commands
         # ==============================
@@ -196,20 +200,19 @@ class RobotContainer:
 
         # Spinning flywheel but Manually
         self.opController.rightBumper().whileTrue(
-            FlyWheelSpeed(0.5, self.intake)
+            FlyWheelSpeed(0.5, self.shooter)
         )  # shoot
         self.opController.leftBumper().whileTrue(
-            FlyWheelSpeed(-0.5, self.intake)
+            FlyWheelSpeed(-0.5, self.shooter)
         )  # reject
 
         # Cancel all when x is pressed
         self.opController.x().onTrue(commands2.InstantCommand(self.cancelAll))
 
         # Zeroes the intake
-        #self.opController.back().onTrue(
-        #    commands2.InstantCommand(self.intake.zeroIntake)
-        #)
-        self.opController.back().whileTrue(sendToObject(self.robotDrive,self.limelight))
+        self.opController.back().onTrue(
+            commands2.InstantCommand(self.intake.zeroIntake)
+        )
 
     def cancelAll(self) -> None:
         """

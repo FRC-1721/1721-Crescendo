@@ -343,5 +343,5 @@ class DriveSubsystem(Subsystem):
         """
         return self.gyro.getRate() * (-1.0 if DriveConstants.kGyroReversed else 1.0)
 
-    def resetYaw(self) -> None:
-        self.gyro.setYaw(0,100)
+    def resetYaw(self, angle) -> None:
+        self.gyro.setYaw(angle, 100)

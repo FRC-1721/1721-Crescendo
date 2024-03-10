@@ -51,8 +51,8 @@ class limeLightCommands(commands2.Subsystem):
         """
 
         if PosX > 16 or PosY > 8:
-            print(
-                "Desired location out of field perimeters! Let's try to think logically next time bud!"
+            logging.warn(
+                "Specified location out of field perimeters! Let's try to think logically next time bud!"
             )
             return
 
@@ -97,7 +97,7 @@ class limeLightCommands(commands2.Subsystem):
 
         # print(correctPos)                                                                                 IS THE ROBOT IN THE RIGHT PLACE
 
-        driver.drive(driveX, driveY, driveZ, False, True)
+        driver.drive(driveX, driveY, driveZ, True, True)
 
     def findObj(self) -> bool:
         posX = self.ll.getEntry("tx").getDouble(
@@ -124,19 +124,19 @@ class limeLightCommands(commands2.Subsystem):
             return True
 
     def goToObj(self, driver: DriveSubsystem) -> None:
-        if self.distY > -21:  # ALL OF THIS SET TO BE CHANGED. FOR TESTING PURPOSES ONLY
-            driveY = 0.25
+        if self.distY > 0:
+            driveY = 0.01 * (self.distY)
         else:
             driveY = 0
 
-        if self.distX < -3.5:
-            driveX = 0.1
+        if self.distX < 0.25:
+            driveX = 0.01 * abs(self.distX)
 
-        elif self.distX > -2.5:
-            driveX = -0.1
+        elif self.distX > 0.25:
+            driveX = -0.01 * abs(self.distX)
 
         else:
             driveX = 0
         print(driveX)
         print(driveY)
-        driver.drive(driveX, driveY, 0, False, True)
+        driver.drive(driveY, driveX, 0, False, True)
