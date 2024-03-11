@@ -39,6 +39,8 @@ from commands.loadMagazine import LoadMagazine
 # autonomous
 from autonomous.forwardDrive import ForwardDrive
 from autonomous.ampDrive import AmpDrive
+from autonomous.nothDrive import NothDrive
+from autonomous.noauto import NoAuto
 
 # NetworkTables
 from ntcore import NetworkTableInstance
@@ -233,4 +235,4 @@ class RobotContainer:
         """
 
         # TODO replace with chooser
-        return AmpDrive(self.robotDrive, self.shooter, self.intake)
+        return NoAuto()
