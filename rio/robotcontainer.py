@@ -36,6 +36,9 @@ from commands.intakeUntilNote import intakeUntilNote
 from commands.setIntakeSpeed import SetIntakeSpeed
 from commands.loadMagazine import LoadMagazine
 
+# autonomous
+from autonomous.forwardDrive import ForwardDrive
+
 # NetworkTables
 from ntcore import NetworkTableInstance
 
@@ -227,56 +230,6 @@ class RobotContainer:
         :returns:
         command to run in autonomous
         """
-        # Create config for trajectory
-        config = TrajectoryConfig(
-            AutoConstants.kMaxSpeedMetersPerSecond,
-            AutoConstants.kMaxAccelerationMetersPerSecondSquared,
-        )
-        # Add kinematics to ensure max speed is actually obeyed
-        config.setKinematics(DriveConstants.kDriveKinematics)
 
-        # An example trajectory to follow. All units in meters.
-        exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-            # Start at the origin facing the +X direction
-            Pose2d(0, 0, Rotation2d(0)),
-            # Pass through these two interior waypoints, making an 's' curve path
-            [Translation2d(1, 1), Translation2d(2, -1)],
-            # End 3 meters straight ahead of where we started, facing forward
-            Pose2d(3, 0, Rotation2d(0)),
-            config,
-        )
-
-        thetaController = ProfiledPIDControllerRadians(
-            AutoConstants.kPThetaController,
-            0,
-            0,
-            AutoConstants.kThetaControllerConstraints,
-        )
-        thetaController.enableContinuousInput(-math.pi, math.pi)
-
-        holoController = HolonomicDriveController(
-            PIDController(AutoConstants.kPXController, 0, 0),
-            PIDController(AutoConstants.kPYController, 0, 0),
-            thetaController,
-        )
-
-        swerveControllerCommand = commands2.SwerveControllerCommand(
-            exampleTrajectory,
-            self.robotDrive.getPose,  # Functional interface to feed supplier
-            DriveConstants.kDriveKinematics,
-            # Position controller
-            holoController,
-            self.robotDrive.setModuleStates,
-            (self.robotDrive,),
-        )
-
-        # Reset odometry to the starting pose of the trajectory.
-        self.robotDrive.resetOdometry(exampleTrajectory.initialPose())
-
-        # Run path following command, then stop at the end.
-        return swerveControllerCommand.andThen(
-            cmd.run(
-                lambda: self.robotDrive.drive(0, 0, 0, True, False),
-                self.robotDrive,
-            )
-        )
+        # TODO replace with chooser
+        return ForwardDrive(self.robotDrive, self.shooter, self.intake)
