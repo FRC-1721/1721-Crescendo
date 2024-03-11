@@ -35,7 +35,7 @@ class DriveConstants:
     # Chassis configuration
     kTrackWidth = units.inchesToMeters(20.3937)
     # Distance between centers of right and left wheels on robot
-    kWheelBase = units.inchesToMeters(20.25)
+    kWheelBase = units.inchesToMeters(20.5)
 
     # Distance between front and back wheels on robot
     kModulePositions = [
@@ -121,10 +121,13 @@ class ModuleConstants:
 
 
 class OIConstants:
+    # driver controller
     kDriverControllerPort = 0
     kDriveDeadband = 0.075
 
+    # operator controller
     kOpControllerPort = 1
+    kIntakeButton = 1
 
 
 class AutoConstants:
@@ -143,14 +146,72 @@ class AutoConstants:
     )
 
 
+class SuperStrucConstants:
+    # angles for shooter
+    ShootPos = 321
+    LoadPos = 204
+
+    # CANSpark IDS
+    rotateID = 11
+    flyID = 12
+    guideID = 13
+
+    kRotConversion = 360  # Configured feb 12 by joe
+
+    krotateInversion = True
+
+    # PID values
+    krotateP = 0.02
+    krotateI = 0.0
+    krotateD = 0.0
+    krotateFF = 0
+
+    kflyP = 1
+    kflyI = 0.00001
+    kflyD = 0.0002
+    kflyFF = 0
+
+
+class IntakeConstants:
+    # CANSparkMax ports
+    kliftCanId = 9
+    kIntakeCanId = 10
+
+    # inversion
+    kLiftInversion = False
+    kIntakeInversion = False
+
+    # conversion factor
+    kLiftConversion = 1  # Configured feb 12 by joe
+
+    # lift pid
+    kLiftP = 0.8
+    kLiftI = 0.00001
+    kLiftD = 1.6
+    kLiftFF = 0
+
+
+class GyroConstants:
+    id = 0
+
+    # pose
+    yawPose = 0
+    pitchPose = 0
+    rollPose = 0
+
+
 class ClimberConstants:
     # ids
     kmotorID = 14
     kServoID = 0
 
     # inversions
-    kInversion = False
+    kInversion = True
 
     # servo angles
-    kservolock = 0.0
+    kServoLock = -0.1
     kservoOpen = 0.165
+
+    # Relationship between climber speed and shooter angle (rough but ugh..)
+    kClimberShooterForward = 0.3  # Down
+    kClimberShooterBackward = 0.5  # Up

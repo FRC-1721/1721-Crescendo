@@ -5,18 +5,32 @@
         "header": {
           "open": true
         }
+      },
+      "SPARK MAX [10]": {
+        "header": {
+          "open": true
+        }
+      },
+      "SPARK MAX [9]": {
+        "header": {
+          "open": true
+        }
       }
     }
   },
   "NTProvider": {
     "types": {
-      "/FMSInfo": "FMSInfo"
+      "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/FieldCentric": "String Chooser"
     }
   },
   "NetworkTables": {
     "transitory": {
       "SmartDashboard": {
         "Swerve": {
+          "FL": {
+            "open": true
+          },
           "open": true
         },
         "open": true
@@ -24,6 +38,9 @@
     }
   },
   "NetworkTables Info": {
+    "Clients": {
+      "open": true
+    },
     "visible": true
   }
 }

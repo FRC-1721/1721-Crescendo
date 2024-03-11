@@ -5,35 +5,35 @@
   "MainWindow": {
     "GLOBAL": {
       "fps": "120",
-      "height": "720",
-      "maximized": "0",
+      "height": "699",
+      "maximized": "1",
       "style": "0",
       "userScale": "2",
-      "width": "1280",
-      "xpos": "447",
-      "ypos": "289"
+      "width": "1366",
+      "xpos": "9",
+      "ypos": "76"
     }
   },
   "Window": {
     "###FMS": {
       "Collapsed": "0",
       "Pos": "5,540",
-      "Size": "283,146"
+      "Size": "169,184"
     },
     "###Joysticks": {
       "Collapsed": "0",
-      "Pos": "291,574",
-      "Size": "796,138"
+      "Pos": "250,465",
+      "Size": "796,124"
     },
     "###NetworkTables": {
       "Collapsed": "0",
-      "Pos": "269,170",
-      "Size": "750,395"
+      "Pos": "250,163",
+      "Size": "750,299"
     },
     "###NetworkTables Info": {
       "Collapsed": "0",
-      "Pos": "269,27",
-      "Size": "750,145"
+      "Pos": "250,22",
+      "Size": "750,138"
     },
     "###Other Devices": {
       "Collapsed": "0",
@@ -58,7 +58,7 @@
     "Robot State": {
       "Collapsed": "0",
       "Pos": "5,20",
-      "Size": "92,99"
+      "Size": "92,116"
     }
   }
 }
