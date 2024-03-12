@@ -6,6 +6,7 @@ from wpilib import RobotBase
 
 from numpy import *
 
+import math
 import logging
 import commands2
 import json
@@ -112,13 +113,21 @@ class limeLightCommands(commands2.Subsystem):
 
     def goToObj(self, driver: DriveSubsystem) -> None:
         if self.distY > 0:
-            driveY = -0.25 ^ (2 * self.distY) + 0.25
+            gabagool = 2 * self.distY
+            driveY = -1 * (math.pow(0.25, gabagool)) + 1
+            # get rid of
+            driveY *= 0.1
         else:
             driveY = 0
-
-        if -0.25 < self.distX < 0.25:
-            driveX = 0.01 * self.distX
+        print(self.distX)
+        if (-0.25 > self.distX) or (self.distX > 0.25):
+            driveX = -0.01 * self.distX
         else:
             driveX = 0
 
         driver.drive(driveY, driveX, 0, False, True)
+
+    def isAtOBJ(self):
+        if self.distY <= 0 and -0.25 < self.distX and self.distX < 0.25:
+            return True
+        return False

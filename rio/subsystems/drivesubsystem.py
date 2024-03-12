@@ -199,7 +199,6 @@ class DriveSubsystem(Subsystem):
                               field.
         :param rateLimit:     Whether to enable rate limiting for smoother control.
         """
-        print(xSpeed)
         xSpeedCommanded = xSpeed
         ySpeedCommanded = ySpeed
 
