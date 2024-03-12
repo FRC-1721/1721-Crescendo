@@ -102,6 +102,7 @@ main {
 }
 
 #camera {
+    object-fit: contain;
     grid-area: cam;
     background-image: url("./asset/doh.png");
     width: 100%;
