@@ -116,7 +116,6 @@ class limeLightCommands(commands2.Subsystem):
             gabagool = 2 * self.distY
             driveY = -1 * (math.pow(0.25, gabagool)) + 1
             # get rid of
-            driveY *= 0.1
         else:
             driveY = 0
         print(self.distX)
@@ -128,6 +127,6 @@ class limeLightCommands(commands2.Subsystem):
         driver.drive(driveY, driveX, 0, False, True)
 
     def isAtOBJ(self):
-        if self.distY <= 0 and -0.25 < self.distX and self.distX < 0.25:
+        if self.distY <= 0.05 and -0.25 < self.distX and self.distX < 0.25:
             return True
         return False
