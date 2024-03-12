@@ -10,4 +10,4 @@ class NoAuto(commands2.SequentialCommandGroup):
 
 
 NAME = "No Auto"
-load = lambda _: NoAuto()
+load = lambda bot: NoAuto(bot.robotDrive)

@@ -62,6 +62,9 @@ class GrabNote(commands2.SequentialCommandGroup):
             sendToFieldPos(
                 0.9245,
                 2.117,
+                0,
+                self.drivetrain,
+                self.limelight,
             ),
         )
 

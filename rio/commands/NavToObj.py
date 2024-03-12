@@ -23,5 +23,8 @@ class sendToObject(commands2.Command):
         if self.Limelight.findObj() == True:
             self.Limelight.goToObj(self.drive)
 
+    def isFinished(self) -> bool:
+        return
+
     def end(self, inturrupted: bool):
         return True

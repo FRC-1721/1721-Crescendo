@@ -77,7 +77,6 @@ class IntakeSubsystem(commands2.Subsystem):
         self.sd.putNumber("Thermals/Intake", self.intakeMotor.getMotorTemperature())
         self.sd.putNumber("Intake/IntakeAngle", self.intakeEncoder.getPosition())
         self.sd.putNumber("Thermals/Lift", self.liftMotor.getMotorTemperature())
-        # print(self.liftEncoder.getPosition())
 
     def intake(self, speed):
         self.intakeMotor.set(speed)
