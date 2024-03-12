@@ -40,6 +40,7 @@ from commands.loadMagazine import LoadMagazine
 from commands.climb import Climb
 from commands.resetYaw import ResetYaw
 from commands.spool import Spool
+from commands.lock import Lock
 
 # NetworkTables
 from ntcore import NetworkTableInstance

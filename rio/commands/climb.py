@@ -30,11 +30,12 @@ class Climb(commands2.Command):
         self.addRequirements((self.climber, self.shooter))
 
         self.shooter.setIdleMode(rev._rev.CANSparkBase.IdleMode.kCoast)
-        self.climber.setServoAngle(ClimberConstants.kServoLock)
+        self.climber.setServoAngle(ClimberConstants.kservoOpen)
 
     def execute(self):
         self.climber.setClimberMotorSpeed(self.speed)
+        self.shooter.setIdleMode(rev._rev.CANSparkBase.IdleMode.kBrake)
 
     def end(self, interrupted: bool):
-        self.shooter.setIdleMode(rev._rev.CANSparkBase.IdleMode.kBrake)
+        self.climber.setServoAngle(ClimberConstants.kServoLock)
         self.climber.setClimberMotorSpeed(0)

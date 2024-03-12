@@ -16,7 +16,7 @@ class Lock(commands2.Command):
         self.climberSubsystem = subsystem
 
         if locktype == "lock":
-            self.locktype = ClimberConstants.kservolock
+            self.locktype = ClimberConstants.kServoLock
 
         else:
             self.locktype = ClimberConstants.kservoOpen
