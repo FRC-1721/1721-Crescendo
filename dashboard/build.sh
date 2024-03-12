@@ -10,3 +10,5 @@ sed -i -e "/<\!--FLd-->/rsrc/asset/wheel/FLd.svg" dist/index.html
 sed -i -e "/<\!--FRd-->/rsrc/asset/wheel/FRd.svg" dist/index.html
 sed -i -e "/<\!--RLd-->/rsrc/asset/wheel/RLd.svg" dist/index.html
 sed -i -e "/<\!--RRd-->/rsrc/asset/wheel/RRd.svg" dist/index.html
+
+sed -i "/<!--[FLR]\{2\}d\?-->/d" dist/index.html
