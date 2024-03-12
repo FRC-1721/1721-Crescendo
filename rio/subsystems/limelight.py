@@ -22,8 +22,8 @@ class limeLightCommands(commands2.Subsystem):
         # field size in goofy limelight units
         self.fieldSize = [16, 8]
 
-        self.xFifo = array([0] * 10, dtype=double)
-        self.yFifo = array([0] * 10, dtype=double)
+        self.xFifo = array([0] * 10)
+        self.yFifo = array([0] * 10)
 
     def setPipeline(self, PipeLine: int) -> None:
         self.ll.getEntry("pipeline").setDouble(PipeLine)
@@ -84,19 +84,6 @@ class limeLightCommands(commands2.Subsystem):
                 RotZ - self.botPos[2]
             ) / 10  # drive speed is placeholder & guess of what we might want to do in order to get fast results & high accuracy using dampening will need to be tweaked & adjusted & such things
             correctPos = False
-
-        # NOTE commented out print commands to use while testing
-
-        # print(self.botPos[0])
-        # print(self.botPos[1])                                               ROBOT POSITIONS
-        # print(self.botPos[2])
-
-        # print(driveX)
-        # print(driveY)                                                        DRIVE VALUES
-        # print(RotZ)
-
-        # print(correctPos)                                                                                 IS THE ROBOT IN THE RIGHT PLACE
-
         driver.drive(driveX, driveY, driveZ, True, True)
 
     def findObj(self) -> bool:
@@ -125,18 +112,13 @@ class limeLightCommands(commands2.Subsystem):
 
     def goToObj(self, driver: DriveSubsystem) -> None:
         if self.distY > 0:
-            driveY = 0.01 * (self.distY)
+            driveY = -0.25 ^ (2 * self.distY) + 0.25
         else:
             driveY = 0
 
-        if self.distX < 0.25:
-            driveX = 0.01 * abs(self.distX)
-
-        elif self.distX > 0.25:
-            driveX = -0.01 * abs(self.distX)
-
+        if -0.25 < self.distX < 0.25:
+            driveX = 0.01 * self.distX
         else:
             driveX = 0
-        print(driveX)
-        print(driveY)
+
         driver.drive(driveY, driveX, 0, False, True)
