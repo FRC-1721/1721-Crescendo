@@ -16,12 +16,13 @@ from wpimath.trajectory import TrajectoryConfig, TrajectoryGenerator
 # CommandsV2
 import commands2
 from commands2 import cmd
-from commands2.button import CommandJoystick, CommandXboxController
+from commands2.button import CommandXboxController, CommandGenericHID
 
 from constants import AutoConstants, DriveConstants, OIConstants, SuperStrucConstants
 
 # Subsystems
 from subsystems.drivesubsystem import DriveSubsystem
+from subsystems.climbersubsystem import ClimberSubsystem
 from subsystems.shooter import Shooter
 from subsystems.intake import IntakeSubsystem
 from subsystems.climber import Climber
@@ -40,6 +41,9 @@ from commands.intakeUntilNote import intakeUntilNote
 from commands.setIntakeSpeed import SetIntakeSpeed
 from commands.loadMagazine import LoadMagazine
 from commands.climb import Climb
+from commands.resetYaw import ResetYaw
+from commands.spool import Spool
+from commands.lock import Lock
 
 
 # Autos
@@ -101,8 +105,8 @@ class RobotContainer:
                         self.driverController.getRawAxis(4),
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
-                    * 0.6,
-                    lambda: self.fieldCentricChooser.getSelected(),
+                    * 0.5,
+                    False,
                     True,
                 ),
                 self.robotDrive,
@@ -172,6 +176,11 @@ class RobotContainer:
                 FlyWheelSpeed(0, self.shooter),  # stops the Flywheel
             )
         )
+        self.driverController.start().onTrue(ResetYaw(self.robotDrive))
+
+        self.driverController.back().onTrue(
+            commands2.InstantCommand(self.intake.zeroIntake)
+        )
 
         # Climbing
         self.driverController.rightBumper().whileTrue(
@@ -190,34 +199,26 @@ class RobotContainer:
         # ==============================
         #        Operator Commands
         # ==============================
+        # intake keybinds
+        # intake movement
+        self.opController.button(2).whileTrue(IntakeRotationMAN(1, self.intake))  # out
+        self.opController.button(1).whileTrue(IntakeRotationMAN(-1, self.intake))  # in
 
-        # Rotating intake but Manually
-        self.opController.pov(90).whileTrue(IntakeRotationMAN(1, self.intake))  # out
-        self.opController.pov(270).whileTrue(IntakeRotationMAN(-1, self.intake))  # in
+        # intake spin
+        self.opController.button(6).whileTrue(SetIntakeSpeed(0.6, self.intake))
+        self.opController.button(9).whileTrue(SetIntakeSpeed(-0.6, self.intake))
 
-        # Rotating shooter but Manually
-        self.opController.pov(0).whileTrue(manualROT(0.5, self.shooter))  # out
-        self.opController.pov(180).whileTrue(manualROT(-0.5, self.shooter))  # in
+        # shooter keybinds
+        # shooter movement
+        self.opController.button(3).whileTrue(manualROT(0.5, self.shooter))
+        self.opController.button(4).whileTrue(manualROT(-0.5, self.shooter))
 
-        # Spinning intake wheels but Manually
-        self.opController.a().whileTrue(SetIntakeSpeed(0.5, self.intake))  # suck
-        self.opController.b().whileTrue(SetIntakeSpeed(-0.5, self.intake))  # blow
+        # climber
+        self.opController.button(5).whileTrue(Climb(0.2, self.climber, self.shooter))
+        self.opController.button(7).whileTrue(Spool(-0.1, self.climber))
 
-        # Spinning flywheel but Manually
-        self.opController.rightBumper().whileTrue(
-            FlyWheelSpeed(0.5, self.shooter)
-        )  # shoot
-        self.opController.leftBumper().whileTrue(
-            FlyWheelSpeed(-0.5, self.shooter)
-        )  # reject
-
-        # Cancel all when x is pressed
-        self.opController.x().onTrue(commands2.InstantCommand(self.cancelAll))
-
-        # Zeroes the intake
-        self.opController.back().onTrue(
-            commands2.InstantCommand(self.intake.zeroIntake)
-        )
+        # Cancel all
+        self.opController.button(8).onTrue(commands2.InstantCommand(self.cancelAll))
 
     def cancelAll(self) -> None:
         """
@@ -261,19 +262,14 @@ class RobotContainer:
         :returns:
         command to run in autonomous
         """
+        # # Create a sendable chooser
+        # self.autoChooser = wpilib.SendableChooser()
 
-        # Create a sendable chooser
-        self.autoChooser = wpilib.SendableChooser()
-
-        # Add options
-        self.autoChooser.setDefaultOption("No Auto", NoAuto(self.robotDrive))
-        self.autoChooser.addOption(
-            "Limelight Auto",
-            grabNote(self.limelight, self.shooter, self.intake, self.robotDrive),
-        )
+        # # Add options
+        # self.autoChooser.setDefaultOption("No Auto", NoAuto())
 
         # # Put the chooser on the dashboard
-        wpilib.SmartDashboard.putData("Autonomous", self.autoChooser)
+        # wpilib.SmartDashboard.putData("Autonomous", self.autoChooser)
 
         # ===========================
         # DEFAULT STUFF
