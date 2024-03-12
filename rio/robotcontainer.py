@@ -41,6 +41,11 @@ from commands.setIntakeSpeed import SetIntakeSpeed
 from commands.loadMagazine import LoadMagazine
 from commands.climb import Climb
 
+
+# Autos
+from autonomous.grabNote import grabNote
+from autonomous.noAuto import NoAuto
+
 # NetworkTables
 from ntcore import NetworkTableInstance
 
@@ -257,14 +262,18 @@ class RobotContainer:
         command to run in autonomous
         """
 
-        # # Create a sendable chooser
-        # self.autoChooser = wpilib.SendableChooser()
+        # Create a sendable chooser
+        self.autoChooser = wpilib.SendableChooser()
 
-        # # Add options
-        # self.autoChooser.setDefaultOption("No Auto", NoAuto())
+        # Add options
+        self.autoChooser.setDefaultOption("No Auto", NoAuto(self.robotDrive))
+        self.autoChooser.addOption(
+            "Limelight Auto",
+            grabNote(self.limelight, self.shooter, self.intake, self.robotDrive),
+        )
 
         # # Put the chooser on the dashboard
-        # wpilib.SmartDashboard.putData("Autonomous", self.autoChooser)
+        wpilib.SmartDashboard.putData("Autonomous", self.autoChooser)
 
         # ===========================
         # DEFAULT STUFF

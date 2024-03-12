@@ -4,7 +4,6 @@ from subsystems.drivesubsystem import DriveSubsystem
 
 
 class ResetYaw(commands2.Command):
-
     def __init__(
         self,
         _drivetrain=DriveSubsystem,

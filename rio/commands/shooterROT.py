@@ -3,6 +3,7 @@ import logging
 
 from subsystems.shooter import Shooter
 
+
 class ShooterROT(commands2.Command):
     def __init__(self, angle: float, _shooter: Shooter):
         super().__init__()
