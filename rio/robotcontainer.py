@@ -2,6 +2,8 @@
 import math
 import wpilib
 import logging
+import os
+import importlib
 
 # wpimath
 import wpimath
@@ -41,11 +43,6 @@ from commands.setIntakeSpeed import SetIntakeSpeed
 from commands.loadMagazine import LoadMagazine
 from commands.climb import Climb
 
-
-# Autos
-from autonomous.grabNote import grabNote
-from autonomous.noAuto import NoAuto
-
 # NetworkTables
 from ntcore import NetworkTableInstance
 
@@ -80,6 +77,9 @@ class RobotContainer:
 
         # Configure networktables
         self.configureNetworktables()
+
+        # Configure autonomous
+        self.configureAutonomous()
 
         # Configure default commands
         self.robotDrive.setDefaultCommand(
@@ -255,25 +255,35 @@ class RobotContainer:
         self.fieldCentricChooser.addOption("Robot Centric", False)
         wpilib.SmartDashboard.putData("FieldCentric", self.fieldCentricChooser)
 
+    def configureAutonomous(self) -> None:
+        """
+        Configure Autonomous Modes
+        """
+
+        self.autoChooser = wpilib.SendableChooser()
+
+        from autonomous.noAuto import NoAuto
+
+        self.autoChooser.setDefaultOption("No Auto", NoAuto(self.robotDrive))
+
+        list(
+            map(
+                lambda x: self.autoChooser.addOption(x.NAME, x.load(self)),
+                map(
+                    lambda mod: importlib.import_module(f"autonomous.{mod[:-3]}"),
+                    os.listdir("./autonomous"),
+                ),
+            )
+        )
+
+        wpilib.SmartDashboard.putData("Autonomous", self.autoChooser)
+
     def getAutonomousCommand(self) -> commands2.Command:
         """Use this to pass the autonomous command to the main {@link Robot} class.
 
         :returns:
         command to run in autonomous
         """
-
-        # Create a sendable chooser
-        self.autoChooser = wpilib.SendableChooser()
-
-        # Add options
-        self.autoChooser.setDefaultOption("No Auto", NoAuto(self.robotDrive))
-        self.autoChooser.addOption(
-            "Limelight Auto",
-            grabNote(self.limelight, self.shooter, self.intake, self.robotDrive),
-        )
-
-        # # Put the chooser on the dashboard
-        wpilib.SmartDashboard.putData("Autonomous", self.autoChooser)
 
         # ===========================
         # DEFAULT STUFF
