@@ -40,14 +40,14 @@ class Spool(commands2.Command):
 
         if self.speed == 0 or self.speed >= 0.5:
             # Positive numbers imply we're pulling DOWN
-            self.shooter.currlimit(5)
+            self.shooter.currlimit(2)
             self.climber.setServoAngle(ClimberConstants.kServoLock)
             self.shooter.rotateManual(
                 -self.speed * ClimberConstants.kClimberShooterForward
             )
         else:
             # Negative numbers imply we're relaxing
-            self.shooter.currlimit(40)
+            self.shooter.currlimit(5)
             self.climber.setServoAngle(ClimberConstants.kservoOpen)
             self.shooter.rotateManual(
                 -self.speed * ClimberConstants.kClimberShooterBackward
