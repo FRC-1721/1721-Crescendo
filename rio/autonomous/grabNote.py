@@ -16,7 +16,7 @@ from commands.intakeUntilNote import intakeUntilNote
 from commands.SendToPos import sendToFieldPos
 
 
-class grabNote(commands2.SequentialCommandGroup):
+class GrabNote(commands2.SequentialCommandGroup):
     def __init__(
         self,
         _limelight: limeLightCommands,
@@ -67,3 +67,7 @@ class grabNote(commands2.SequentialCommandGroup):
                 self.limelight,
             ),
         )
+
+
+NAME = "Get Note"
+load = lambda bot: GrabNote(bot.limelight, bot.shooter, bot.intake, bot.robotDrive)

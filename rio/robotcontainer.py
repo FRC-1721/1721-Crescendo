@@ -2,6 +2,8 @@
 import math
 import wpilib
 import logging
+import os
+import importlib
 
 # wpimath
 import wpimath
@@ -45,11 +47,6 @@ from commands.resetYaw import ResetYaw
 from commands.spool import Spool
 from commands.lock import Lock
 
-
-# Autos
-from autonomous.grabNote import grabNote
-from autonomous.noAuto import NoAuto
-
 # NetworkTables
 from ntcore import NetworkTableInstance
 
@@ -84,6 +81,9 @@ class RobotContainer:
 
         # Configure networktables
         self.configureNetworktables()
+
+        # Configure autonomous
+        self.configureAutonomous()
 
         # Configure default commands
         self.robotDrive.setDefaultCommand(
@@ -255,6 +255,29 @@ class RobotContainer:
         self.fieldCentricChooser.setDefaultOption("Field Centric", True)
         self.fieldCentricChooser.addOption("Robot Centric", False)
         wpilib.SmartDashboard.putData("FieldCentric", self.fieldCentricChooser)
+
+    def configureAutonomous(self) -> None:
+        """
+        Configure Autonomous Modes
+        """
+
+        self.autoChooser = wpilib.SendableChooser()
+
+        from autonomous.noAuto import NoAuto
+
+        self.autoChooser.setDefaultOption("No Auto", NoAuto(self.robotDrive))
+
+        list(
+            map(
+                lambda x: self.autoChooser.addOption(x.NAME, x.load(self)),
+                map(
+                    lambda mod: importlib.import_module(f"autonomous.{mod[:-3]}"),
+                    os.listdir("./autonomous"),
+                ),
+            )
+        )
+
+        wpilib.SmartDashboard.putData("Autonomous", self.autoChooser)
 
     def getAutonomousCommand(self) -> commands2.Command:
         """Use this to pass the autonomous command to the main {@link Robot} class.
