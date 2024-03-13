@@ -82,6 +82,8 @@ class Shooter(Subsystem):
 
         self.rotateMotor.setIdleMode(rev._rev.CANSparkBase.IdleMode.kBrake)
 
+        self.rotateMotor.setSmartCurrentLimit(35)
+
         # Burn flymotor configuration
         self.flyMotor.burnFlash()
         self.rotateMotor.burnFlash()
@@ -89,7 +91,6 @@ class Shooter(Subsystem):
     def periodic(self) -> None:
         self.sd.putNumber("Thermals/rotate", self.rotateMotor.getMotorTemperature())
         self.sd.putNumber("Thermals/fly", self.flyMotor.getMotorTemperature())
-        print(self.rotateEncoder.getPosition())
 
     def setFlyWheelSpeed(self, speed):
         self.flyMotor.set(speed)
@@ -140,4 +141,8 @@ class Shooter(Subsystem):
     # hello burflash my old friend
     def setIdleMode(self, mode):
         self.rotateMotor.setIdleMode(mode)
+        self.rotateMotor.burnFlash()
+
+    def currlimit(self, currlmt):
+        self.rotateMotor.setSmartCurrentLimit(currlmt)
         self.rotateMotor.burnFlash()

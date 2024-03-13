@@ -6,7 +6,7 @@
     "GLOBAL": {
       "fps": "120",
       "height": "699",
-      "maximized": "1",
+      "maximized": "0",
       "style": "0",
       "userScale": "2",
       "width": "1366",
@@ -18,7 +18,7 @@
     "###FMS": {
       "Collapsed": "0",
       "Pos": "5,540",
-      "Size": "283,140"
+      "Size": "169,184"
     },
     "###Joysticks": {
       "Collapsed": "0",
