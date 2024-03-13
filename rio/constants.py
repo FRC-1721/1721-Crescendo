@@ -213,5 +213,5 @@ class ClimberConstants:
     kservoOpen = 0.165
 
     # Relationship between climber speed and shooter angle (rough but ugh..)
-    kClimberShooterForward = 0.3  # Down
-    kClimberShooterBackward = 0.5  # Up
+    kClimberShooterForward = 0.4  # Down
+    kClimberShooterBackward = 0.75  # Up

@@ -202,8 +202,8 @@ class RobotContainer:
         self.opController.button(4).whileTrue(manualROT(-0.5, self.shooter))
 
         # climber
-        self.opController.button(5).whileTrue(Climb(0.2, self.climber, self.shooter))
-        self.opController.button(7).whileTrue(Spool(-0.1, self.climber))
+        self.opController.button(5).whileTrue(Spool(0.2, self.climber, self.shooter))
+        self.opController.button(7).whileTrue(Spool(-0.1, self.climber, self.shooter))
 
         # Cancel all
         self.opController.button(8).onTrue(commands2.InstantCommand(self.cancelAll))
