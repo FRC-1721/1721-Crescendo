@@ -267,12 +267,17 @@ class RobotContainer:
 
         self.autoChooser.setDefaultOption("No Auto", NoAuto(self.robotDrive))
 
+        try:
+            filepaths = os.listdir("autonomous")
+        except FileNotFoundError:
+            filepaths = os.listdir("../autonomous")
+
         list(
             map(
                 lambda x: self.autoChooser.addOption(x.NAME, x.load(self)),
                 map(
                     lambda mod: importlib.import_module(f"autonomous.{mod[:-3]}"),
-                    os.listdir("./autonomous"),
+                    filepaths,
                 ),
             )
         )
