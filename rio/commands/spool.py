@@ -57,6 +57,6 @@ class Spool(commands2.Command):
 
     def end(self, interrupted: bool):
         self.climber.setServoAngle(ClimberConstants.kServoLock)
-        self.shooter.currlimit(80)
+        self.shooter.currlimit(35)
         self.climber.setClimberMotorSpeed(0)
         self.shooter.rotateManual(0)

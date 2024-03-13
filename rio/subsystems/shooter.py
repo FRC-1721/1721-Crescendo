@@ -82,7 +82,7 @@ class Shooter(Subsystem):
 
         self.rotateMotor.setIdleMode(rev._rev.CANSparkBase.IdleMode.kBrake)
 
-        self.rotateMotor.setSmartCurrentLimit(80)
+        self.rotateMotor.setSmartCurrentLimit(35)
 
         # Burn flymotor configuration
         self.flyMotor.burnFlash()
