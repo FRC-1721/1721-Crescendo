@@ -1,4 +1,6 @@
 import wpilib
+import rev
+
 from ntcore import NetworkTableInstance
 from commands2 import Subsystem
 from rev import (
@@ -41,6 +43,8 @@ class Shooter(Subsystem):
 
         self.rotateEncoder.setInverted(SuperStrucConstants.krotateInversion)
 
+        # self.rotateEncoder.setZeroOffset(1 - 0.3482)  # F*cking love rev sometimes
+
         # PID values
         # rotate pid
         self.rotatePIDController = self.rotateMotor.getPIDController()
@@ -76,13 +80,16 @@ class Shooter(Subsystem):
         # (joe added this, its bad)
         self.flyPIDController.setOutputRange(-1, 1)
 
+        self.rotateMotor.setIdleMode(rev._rev.CANSparkBase.IdleMode.kBrake)
+
         # Burn flymotor configuration
         self.flyMotor.burnFlash()
+        self.rotateMotor.burnFlash()
 
     def periodic(self) -> None:
         self.sd.putNumber("Thermals/rotate", self.rotateMotor.getMotorTemperature())
         self.sd.putNumber("Thermals/fly", self.flyMotor.getMotorTemperature())
-        # print(self.rotateEncoder.getPosition())
+        print(self.rotateEncoder.getPosition())
 
     def setFlyWheelSpeed(self, speed):
         self.flyMotor.set(speed)
@@ -129,3 +136,8 @@ class Shooter(Subsystem):
 
     def setFlyVelocity(self, velocity):
         self.flyPIDController.setReference(velocity, CANSparkMax.ControlType.kVelocity)
+
+    # hello burflash my old friend
+    def setIdleMode(self, mode):
+        self.rotateMotor.setIdleMode(mode)
+        self.rotateMotor.burnFlash()

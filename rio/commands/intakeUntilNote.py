@@ -5,17 +5,20 @@ from subsystems.intake import IntakeSubsystem
 
 
 class intakeUntilNote(commands2.Command):
-    def __init__(self, speed: float, subsystem: IntakeSubsystem):
+    def __init__(self, speed: float, _intake: IntakeSubsystem):
         """
         takes in the rings
         """
         super().__init__()
 
         # local subsystem instance
-        self.intakeSubsystem = subsystem
+        self.intakeSubsystem = _intake
 
         # requested speed
         self.speed = speed
+
+        # Command requirements
+        self.addRequirements()
 
     def initialize(self):
         if not self.intakeSubsystem.switchPress():
