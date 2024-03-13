@@ -7,18 +7,26 @@
       "fps": "120",
       "height": "699",
       "maximized": "1",
-      "style": "0",
+      "style": "1",
       "userScale": "2",
       "width": "1366",
       "xpos": "9",
       "ypos": "76"
     }
   },
+  "Table": {
+    "0xE56EC1C2,4": {
+      "Column 0  Weight": "1.0000",
+      "Column 1  Weight": "1.0000",
+      "Column 2  Weight": "1.0000",
+      "Column 3  Weight": "1.0000"
+    }
+  },
   "Window": {
     "###FMS": {
       "Collapsed": "0",
       "Pos": "5,540",
-      "Size": "283,140"
+      "Size": "169,184"
     },
     "###Joysticks": {
       "Collapsed": "0",
@@ -40,9 +48,14 @@
       "Pos": "1025,20",
       "Size": "250,695"
     },
+    "###RoboRIO": {
+      "Collapsed": "0",
+      "Pos": "5,125",
+      "Size": "119,146"
+    },
     "###System Joysticks": {
       "Collapsed": "0",
-      "Pos": "5,350",
+      "Pos": "6,319",
       "Size": "192,218"
     },
     "###Timing": {

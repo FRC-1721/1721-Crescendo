@@ -43,9 +43,11 @@ from commands.intakeUntilNote import intakeUntilNote
 from commands.setIntakeSpeed import SetIntakeSpeed
 from commands.loadMagazine import LoadMagazine
 from commands.climb import Climb
-from commands.resetYaw import ResetYaw
+from commands.ResetYaw import ResetYaw
 from commands.spool import Spool
 from commands.lock import Lock
+
+from autonomous.noAuto import NoAuto
 
 # NetworkTables
 from ntcore import NetworkTableInstance
@@ -176,6 +178,7 @@ class RobotContainer:
                 FlyWheelSpeed(0, self.shooter),  # stops the Flywheel
             )
         )
+
         self.driverController.start().onTrue(ResetYaw(self.robotDrive))
 
         self.driverController.back().onTrue(
@@ -192,7 +195,7 @@ class RobotContainer:
             )
         )
 
-        self.driverController.leftBumper().whileTrue(
+        self.driverController.leftBumper().onTrue(
             sendToObject(self.robotDrive, self.limelight)
         )
 
@@ -262,8 +265,6 @@ class RobotContainer:
         """
 
         self.autoChooser = wpilib.SendableChooser()
-
-        from autonomous.noAuto import NoAuto
 
         self.autoChooser.setDefaultOption("No Auto", NoAuto(self.robotDrive))
 

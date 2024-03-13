@@ -88,16 +88,12 @@ class limeLightCommands(commands2.Subsystem):
         driver.drive(driveX, driveY, driveZ, True, True)
 
     def findObj(self) -> bool:
-        posX = self.ll.getEntry("tx").getDouble(
-            0
-        )  # trys to recieve the objects distance from
-        posY = self.ll.getEntry("ty").getDouble(0)  # the robot via NetworkTables
+        # tries to recieve the objects distance from the robot via NetworkTables
+        posX = self.ll.getEntry("tx").getDouble(0)
+        posY = self.ll.getEntry("ty").getDouble(0)
 
         if (posX == 0) and (posY == 0):
-            logging.warn(
-                "No note in view of limelight"
-            )  # TODO: run an estimated guess on whether or not the
-            return False  #       Intake is obscuring the note
+            return False
         else:
             append(self.xFifo, posX)  # Append newly collected Pos to array of data to
             append(self.yFifo, posY)  # collect an average distance
@@ -105,28 +101,25 @@ class limeLightCommands(commands2.Subsystem):
             # self.xFifo = delete(self.xFifo, 0)              # Deletes old Pos variables that we don't really need
             # self.yFifo = delete(self.yFifo, 0)
 
-            self.distX = mean(
-                posX
-            )  # TODO: change pos variables to numpy array variables
+            # TODO: change pos variables to numpy array variables
+            self.distX = mean(posX)
             self.distY = mean(posY)
             return True
 
     def goToObj(self, driver: DriveSubsystem) -> None:
         if self.distY > 0:
-            gabagool = 2 * self.distY
-            driveY = -1 * (math.pow(0.25, gabagool)) + 1
-            # get rid of
+            driveY = -1 * (math.pow(0.25, 2 * self.distY)) + 1
         else:
             driveY = 0
-        print(self.distX)
-        if (-0.25 > self.distX) or (self.distX > 0.25):
+
+        if (self.distX < -0.25) or (self.distX > 0.25):
             driveX = -0.01 * self.distX
         else:
             driveX = 0
 
         driver.drive(driveY, driveX, 0, False, True)
 
-    def isAtOBJ(self):
-        if self.distY <= 0.05 and -0.25 < self.distX and self.distX < 0.25:
+    def isAtOBJ(self) -> bool:
+        if (-0.1 < self.distY < 0.1) and (-0.25 < self.distX < 0.25):
             return True
         return False
