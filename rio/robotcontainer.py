@@ -116,6 +116,15 @@ class RobotContainer:
             )
         )
 
+        self.shooter.setDefaultCommand(
+            commands2.cmd.run(
+                lambda: self.shooter.setFlyWheelSpeed(
+                    self.opController.getRawAxis(2) + 0.16
+                ),
+                self.shooter,
+            )
+        )
+
     def configureButtonBindings(self) -> None:
         """
         Use this method to define your button->command mappings. Buttons can be created by

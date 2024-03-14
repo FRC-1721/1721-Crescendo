@@ -117,14 +117,6 @@ class Shooter(Subsystem):
     def currentSpeed(self) -> float:
         return self.flyEncoder.getVelocity()
 
-    def setIdleBrake(self):
-        self.flyMotor.setIdleMode(CANSparkBase.IdleMode.kBrake)
-        self.flyMotor.burnFlash()
-
-    def setIdleCoast(self):
-        self.flyMotor.setIdleMode(CANSparkBase.IdleMode.kCoast)
-        self.flyMotor.burnFlash()
-
     def setFlyAngle(self, angle: float):
         self.flyPIDController.setReference(angle, CANSparkMax.ControlType.kPosition)
 
