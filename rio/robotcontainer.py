@@ -2,6 +2,8 @@
 import math
 import wpilib
 import logging
+import os
+import importlib
 
 # wpimath
 import wpimath
@@ -26,21 +28,27 @@ from subsystems.climbersubsystem import ClimberSubsystem
 from subsystems.shooter import Shooter
 from subsystems.intake import IntakeSubsystem
 from subsystems.climber import Climber
+from subsystems.limelight import limeLightCommands
 
 # Commands
 from commands.setIntakeSpeed import SetIntakeSpeed
 from commands.rotateIntake import RotateIntake
 from commands.FlyWheelSpeed import FlyWheelSpeed
 from commands.intakeRotationMAN import IntakeRotationMAN
+from commands.SendToPos import sendToFieldPos
+from commands.NavToObj import sendToObject
 from commands.shooterROT import ShooterROT
 from commands.manualRot import manualROT
 from commands.intakeUntilNote import intakeUntilNote
 from commands.setIntakeSpeed import SetIntakeSpeed
 from commands.loadMagazine import LoadMagazine
 from commands.climb import Climb
-from commands.resetYaw import ResetYaw
+from commands.ResetYaw import ResetYaw
 from commands.spool import Spool
 from commands.lock import Lock
+from commands.crashDrive import crashDrive
+from autonomous.noAuto import NoAuto
+from autonomous.grabNote import GrabNote
 
 # NetworkTables
 from ntcore import NetworkTableInstance
@@ -63,6 +71,7 @@ class RobotContainer:
         self.shooter = Shooter()
         self.intake = IntakeSubsystem()
         self.climber = Climber()
+        self.limelight = limeLightCommands()
 
         # The driver's controller
         self.driverController = CommandXboxController(0)
@@ -75,6 +84,9 @@ class RobotContainer:
 
         # Configure networktables
         self.configureNetworktables()
+
+        # Configure autonomous
+        self.configureAutonomous()
 
         # Configure default commands
         self.robotDrive.setDefaultCommand(
@@ -97,7 +109,7 @@ class RobotContainer:
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
                     * 0.5,
-                    False,
+                    True,
                     True,
                 ),
                 self.robotDrive,
@@ -167,6 +179,7 @@ class RobotContainer:
                 FlyWheelSpeed(0, self.shooter),  # stops the Flywheel
             )
         )
+
         self.driverController.start().onTrue(ResetYaw(self.robotDrive))
 
         self.driverController.back().onTrue(
@@ -183,10 +196,11 @@ class RobotContainer:
             )
         )
 
+        self.driverController.leftBumper().whileTrue(crashDrive(self.robotDrive))
+
         # ==============================
         #        Operator Commands
         # ==============================
-
         # intake keybinds
         # intake movement
         self.opController.button(2).whileTrue(IntakeRotationMAN(1, self.intake))  # out
@@ -244,6 +258,22 @@ class RobotContainer:
         self.fieldCentricChooser.addOption("Robot Centric", False)
         wpilib.SmartDashboard.putData("FieldCentric", self.fieldCentricChooser)
 
+    def configureAutonomous(self) -> None:
+        """
+        Configure Autonomous Modes
+        """
+
+        self.autoChooser = wpilib.SendableChooser()
+
+        self.autoChooser.setDefaultOption("No Auto", NoAuto(self.robotDrive))
+
+        self.autoChooser.addOption(
+            "vision Auto",
+            GrabNote(self.limelight, self.shooter, self.intake, self.robotDrive),
+        )
+
+        wpilib.SmartDashboard.putData("Autonomous", self.autoChooser)
+
     def getAutonomousCommand(self) -> commands2.Command:
         """Use this to pass the autonomous command to the main {@link Robot} class.
 
@@ -251,69 +281,4 @@ class RobotContainer:
         command to run in autonomous
         """
 
-        # # Create a sendable chooser
-        # self.autoChooser = wpilib.SendableChooser()
-
-        # # Add options
-        # self.autoChooser.setDefaultOption("No Auto", NoAuto())
-
-        # # Put the chooser on the dashboard
-        # wpilib.SmartDashboard.putData("Autonomous", self.autoChooser)
-
-        # ===========================
-        # DEFAULT STUFF
-        # ===========================
-
-        # Create config for trajectory
-        config = TrajectoryConfig(
-            AutoConstants.kMaxSpeedMetersPerSecond,
-            AutoConstants.kMaxAccelerationMetersPerSecondSquared,
-        )
-        # Add kinematics to ensure max speed is actually obeyed
-        config.setKinematics(DriveConstants.kDriveKinematics)
-
-        # An example trajectory to follow. All units in meters.
-        exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-            # Start at the origin facing the +X direction
-            Pose2d(0, 0, Rotation2d(0)),
-            # Pass through these two interior waypoints, making an 's' curve path
-            [Translation2d(1, 1), Translation2d(2, -1)],
-            # End 3 meters straight ahead of where we started, facing forward
-            Pose2d(3, 0, Rotation2d(0)),
-            config,
-        )
-
-        thetaController = ProfiledPIDControllerRadians(
-            AutoConstants.kPThetaController,
-            0,
-            0,
-            AutoConstants.kThetaControllerConstraints,
-        )
-        thetaController.enableContinuousInput(-math.pi, math.pi)
-
-        holoController = HolonomicDriveController(
-            PIDController(AutoConstants.kPXController, 0, 0),
-            PIDController(AutoConstants.kPYController, 0, 0),
-            thetaController,
-        )
-
-        swerveControllerCommand = commands2.SwerveControllerCommand(
-            exampleTrajectory,
-            self.robotDrive.getPose,  # Functional interface to feed supplier
-            DriveConstants.kDriveKinematics,
-            # Position controller
-            holoController,
-            self.robotDrive.setModuleStates,
-            (self.robotDrive,),
-        )
-
-        # Reset odometry to the starting pose of the trajectory.
-        self.robotDrive.resetOdometry(exampleTrajectory.initialPose())
-
-        # Run path following command, then stop at the end.
-        return swerveControllerCommand.andThen(
-            cmd.run(
-                lambda: self.robotDrive.drive(0, 0, 0, True, False),
-                self.robotDrive,
-            )
-        )
+        return self.autoChooser.getSelected()

@@ -9,6 +9,7 @@ robotpy = "2024.2.1.1"
 robotpy-rev = "2024.2.0"
 robotpy-ctre = "2024.1.2"
 robotpy-commands-v2 = "2024.2.1"
+numpy = "1.26.4"
 
 [dev-packages]
 

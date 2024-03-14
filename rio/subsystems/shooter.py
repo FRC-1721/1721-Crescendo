@@ -79,7 +79,6 @@ class Shooter(Subsystem):
         # Set dir
         # (joe added this, its bad)
         self.flyPIDController.setOutputRange(-1, 1)
-
         self.rotateMotor.setIdleMode(rev._rev.CANSparkBase.IdleMode.kBrake)
 
         self.rotateMotor.setSmartCurrentLimit(35)

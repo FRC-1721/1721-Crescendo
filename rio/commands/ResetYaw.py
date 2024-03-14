@@ -1,4 +1,5 @@
 import commands2
+import logging
 
 from subsystems.drivesubsystem import DriveSubsystem
 
@@ -18,5 +19,12 @@ class ResetYaw(commands2.Command):
     def initialize(self):
         self.subsystem.resetYaw(self.angle)
 
+    def execute(self):
+        pass
+
+    def isFinished(self):
+        return True
+
     def end(self, interrupted: bool):
+        logging.info("Yaw iz zero mah boi")
         return True
