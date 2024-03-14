@@ -20,7 +20,13 @@ import commands2
 from commands2 import cmd
 from commands2.button import CommandXboxController, CommandGenericHID
 
-from constants import AutoConstants, DriveConstants, OIConstants, SuperStrucConstants
+from constants import (
+    AutoConstants,
+    DriveConstants,
+    OIConstants,
+    SuperStrucConstants,
+    IntakeConstants,
+)
 
 # Subsystems
 from subsystems.drivesubsystem import DriveSubsystem
@@ -132,9 +138,11 @@ class RobotContainer:
             commands2.SequentialCommandGroup(
                 ShooterROT(SuperStrucConstants.LoadPos, self.shooter),
                 FlyWheelSpeed(0, self.shooter),  # Stop shooter (if its running)
-                RotateIntake(120, self.intake),  # Put intake down
+                RotateIntake(IntakeConstants.SuckPos, self.intake),  # Put intake down
                 intakeUntilNote(0.5, self.intake),  # Intake till note
-                RotateIntake(0, self.intake),  # Put intake back up
+                RotateIntake(
+                    IntakeConstants.BlowPos, self.intake
+                ),  # Put intake back up
             )
         )
 
@@ -142,7 +150,7 @@ class RobotContainer:
         self.driverController.y().onTrue(
             commands2.SequentialCommandGroup(
                 RotateIntake(
-                    0, self.intake
+                    IntakeConstants.BlowPos, self.intake
                 ),  # Put intake fully inside (if it wasn't already)
                 FlyWheelSpeed(1.0, self.shooter, False),  # Power up the flywheels (?)
                 SetIntakeSpeed(
@@ -205,6 +213,8 @@ class RobotContainer:
         # intake spin
         self.opController.button(6).whileTrue(SetIntakeSpeed(0.6, self.intake))
         self.opController.button(9).whileTrue(SetIntakeSpeed(-0.6, self.intake))
+
+        self.opController.button(6).whileFalse(SetIntakeSpeed(0, self.intake))
 
         # shooter keybinds
         # shooter movement
