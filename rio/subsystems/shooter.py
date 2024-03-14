@@ -81,6 +81,8 @@ class Shooter(Subsystem):
         self.flyPIDController.setOutputRange(-1, 1)
         self.rotateMotor.setIdleMode(rev._rev.CANSparkBase.IdleMode.kBrake)
 
+        self.rotateMotor.setSmartCurrentLimit(35)
+
         # Burn flymotor configuration
         self.flyMotor.burnFlash()
         self.rotateMotor.burnFlash()
@@ -138,4 +140,8 @@ class Shooter(Subsystem):
     # hello burflash my old friend
     def setIdleMode(self, mode):
         self.rotateMotor.setIdleMode(mode)
+        self.rotateMotor.burnFlash()
+
+    def currlimit(self, currlmt):
+        self.rotateMotor.setSmartCurrentLimit(currlmt)
         self.rotateMotor.burnFlash()
