@@ -46,8 +46,9 @@ from commands.climb import Climb
 from commands.ResetYaw import ResetYaw
 from commands.spool import Spool
 from commands.lock import Lock
-
+from commands.crashDrive import crashDrive
 from autonomous.noAuto import NoAuto
+from autonomous.grabNote import GrabNote
 
 # NetworkTables
 from ntcore import NetworkTableInstance
@@ -108,7 +109,7 @@ class RobotContainer:
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
                     * 0.5,
-                    False,
+                    True,
                     True,
                 ),
                 self.robotDrive,
@@ -195,9 +196,7 @@ class RobotContainer:
             )
         )
 
-        self.driverController.leftBumper().onTrue(
-            sendToObject(self.robotDrive, self.limelight)
-        )
+        self.driverController.leftBumper().whileTrue(crashDrive(self.robotDrive))
 
         # ==============================
         #        Operator Commands
@@ -268,19 +267,9 @@ class RobotContainer:
 
         self.autoChooser.setDefaultOption("No Auto", NoAuto(self.robotDrive))
 
-        try:
-            filepaths = os.listdir("autonomous")
-        except FileNotFoundError:
-            filepaths = os.listdir("../autonomous")
-
-        list(
-            map(
-                lambda x: self.autoChooser.addOption(x.NAME, x.load(self)),
-                map(
-                    lambda mod: importlib.import_module(f"autonomous.{mod[:-3]}"),
-                    filepaths,
-                ),
-            )
+        self.autoChooser.addOption(
+            "vision Auto",
+            GrabNote(self.limelight, self.shooter, self.intake, self.robotDrive),
         )
 
         wpilib.SmartDashboard.putData("Autonomous", self.autoChooser)
@@ -291,11 +280,5 @@ class RobotContainer:
         :returns:
         command to run in autonomous
         """
-        # # Create a sendable chooser
-        # self.autoChooser = wpilib.SendableChooser()
 
-        # # Add options
-        # self.autoChooser.setDefaultOption("No Auto", NoAuto())
-
-        # # Put the chooser on the dashboard
-        # wpilib.SmartDashboard.putData("Autonomous", self.autoChooser)
+        return self.autoChooser.getSelected()

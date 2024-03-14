@@ -27,35 +27,29 @@ class GrabNote(commands2.SequentialCommandGroup):
         """
         Runs around and shoots as many speaker shots as possible
         """
-        self.limelight = _limelight
-        self.drivetrain = _drive
-        self.shooter = _shooter
-        self.intake = _intake
         super().__init__(
             # Resets Yaw relative to the robot's starting position
             ResetYaw(_drive),
             # ============ #
             # SPEAKER SHOT #
             # ============ #
-            RotateIntake(
-                0, self.intake
-            ),  # Put intake fully inside (if it wasn't already)
-            FlyWheelSpeed(1.0, self.shooter, False),  # Power up the flywheels (?)
-            SetIntakeSpeed(-0.6, self.intake),  # Load magazine? (but without ending)
+            RotateIntake(0, _intake),  # Put intake fully inside (if it wasn't already)
+            print("intake rotatered"),
+            FlyWheelSpeed(1.0, _shooter, False),  # Power up the flywheels (?)
+            print("wheels r fly"),
+            SetIntakeSpeed(-0.6, _intake),  # Load magazine? (but without ending)
             commands2.WaitCommand(1),
-            FlyWheelSpeed(0.0, self.shooter),  # Stop flywheel
-            SetIntakeSpeed(0, self.intake),  # Stop intake
+            FlyWheelSpeed(0.0, _shooter),  # Stop flywheel
+            SetIntakeSpeed(0, _intake),  # Stop intake
             # ================ #
             # COLLECT NEW NOTE #
             # ================ #
-            sendToObject(self.drivetrain, self.limelight),
-            ShooterROT(SuperStrucConstants.LoadPos, self.shooter),
-            FlyWheelSpeed(0, self.shooter),  # Stop shooter (if its running)
-            RotateIntake(
-                122.5, self.intake
-            ),  # Put intake down (with a lil extra squeeze)
-            intakeUntilNote(0.5, self.intake),  # Intake till note
-            RotateIntake(0, self.intake),  # Put intake back up
+            sendToObject(_drive, _limelight),
+            ShooterROT(SuperStrucConstants.LoadPos, _shooter),
+            FlyWheelSpeed(0, _shooter),  # Stop shooter (if its running)
+            RotateIntake(122.5, _intake),  # Put intake down (with a lil extra squeeze)
+            intakeUntilNote(0.5, _intake),  # Intake till note
+            RotateIntake(0, _intake),  # Put intake back up
             # ================= #
             # RETURN TO SPEAKER #
             # ================= #
@@ -63,11 +57,7 @@ class GrabNote(commands2.SequentialCommandGroup):
                 0.9245,
                 2.117,
                 0,
-                self.drivetrain,
-                self.limelight,
+                _drive,
+                _limelight,
             ),
         )
-
-
-NAME = "Get Note"
-load = lambda bot: GrabNote(bot.limelight, bot.shooter, bot.intake, bot.robotDrive)

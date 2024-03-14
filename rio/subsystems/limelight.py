@@ -4,8 +4,6 @@ from subsystems.drivesubsystem import DriveSubsystem
 
 from wpilib import RobotBase
 
-from numpy import *
-
 import math
 import logging
 import commands2
@@ -23,8 +21,8 @@ class limeLightCommands(commands2.Subsystem):
         # field size in goofy limelight units
         self.fieldSize = [16, 8]
 
-        self.xFifo = array([0] * 10)
-        self.yFifo = array([0] * 10)
+        # self.xFifo = array([0] * 10)
+        # self.yFifo = array([0] * 10)
 
     def setPipeline(self, PipeLine: int) -> None:
         self.ll.getEntry("pipeline").setDouble(PipeLine)
@@ -95,31 +93,33 @@ class limeLightCommands(commands2.Subsystem):
         if (posX == 0) and (posY == 0):
             return False
         else:
-            append(self.xFifo, posX)  # Append newly collected Pos to array of data to
-            append(self.yFifo, posY)  # collect an average distance
+            # append(self.xFifo, posX)  # Append newly collected Pos to array of data to
+            # append(self.yFifo, posY)  # collect an average distance
 
             # self.xFifo = delete(self.xFifo, 0)              # Deletes old Pos variables that we don't really need
             # self.yFifo = delete(self.yFifo, 0)
 
             # TODO: change pos variables to numpy array variables
-            self.distX = mean(posX)
-            self.distY = mean(posY)
+            self.distX = posX
+            self.distY = posY
             return True
 
     def goToObj(self, driver: DriveSubsystem) -> None:
+        driveX = 0
+
         if self.distY > 0:
-            driveY = -1 * (math.pow(0.25, 2 * self.distY)) + 1
+            driveY = -1 * (math.pow(0.25, 0.125 * self.distY + 1)) + 0.25
         else:
             driveY = 0
 
-        if (self.distX < -0.25) or (self.distX > 0.25):
-            driveX = -0.01 * self.distX
+        if (self.distX < -0.1) or (self.distX > 0.1):
+            driveX = -0.02 * self.distX
         else:
             driveX = 0
-
+        print(driveY)
         driver.drive(driveY, driveX, 0, False, True)
 
     def isAtOBJ(self) -> bool:
-        if (-0.1 < self.distY < 0.1) and (-0.25 < self.distX < 0.25):
+        if (-0.1 < self.distY < 0.25) and (-0.25 < self.distX < 0.25):
             return True
         return False

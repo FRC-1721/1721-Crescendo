@@ -30,6 +30,8 @@ class HolyToaster(commands2.TimedCommandRobot):
 
         if self.autonomousCommand:
             self.autonomousCommand.schedule()
+        else:
+            print("No auto command?")
 
     def teleopInit(self) -> None:
         if self.autonomousCommand:

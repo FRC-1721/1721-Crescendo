@@ -72,7 +72,6 @@ class DriveSubsystem(Subsystem):
             GyroConstants.pitchPose,
             GyroConstants.rollPose,
         )
-
         # Slew rate filter variables for controlling lateral acceleration
         self.currentRotation = 0.0
         self.currentTranslationDir = 0.0
@@ -97,17 +96,19 @@ class DriveSubsystem(Subsystem):
         # self.gyro.setAngleAdjustment(90)
 
     def periodic(self) -> None:
+        self.sd.putNumberArray("Accel", self.gyro.getBiasedAccelerometer()[1])
         # Update the odometry in the periodic block
         # print(self.getHeading())
-        self.odometry.update(
-            Rotation2d.fromDegrees(self.gyro.getYaw()),
+        # print(self.gyro.getBiasedAccelerometer())
+        """self.odometry.update(
+            Rotation2d.fromDegrees(self.gyro.accel),
             (
                 self.frontLeft.getPosition(),
                 self.frontRight.getPosition(),
                 self.rearLeft.getPosition(),
                 self.rearRight.getPosition(),
             ),
-        )
+        )"""
 
         # Desired Positions
         self.sd.putNumber(
@@ -201,7 +202,7 @@ class DriveSubsystem(Subsystem):
         """
         xSpeedCommanded = xSpeed
         ySpeedCommanded = ySpeed
-
+        self.sd.putNumber("pos/rot", rot)
         if rateLimit:
             # Convert XY to polar for rate limiting
             inputTranslationDir = math.atan2(ySpeed, xSpeed)
@@ -344,3 +345,17 @@ class DriveSubsystem(Subsystem):
 
     def resetYaw(self, angle) -> None:
         self.gyro.setYaw(angle, 100)
+
+    def isZero(self, angle):
+        yaw = self.gyro.getYaw()
+        if yaw == angle:
+            return True
+        return False
+
+    def getAcc(self):
+        xAcc = self.gyro.getBiasedAccelerometer()[1][0]
+        print(xAcc)
+        if xAcc < -2500:
+            print("POOP FART----------------------------asdfasdfasdfasdfasdfasdf")
+            return True
+        return False
