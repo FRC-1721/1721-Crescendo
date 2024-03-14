@@ -13,7 +13,7 @@ from commands.ResetYaw import ResetYaw
 from commands.NavToObj import sendToObject
 from commands.shooterROT import ShooterROT
 from commands.intakeUntilNote import intakeUntilNote
-from commands.SendToPos import sendToFieldPos
+from commands.poseReset import PoseReset
 
 
 class GrabNote(commands2.SequentialCommandGroup):
@@ -53,4 +53,5 @@ class GrabNote(commands2.SequentialCommandGroup):
             # ================= #
             # RETURN TO SPEAKER #
             # ================= #
+            PoseReset(_drive),
         )

@@ -182,10 +182,6 @@ class RobotContainer:
 
         self.driverController.start().onTrue(ResetYaw(self.robotDrive))
 
-        self.driverController.back().onTrue(
-            commands2.InstantCommand(self.intake.zeroIntake)
-        )
-
         # Climbing
         self.driverController.rightBumper().whileTrue(
             Climb(
