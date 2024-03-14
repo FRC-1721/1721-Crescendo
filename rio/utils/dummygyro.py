@@ -14,3 +14,9 @@ class DummyGyro:
 
     def setAngleAdjustment(self, num):
         pass
+
+    def getBiasedAccelerometer(self):
+        return (0, [0.0, 0.0, 0.0])
+
+    def setYaw(self, x, y):
+        pass
