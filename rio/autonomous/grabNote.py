@@ -47,17 +47,10 @@ class GrabNote(commands2.SequentialCommandGroup):
             sendToObject(_drive, _limelight),
             ShooterROT(SuperStrucConstants.LoadPos, _shooter),
             FlyWheelSpeed(0, _shooter),  # Stop shooter (if its running)
-            RotateIntake(122.5, _intake),  # Put intake down (with a lil extra squeeze)
+            RotateIntake(130, _intake),  # Put intake down (with a lil extra squeeze)
             intakeUntilNote(0.5, _intake),  # Intake till note
             RotateIntake(0, _intake),  # Put intake back up
             # ================= #
             # RETURN TO SPEAKER #
             # ================= #
-            sendToFieldPos(
-                0.9245,
-                2.117,
-                0,
-                _drive,
-                _limelight,
-            ),
         )
