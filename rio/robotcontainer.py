@@ -20,7 +20,13 @@ import commands2
 from commands2 import cmd
 from commands2.button import CommandXboxController, CommandGenericHID
 
-from constants import AutoConstants, DriveConstants, OIConstants, SuperStrucConstants
+from constants import (
+    AutoConstants,
+    DriveConstants,
+    OIConstants,
+    SuperStrucConstants,
+    IntakeConstants,
+)
 
 # Subsystems
 from subsystems.drivesubsystem import DriveSubsystem
@@ -94,21 +100,24 @@ class RobotContainer:
             # Turning is controlled by the X axis of the right stick.
             commands2.cmd.run(
                 lambda: self.robotDrive.drive(
-                    -wpimath.applyDeadband(
+                    2
+                    ** -wpimath.applyDeadband(
                         self.driverController.getRawAxis(1),
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
-                    * 0.5,
-                    -wpimath.applyDeadband(
+                    - 1,
+                    2
+                    ** -wpimath.applyDeadband(
                         self.driverController.getRawAxis(0),
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
-                    * 0.5,
-                    -wpimath.applyDeadband(
+                    - 1,
+                    2
+                    ** -wpimath.applyDeadband(
                         self.driverController.getRawAxis(4),
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
-                    * 0.5,
+                    - 1,
                     True,
                     True,
                 ),
@@ -141,9 +150,11 @@ class RobotContainer:
             commands2.SequentialCommandGroup(
                 ShooterROT(SuperStrucConstants.LoadPos, self.shooter),
                 FlyWheelSpeed(0, self.shooter),  # Stop shooter (if its running)
-                RotateIntake(120, self.intake),  # Put intake down
+                RotateIntake(IntakeConstants.SuckPos, self.intake),  # Put intake down
                 intakeUntilNote(0.5, self.intake),  # Intake till note
-                RotateIntake(0, self.intake),  # Put intake back up
+                RotateIntake(
+                    IntakeConstants.BlowPos, self.intake
+                ),  # Put intake back up
             )
         )
 
@@ -151,7 +162,7 @@ class RobotContainer:
         self.driverController.y().onTrue(
             commands2.SequentialCommandGroup(
                 RotateIntake(
-                    0, self.intake
+                    IntakeConstants.BlowPos, self.intake
                 ),  # Put intake fully inside (if it wasn't already)
                 FlyWheelSpeed(1.0, self.shooter, False),  # Power up the flywheels (?)
                 SetIntakeSpeed(
@@ -166,7 +177,9 @@ class RobotContainer:
         # Deliver to amp (button a), part a
         self.driverController.a().onTrue(
             commands2.SequentialCommandGroup(
-                RotateIntake(0, self.intake),  # Rotate to fully closed
+                RotateIntake(
+                    IntakeConstants.BlowPos, self.intake
+                ),  # Rotate to fully closed
                 # SetIntakeSpeed(-0.6, self.intake),  # Eject slowly
                 LoadMagazine(self.shooter, self.intake),  # Load the magazine
                 # SetIntakeSpeed(0, self.intake),  # Stop ejecting
@@ -191,10 +204,6 @@ class RobotContainer:
 
         self.driverController.start().onTrue(ResetYaw(self.robotDrive))
 
-        self.driverController.back().onTrue(
-            commands2.InstantCommand(self.intake.zeroIntake)
-        )
-
         # Climbing
         self.driverController.rightBumper().whileTrue(
             Climb(
@@ -218,6 +227,8 @@ class RobotContainer:
         # intake spin
         self.opController.button(6).whileTrue(SetIntakeSpeed(0.6, self.intake))
         self.opController.button(9).whileTrue(SetIntakeSpeed(-0.6, self.intake))
+
+        self.opController.button(6).whileFalse(SetIntakeSpeed(0, self.intake))
 
         # shooter keybinds
         # shooter movement

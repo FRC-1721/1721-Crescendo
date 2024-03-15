@@ -92,23 +92,23 @@ class DriveSubsystem(Subsystem):
                 self.rearRight.getPosition(),
             ),
         )
+        self.gyroAngle = self.gyro.getYaw()
 
         # self.gyro.setAngleAdjustment(90)
 
     def periodic(self) -> None:
-        self.sd.putNumberArray("Accel", self.gyro.getBiasedAccelerometer()[1])
         # Update the odometry in the periodic block
         # print(self.getHeading())
         # print(self.gyro.getBiasedAccelerometer())
-        """self.odometry.update(
-            Rotation2d.fromDegrees(self.gyro.accel),
+        self.odometry.update(
+            Rotation2d.fromDegrees(self.gyroAngle),
             (
                 self.frontLeft.getPosition(),
                 self.frontRight.getPosition(),
                 self.rearLeft.getPosition(),
                 self.rearRight.getPosition(),
             ),
-        )"""
+        )
 
         # Desired Positions
         self.sd.putNumber(
@@ -162,6 +162,13 @@ class DriveSubsystem(Subsystem):
         :returns: The pose.
         """
         return self.odometry.getPose()
+
+    def isPoseZero(self):
+        Pose = self.odometry.getPose()
+        for item in Pose:
+            if item != 0:
+                return False
+        return True
 
     def resetOdometry(self, pose: Pose2d) -> None:
         """Resets the odometry to the specified pose.

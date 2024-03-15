@@ -40,7 +40,9 @@ class IntakeSubsystem(commands2.Subsystem):
         self.intakeMotor.setInverted(True)
 
         # encoders
-        self.liftEncoder = self.liftMotor.getEncoder()
+        self.liftEncoder = self.liftMotor.getAbsoluteEncoder(
+            SparkAbsoluteEncoder.Type.kDutyCycle
+        )
 
         self.liftEncoder.setPositionConversionFactor(IntakeConstants.kLiftConversion)
 
@@ -52,6 +54,8 @@ class IntakeSubsystem(commands2.Subsystem):
 
         # pids
         self.liftPID = self.liftMotor.getPIDController()
+        self.liftPID.setFeedbackDevice(self.liftEncoder)
+        self.liftPID.setPositionPIDWrappingEnabled(False)
         self.liftPID.setP(IntakeConstants.kLiftP)
         self.liftPID.setI(IntakeConstants.kLiftI)
         self.liftPID.setD(IntakeConstants.kLiftD)
@@ -93,6 +97,3 @@ class IntakeSubsystem(commands2.Subsystem):
 
     def lift(self, angle: float):
         self.liftPID.setReference(angle, CANSparkMax.ControlType.kPosition)
-
-    def zeroIntake(self):
-        self.liftEncoder.setPosition(0)

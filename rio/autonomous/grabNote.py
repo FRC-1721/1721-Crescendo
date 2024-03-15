@@ -13,7 +13,10 @@ from commands.ResetYaw import ResetYaw
 from commands.NavToObj import sendToObject
 from commands.shooterROT import ShooterROT
 from commands.intakeUntilNote import intakeUntilNote
-from commands.SendToPos import sendToFieldPos
+from commands.poseReset import PoseReset
+from commands.zeroPose import zeroPose
+
+from constants import IntakeConstants
 
 
 class GrabNote(commands2.SequentialCommandGroup):
@@ -30,10 +33,13 @@ class GrabNote(commands2.SequentialCommandGroup):
         super().__init__(
             # Resets Yaw relative to the robot's starting position
             ResetYaw(_drive),
+            zeroPose(_drive),
             # ============ #
             # SPEAKER SHOT #
             # ============ #
-            RotateIntake(0, _intake),  # Put intake fully inside (if it wasn't already)
+            RotateIntake(
+                IntakeConstants.BlowPos, _intake
+            ),  # Put intake fully inside (if it wasn't already)
             print("intake rotatered"),
             FlyWheelSpeed(1.0, _shooter, False),  # Power up the flywheels (?)
             print("wheels r fly"),
@@ -47,10 +53,13 @@ class GrabNote(commands2.SequentialCommandGroup):
             sendToObject(_drive, _limelight),
             ShooterROT(SuperStrucConstants.LoadPos, _shooter),
             FlyWheelSpeed(0, _shooter),  # Stop shooter (if its running)
-            RotateIntake(130, _intake),  # Put intake down (with a lil extra squeeze)
+            RotateIntake(
+                IntakeConstants.SuckPos, _intake
+            ),  # Put intake down (with a lil extra squeeze)
             intakeUntilNote(0.5, _intake),  # Intake till note
-            RotateIntake(0, _intake),  # Put intake back up
+            RotateIntake(IntakeConstants.BlowPos, _intake),  # Put intake back up
             # ================= #
             # RETURN TO SPEAKER #
             # ================= #
+            PoseReset(_drive),
         )
