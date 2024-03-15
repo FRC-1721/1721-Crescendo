@@ -100,21 +100,24 @@ class RobotContainer:
             # Turning is controlled by the X axis of the right stick.
             commands2.cmd.run(
                 lambda: self.robotDrive.drive(
-                    -wpimath.applyDeadband(
+                    2
+                    ** -wpimath.applyDeadband(
                         self.driverController.getRawAxis(1),
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
-                    * 0.5,
-                    -wpimath.applyDeadband(
+                    - 1,
+                    2
+                    ** -wpimath.applyDeadband(
                         self.driverController.getRawAxis(0),
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
-                    * 0.5,
-                    -wpimath.applyDeadband(
+                    - 1,
+                    2
+                    ** -wpimath.applyDeadband(
                         self.driverController.getRawAxis(4),
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
-                    * 0.5,
+                    - 1,
                     True,
                     True,
                 ),
@@ -165,7 +168,9 @@ class RobotContainer:
         # Deliver to amp (button a), part a
         self.driverController.a().onTrue(
             commands2.SequentialCommandGroup(
-                RotateIntake(0, self.intake),  # Rotate to fully closed
+                RotateIntake(
+                    IntakeConstants.BlowPos, self.intake
+                ),  # Rotate to fully closed
                 # SetIntakeSpeed(-0.6, self.intake),  # Eject slowly
                 LoadMagazine(self.shooter, self.intake),  # Load the magazine
                 # SetIntakeSpeed(0, self.intake),  # Stop ejecting

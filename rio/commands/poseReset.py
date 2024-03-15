@@ -2,6 +2,7 @@ import commands2
 import logging
 
 from subsystems.drivesubsystem import DriveSubsystem
+from wpimath.geometry import Rotation2d
 
 
 class PoseReset(commands2.Command):
@@ -24,19 +25,19 @@ class PoseReset(commands2.Command):
         rotZ = 0
         Pose = self.drivetrain.getPose()
 
-        if Pose[0] > 0:
+        if Pose.X() > 0:
             driveX = 0.1
-        elif Pose[0] < 0:
+        elif Pose.X() < 0:
             driveX = -0.1
 
-        if Pose[1] > 0:
+        if Pose.Y() > 0:
             driveY = 0.1
-        elif Pose[1] < 0:
+        elif Pose.Y() < 0:
             driveY = -0.1
 
-        if Pose[2] > 0:
+        if Pose.rotation().degrees() > 0:
             rotZ = 0.1
-        elif Pose[2] < 0:
+        elif Pose.rotation().degrees() < 0:
             rotZ = -0.1
 
         self.drivetrain.drive(driveX, driveY, rotZ)
