@@ -173,8 +173,8 @@ class MikeSwerveModule:
             )
         else:
             # If you want the velocity to be dependant on eror
-            error = correctedDesiredState.angle - self.getState().angle
-            errorMultiplier = abs(
+            error = desiredState.angle - self.getState().angle
+            errorMultiplier = 1 - abs(
                 clamp(error.degrees() / 90, 1, -1)
             )  # TODO: Snap to 1.0 instead of 0.9999...
             logging.info(
