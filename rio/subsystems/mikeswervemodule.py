@@ -4,6 +4,8 @@ from wpimath.kinematics import SwerveModuleState, SwerveModulePosition
 
 from constants import ModuleConstants
 
+from utils.swerveutils import clamp
+
 
 class MikeSwerveModule:
     def __init__(
@@ -139,7 +141,11 @@ class MikeSwerveModule:
             Rotation2d(self.turningEncoder.getPosition() - self.chassisAngularOffset),
         )
 
-    def setDesiredState(self, desiredState: SwerveModuleState) -> None:
+    def setDesiredState(
+        self,
+        desiredState: SwerveModuleState,
+        waitForAlignment: bool = True,
+    ) -> None:
         """Sets the desired state for the module.
 
         :param desiredState: Desired state with speed and angle.
@@ -158,9 +164,23 @@ class MikeSwerveModule:
         )
 
         # Command driving and turning SPARKS MAX towards their respective setpoints.
-        self.drivingPIDController.setReference(
-            optimizedDesiredState.speed, CANSparkMax.ControlType.kVelocity
-        )
+        if not waitForAlignment:
+            # If you want to set the velocity directly
+            self.drivingPIDController.setReference(
+                optimizedDesiredState.speed, CANSparkMax.ControlType.kVelocity
+            )
+        else:
+            # If you want the velocity to be dependant on eror
+            error = correctedDesiredState.angle - self.getState().angle
+            errorMultiplier = clamp(
+                error.degrees() / 180, 1, 0
+            )  # TODO: Snap to 1.0 instead of 0.9999...
+            print(errorMultiplier)
+            self.drivingPIDController.setReference(
+                optimizedDesiredState.speed * errorMultiplier,
+                CANSparkMax.ControlType.kVelocity,
+            )
+
         self.turningPIDController.setReference(
             optimizedDesiredState.angle.radians(), CANSparkMax.ControlType.kPosition
         )

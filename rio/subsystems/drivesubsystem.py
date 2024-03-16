@@ -361,7 +361,7 @@ class DriveSubsystem(Subsystem):
 
     def getAcc(self):
         xAcc = self.gyro.getBiasedAccelerometer()[1][0]
-        print(xAcc)
+        # print(xAcc)
         if xAcc < -2500:
             print("POOP FART----------------------------asdfasdfasdfasdfasdfasdf")
             return True
