@@ -194,7 +194,7 @@ class RobotContainer:
         # Deliver to amp (button b), part b
         self.driverController.b().onTrue(
             commands2.SequentialCommandGroup(
-                FlyWheelSpeed(0.25, self.shooter, False),  # rotates the Flywheel
+                FlyWheelSpeed(0.3, self.shooter, False),  # rotates the Flywheel
                 commands2.WaitCommand(2),
                 ShooterROT(
                     SuperStrucConstants.LoadPos, self.shooter
