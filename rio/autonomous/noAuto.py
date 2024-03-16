@@ -9,7 +9,7 @@ class NoAuto(commands2.SequentialCommandGroup):
         This doesn't do anything besides
         reset yaw
         """
-        super().__init__(ResetYaw(_drive))
+        super().__init__(ResetYaw(_drive, 180))
 
 
 NAME = "No Auto"

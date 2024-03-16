@@ -148,8 +148,8 @@ class AutoConstants:
 
 class SuperStrucConstants:
     # angles for shooter
-    ShootPos = 321
-    LoadPos = 160
+    ShootPos = 0
+    LoadPos = 115
 
     # CANSpark IDS
     rotateID = 11

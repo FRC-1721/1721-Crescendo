@@ -229,7 +229,7 @@ class RobotContainer:
         self.opController.button(6).whileTrue(SetIntakeSpeed(0.6, self.intake))
         self.opController.button(9).whileTrue(SetIntakeSpeed(-0.6, self.intake))
 
-        self.opController.button(6).whileFalse(SetIntakeSpeed(0, self.intake))
+        self.opController.button(9).whileFalse(SetIntakeSpeed(0, self.intake))
 
         # shooter keybinds
         # shooter movement
