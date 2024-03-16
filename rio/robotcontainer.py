@@ -4,6 +4,7 @@ import wpilib
 import logging
 import os
 import importlib
+import commands2
 
 # wpimath
 import wpimath
@@ -100,24 +101,21 @@ class RobotContainer:
             # Turning is controlled by the X axis of the right stick.
             commands2.cmd.run(
                 lambda: self.robotDrive.drive(
-                    2
-                    ** -wpimath.applyDeadband(
+                    -wpimath.applyDeadband(
                         self.driverController.getRawAxis(1),
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
-                    - 1,
-                    2
-                    ** -wpimath.applyDeadband(
+                    * 0.5,
+                    -wpimath.applyDeadband(
                         self.driverController.getRawAxis(0),
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
-                    - 1,
-                    2
-                    ** -wpimath.applyDeadband(
+                    * 0.5,
+                    -wpimath.applyDeadband(
                         self.driverController.getRawAxis(4),
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
-                    - 1,
+                    * 0.5,
                     True,
                     True,
                 ),
@@ -177,8 +175,8 @@ class RobotContainer:
         # Deliver to amp (button a), part a
         self.driverController.a().onTrue(
             commands2.SequentialCommandGroup(
-                RotateIntake(
-                    IntakeConstants.BlowPos, self.intake
+                RotateIntake(IntakeConstants.BlowPos, self.intake).withTimeout(
+                    1
                 ),  # Rotate to fully closed
                 # SetIntakeSpeed(-0.6, self.intake),  # Eject slowly
                 LoadMagazine(self.shooter, self.intake),  # Load the magazine
@@ -215,6 +213,9 @@ class RobotContainer:
         )
 
         self.driverController.leftBumper().whileTrue(crashDrive(self.robotDrive))
+        self.driverController.start().whileTrue(
+            commands2.InstantCommand(self.intake.zeroIntake())
+        )
 
         # ==============================
         #        Operator Commands

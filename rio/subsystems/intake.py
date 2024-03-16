@@ -40,22 +40,18 @@ class IntakeSubsystem(commands2.Subsystem):
         self.intakeMotor.setInverted(True)
 
         # encoders
-        self.liftEncoder = self.liftMotor.getAbsoluteEncoder(
-            SparkAbsoluteEncoder.Type.kDutyCycle
-        )
+        self.liftEncoder = self.liftMotor.getEncoder()
 
-        self.liftEncoder.setPositionConversionFactor(IntakeConstants.kLiftConversion)
+        self.liftEncoder.setPositionConversionFactor(1.0)
 
         self.intakeEncoder = self.intakeMotor.getEncoder()
 
         # setting inverted
         self.liftMotor.setInverted(IntakeConstants.kLiftInversion)
-        # self.intakeMotor.setInverted(IntakeConstants.kIntakeInversion)
+        self.intakeMotor.setInverted(IntakeConstants.kIntakeInversion)
 
         # pids
         self.liftPID = self.liftMotor.getPIDController()
-        self.liftPID.setFeedbackDevice(self.liftEncoder)
-        self.liftPID.setPositionPIDWrappingEnabled(False)
         self.liftPID.setP(IntakeConstants.kLiftP)
         self.liftPID.setI(IntakeConstants.kLiftI)
         self.liftPID.setD(IntakeConstants.kLiftD)
@@ -75,12 +71,15 @@ class IntakeSubsystem(commands2.Subsystem):
             CANSparkBase.SoftLimitDirection.kReverse, False
         )
 
+        self.liftMotor.setSmartCurrentLimit(2)
+
         self.intakeMotor.burnFlash()
 
     def periodic(self) -> None:
         self.sd.putNumber("Thermals/Intake", self.intakeMotor.getMotorTemperature())
         self.sd.putNumber("Intake/IntakeAngle", self.intakeEncoder.getPosition())
         self.sd.putNumber("Thermals/Lift", self.liftMotor.getMotorTemperature())
+        print(self.liftEncoder.getPosition())
 
     def intake(self, speed):
         self.intakeMotor.set(speed)
@@ -97,3 +96,6 @@ class IntakeSubsystem(commands2.Subsystem):
 
     def lift(self, angle: float):
         self.liftPID.setReference(angle, CANSparkMax.ControlType.kPosition)
+
+    def zeroIntake(self):
+        self.liftEncoder.setPosition(0)
