@@ -63,3 +63,7 @@ class GrabNote(commands2.SequentialCommandGroup):
             # ================= #
             PoseReset(_drive),
         )
+
+
+NAME = "Grab Note"
+load = lambda bot: GrabNote(bot.limelight, bot.shooter, bot.intake, bot.robotDrive)

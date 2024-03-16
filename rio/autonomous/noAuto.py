@@ -5,5 +5,12 @@ from commands.ResetYaw import ResetYaw
 
 class NoAuto(commands2.SequentialCommandGroup):
     def __init__(self, _drive: DriveSubsystem):
-        self.drivetrain = _drive
+        """
+        This doesn't do anything besides
+        reset yaw
+        """
         super().__init__(ResetYaw(_drive))
+
+
+NAME = "No Auto"
+load = lambda bot: NoAuto(bot.robotDrive)
