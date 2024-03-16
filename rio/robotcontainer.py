@@ -54,8 +54,11 @@ from commands.ResetYaw import ResetYaw
 from commands.spool import Spool
 from commands.lock import Lock
 from commands.crashDrive import crashDrive
+
+# auto
 from autonomous.noAuto import NoAuto
 from autonomous.grabNote import GrabNote
+from autonomous.shoot import Shoot
 
 # NetworkTables
 from ntcore import NetworkTableInstance
@@ -212,14 +215,16 @@ class RobotContainer:
             )
         )
 
-        self.driverController.leftBumper().whileTrue(crashDrive(self.robotDrive))
+        self.driverController.leftBumper().whileTrue(
+            sendToObject(self.robotDrive, self.limelight)
+        )
         self.driverController.rightBumper().whileTrue(
             commands2.InstantCommand(self.intake.zeroIntake())
         )
 
         # ==============================
         #        Operator Commands
-        # ==============================
+        # ===============180===============
         # intake keybinds
         # intake movement
         self.opController.button(2).whileTrue(IntakeRotationMAN(1, self.intake))  # out
@@ -291,6 +296,11 @@ class RobotContainer:
         self.autoChooser.addOption(
             "vision Auto",
             GrabNote(self.limelight, self.shooter, self.intake, self.robotDrive),
+        )
+
+        self.autoChooser.addOption(
+            "shoot Auto",
+            Shoot(self.robotDrive, self.intake, self.shooter),
         )
 
         wpilib.SmartDashboard.putData("Autonomous", self.autoChooser)
