@@ -1,3 +1,5 @@
+import logging
+
 from rev import CANSparkMax, SparkMaxAbsoluteEncoder, CANSparkLowLevel
 from wpimath.geometry import Rotation2d
 from wpimath.kinematics import SwerveModuleState, SwerveModulePosition
@@ -172,10 +174,12 @@ class MikeSwerveModule:
         else:
             # If you want the velocity to be dependant on eror
             error = correctedDesiredState.angle - self.getState().angle
-            errorMultiplier = clamp(
-                error.degrees() / 180, 1, 0
+            errorMultiplier = abs(
+                clamp(error.degrees() / 90, 1, -1)
             )  # TODO: Snap to 1.0 instead of 0.9999...
-            print(errorMultiplier)
+            logging.info(
+                f"Error comp is {errorMultiplier}, gross angle was {error.degrees()}"
+            )
             self.drivingPIDController.setReference(
                 optimizedDesiredState.speed * errorMultiplier,
                 CANSparkMax.ControlType.kVelocity,
