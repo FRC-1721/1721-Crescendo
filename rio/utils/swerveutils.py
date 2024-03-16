@@ -85,3 +85,11 @@ def wrapAngle(angle: float) -> float:
         return angle + twoPi * (math.floor((-angle) / twoPi) + 1)
     else:
         return angle
+
+
+def clamp(value, upper, lower):
+    if value < lower:
+        return lower
+    elif value > upper:
+        return upper
+    return value
