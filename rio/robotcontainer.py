@@ -213,7 +213,7 @@ class RobotContainer:
         )
 
         self.driverController.leftBumper().whileTrue(crashDrive(self.robotDrive))
-        self.driverController.start().whileTrue(
+        self.driverController.rightBumper().whileTrue(
             commands2.InstantCommand(self.intake.zeroIntake())
         )
 

@@ -148,8 +148,8 @@ class AutoConstants:
 
 class SuperStrucConstants:
     # angles for shooter
-    ShootPos = 0
-    LoadPos = 115
+    ShootPos = 321
+    LoadPos = 204
 
     # CANSpark IDS
     rotateID = 11
@@ -179,11 +179,11 @@ class IntakeConstants:
 
     # inversion
     kLiftInversion = False
-    kIntakeInversion = False
+    kIntakeInversion = True
 
     # conversion factor
     kLiftConversion = 360  # Configured feb 12 by joe
-    SuckPos = 197  # 347
+    SuckPos = 118
     BlowPos = 1
     # lift pid
     kLiftP = 0.075
