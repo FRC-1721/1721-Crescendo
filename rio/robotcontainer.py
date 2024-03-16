@@ -119,7 +119,7 @@ class RobotContainer:
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
                     * 0.5,
-                    True,
+                    lambda: self.fieldCentricChooser.getSelected() == "Field Centric",
                     True,
                 ),
                 self.robotDrive,
