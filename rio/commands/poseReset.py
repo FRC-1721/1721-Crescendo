@@ -14,9 +14,10 @@ class PoseReset(commands2.Command):
 
         # local subsystem instance
         self.drivetrain = _drivetrain
+        self.addRequirements((self.drivetrain))
 
     def initialize(self):
-        # what do I put here? :3
+        # what do I put here? :3c
         pass
 
     def execute(self):

@@ -11,6 +11,7 @@ class FlyWithWires(commands2.CommandBase):
         super().__init__()
 
         self.driveSubsystem = driveSubsystem
+        self.addRequirements((self.driveSubsystem))
 
         # time and derection vars
         self.time = time

@@ -39,10 +39,10 @@ class DriveConstants:
 
     # Distance between front and back wheels on robot
     kModulePositions = [
-        Translation2d(kWheelBase / 2, kTrackWidth / 2),
-        Translation2d(kWheelBase / 2, -kTrackWidth / 2),
         Translation2d(-kWheelBase / 2, kTrackWidth / 2),
         Translation2d(-kWheelBase / 2, -kTrackWidth / 2),
+        Translation2d(kWheelBase / 2, kTrackWidth / 2),
+        Translation2d(kWheelBase / 2, -kTrackWidth / 2),
     ]
     kDriveKinematics = SwerveDrive4Kinematics(*kModulePositions)
 
@@ -63,7 +63,7 @@ class DriveConstants:
     kFrontRightTurningCanId = 2
     kRearRightTurningCanId = 4
 
-    kGyroReversed = False
+    kGyroReversed = True
 
 
 class ModuleConstants:

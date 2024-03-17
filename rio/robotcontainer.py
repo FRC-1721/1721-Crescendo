@@ -53,7 +53,6 @@ from commands.climb import Climb
 from commands.ResetYaw import ResetYaw
 from commands.spool import Spool
 from commands.lock import Lock
-from commands.crashDrive import crashDrive
 
 # auto
 from autonomous.noAuto import NoAuto
@@ -109,7 +108,7 @@ class RobotContainer:
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
                     * 0.5,
-                    -wpimath.applyDeadband(
+                    wpimath.applyDeadband(
                         self.driverController.getRawAxis(0),
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
