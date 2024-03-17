@@ -210,7 +210,7 @@ class DriveSubsystem(Subsystem):
         xSpeedCommanded = xSpeed
         ySpeedCommanded = ySpeed
         self.sd.putNumber("pos/rot", rot)
-        if rateLimit:
+        if False:  # if rateLimit
             # Convert XY to polar for rate limiting
             inputTranslationDir = math.atan2(ySpeed, xSpeed)
             inputTranslationMag = math.hypot(xSpeed, ySpeed)
