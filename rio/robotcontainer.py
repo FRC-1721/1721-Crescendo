@@ -279,8 +279,10 @@ class RobotContainer:
 
         # Use sendable choosers for some settings
         self.fieldCentricChooser = wpilib.SendableChooser()
+        # TODO Make this a boolean
         self.fieldCentricChooser.setDefaultOption("Field Centric", True)
         self.fieldCentricChooser.addOption("Robot Centric", False)
+        self.sd.putNumber("Auto/Angle", 0)
         wpilib.SmartDashboard.putData("FieldCentric", self.fieldCentricChooser)
 
     def configureAutonomous(self) -> None:
@@ -302,7 +304,7 @@ class RobotContainer:
             Shoot(self.robotDrive, self.intake, self.shooter),
         )
 
-        wpilib.SmartDashboard.putData("Autonomous", self.autoChooser)
+        wpilib.SmartDashboard.putData("Auto/Mode", self.autoChooser)
 
     def getAutonomousCommand(self) -> commands2.Command:
         """Use this to pass the autonomous command to the main {@link Robot} class.
