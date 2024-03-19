@@ -40,7 +40,7 @@ class PoseReset(commands2.Command):
         elif Pose.rotation().degrees() < 0:
             rotZ = -0.1
 
-        self.drivetrain.drive(driveX, driveY, rotZ)
+        self.drivetrain.drive(driveX, driveY, rotZ, True, True)
 
     def isFinished(self):
         return self.drivetrain.isPoseZero()

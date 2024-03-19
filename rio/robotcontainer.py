@@ -53,6 +53,8 @@ from commands.ResetYaw import ResetYaw
 from commands.spool import Spool
 from commands.lock import Lock
 from commands.crashDrive import crashDrive
+from commands.poseReset import PoseReset
+
 from autonomous.noAuto import NoAuto
 from autonomous.grabNote import GrabNote
 
@@ -204,6 +206,8 @@ class RobotContainer:
                 self.shooter,
             )
         )
+
+        self.driverController.back().onTrue(PoseReset(self.robotDrive))
 
         self.driverController.leftBumper().whileTrue(crashDrive(self.robotDrive))
 

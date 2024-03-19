@@ -165,9 +165,10 @@ class DriveSubsystem(Subsystem):
 
     def isPoseZero(self):
         Pose = self.odometry.getPose()
-        for item in Pose:
-            if item != 0:
-                return False
+        if Pose.X() != 0:
+            return False
+        if Pose.Y() != 0:
+            return False
         return True
 
     def resetOdometry(self, pose: Pose2d) -> None:
