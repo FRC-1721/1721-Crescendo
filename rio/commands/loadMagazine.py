@@ -1,5 +1,6 @@
 import logging
 import commands2
+import rev
 
 from subsystems.shooter import Shooter
 from subsystems.intake import IntakeSubsystem
@@ -22,7 +23,7 @@ class LoadMagazine(commands2.Command):
 
     def initialize(self):
         logging.info("Spinning up...")
-        self.shooter.setIdleBrake()
+        self.shooter.setIdleMode(rev._rev.CANSparkBase.IdleMode.kBrake)
 
     def execute(self):
         self.intake.intake(-0.6)  # Slowly eject
@@ -41,7 +42,7 @@ class LoadMagazine(commands2.Command):
     def end(self, interrupted: bool):
         self.intake.intake(0)
         # self.shooter.setFlyWheelSpeed(0)
-        self.shooter.setIdleCoast()
+        self.shooter.setIdleMode(rev._rev.CANSparkBase.IdleMode.kCoast)
 
         if not interrupted:
             logging.info(f"Done, magazine loaded")

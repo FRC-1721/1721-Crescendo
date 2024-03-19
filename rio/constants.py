@@ -39,10 +39,10 @@ class DriveConstants:
 
     # Distance between front and back wheels on robot
     kModulePositions = [
-        Translation2d(kWheelBase / 2, kTrackWidth / 2),
-        Translation2d(kWheelBase / 2, -kTrackWidth / 2),
         Translation2d(-kWheelBase / 2, kTrackWidth / 2),
         Translation2d(-kWheelBase / 2, -kTrackWidth / 2),
+        Translation2d(kWheelBase / 2, kTrackWidth / 2),
+        Translation2d(kWheelBase / 2, -kTrackWidth / 2),
     ]
     kDriveKinematics = SwerveDrive4Kinematics(*kModulePositions)
 
@@ -63,7 +63,7 @@ class DriveConstants:
     kFrontRightTurningCanId = 2
     kRearRightTurningCanId = 4
 
-    kGyroReversed = False
+    kGyroReversed = True
 
 
 class ModuleConstants:
@@ -179,11 +179,11 @@ class IntakeConstants:
 
     # inversion
     kLiftInversion = False
-    kIntakeInversion = False
+    kIntakeInversion = True
 
     # conversion factor
     kLiftConversion = 360  # Configured feb 12 by joe
-    SuckPos = 197  # 347
+    SuckPos = 120
     BlowPos = 1
     # lift pid
     kLiftP = 0.075

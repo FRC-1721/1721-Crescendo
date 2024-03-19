@@ -4,6 +4,7 @@ import wpilib
 import logging
 import os
 import importlib
+import commands2
 
 # wpimath
 import wpimath
@@ -52,9 +53,11 @@ from commands.climb import Climb
 from commands.ResetYaw import ResetYaw
 from commands.spool import Spool
 from commands.lock import Lock
-from commands.crashDrive import crashDrive
+
+# auto
 from autonomous.noAuto import NoAuto
 from autonomous.grabNote import GrabNote
+from autonomous.shoot import Shoot
 
 # NetworkTables
 from ntcore import NetworkTableInstance
@@ -100,25 +103,22 @@ class RobotContainer:
             # Turning is controlled by the X axis of the right stick.
             commands2.cmd.run(
                 lambda: self.robotDrive.drive(
-                    2
-                    ** -wpimath.applyDeadband(
+                    -wpimath.applyDeadband(
                         self.driverController.getRawAxis(1),
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
-                    - 1,
-                    2
-                    ** -wpimath.applyDeadband(
+                    * 0.5,
+                    wpimath.applyDeadband(
                         self.driverController.getRawAxis(0),
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
-                    - 1,
-                    2
-                    ** -wpimath.applyDeadband(
+                    * 0.5,
+                    -wpimath.applyDeadband(
                         self.driverController.getRawAxis(4),
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
-                    - 1,
-                    True,
+                    * 0.5,
+                    lambda: self.fieldCentricChooser.getSelected() == "Field Centric",
                     True,
                 ),
                 self.robotDrive,
@@ -177,8 +177,8 @@ class RobotContainer:
         # Deliver to amp (button a), part a
         self.driverController.a().onTrue(
             commands2.SequentialCommandGroup(
-                RotateIntake(
-                    IntakeConstants.BlowPos, self.intake
+                RotateIntake(IntakeConstants.BlowPos, self.intake).withTimeout(
+                    1
                 ),  # Rotate to fully closed
                 # SetIntakeSpeed(-0.6, self.intake),  # Eject slowly
                 LoadMagazine(self.shooter, self.intake),  # Load the magazine
@@ -193,7 +193,7 @@ class RobotContainer:
         # Deliver to amp (button b), part b
         self.driverController.b().onTrue(
             commands2.SequentialCommandGroup(
-                FlyWheelSpeed(0.25, self.shooter, False),  # rotates the Flywheel
+                FlyWheelSpeed(0.3, self.shooter, False),  # rotates the Flywheel
                 commands2.WaitCommand(2),
                 ShooterROT(
                     SuperStrucConstants.LoadPos, self.shooter
@@ -214,11 +214,16 @@ class RobotContainer:
             )
         )
 
-        self.driverController.leftBumper().whileTrue(crashDrive(self.robotDrive))
+        self.driverController.leftBumper().whileTrue(
+            sendToObject(self.robotDrive, self.limelight)
+        )
+        self.driverController.rightBumper().whileTrue(
+            commands2.InstantCommand(self.intake.zeroIntake())
+        )
 
         # ==============================
         #        Operator Commands
-        # ==============================
+        # ===============180===============
         # intake keybinds
         # intake movement
         self.opController.button(2).whileTrue(IntakeRotationMAN(1, self.intake))  # out
@@ -228,7 +233,7 @@ class RobotContainer:
         self.opController.button(6).whileTrue(SetIntakeSpeed(0.6, self.intake))
         self.opController.button(9).whileTrue(SetIntakeSpeed(-0.6, self.intake))
 
-        self.opController.button(6).whileFalse(SetIntakeSpeed(0, self.intake))
+        self.opController.button(9).whileFalse(SetIntakeSpeed(0, self.intake))
 
         # shooter keybinds
         # shooter movement
@@ -274,8 +279,10 @@ class RobotContainer:
 
         # Use sendable choosers for some settings
         self.fieldCentricChooser = wpilib.SendableChooser()
+        # TODO Make this a boolean
         self.fieldCentricChooser.setDefaultOption("Field Centric", True)
         self.fieldCentricChooser.addOption("Robot Centric", False)
+        self.sd.putNumber("Auto/Angle", 0)
         wpilib.SmartDashboard.putData("FieldCentric", self.fieldCentricChooser)
 
     def configureAutonomous(self) -> None:
@@ -292,7 +299,12 @@ class RobotContainer:
             GrabNote(self.limelight, self.shooter, self.intake, self.robotDrive),
         )
 
-        wpilib.SmartDashboard.putData("Autonomous", self.autoChooser)
+        self.autoChooser.addOption(
+            "shoot Auto",
+            Shoot(self.robotDrive, self.intake, self.shooter),
+        )
+
+        wpilib.SmartDashboard.putData("Auto/Mode", self.autoChooser)
 
     def getAutonomousCommand(self) -> commands2.Command:
         """Use this to pass the autonomous command to the main {@link Robot} class.
