@@ -150,6 +150,7 @@ class SuperStrucConstants:
     # angles for shooter
     ShootPos = 321
     LoadPos = 204
+    ClimbPos = 277
 
     # CANSpark IDS
     rotateID = 11

@@ -217,8 +217,11 @@ class RobotContainer:
         self.driverController.leftBumper().whileTrue(
             sendToObject(self.robotDrive, self.limelight)
         )
-        self.driverController.rightBumper().whileTrue(
+        self.driverController.back().whileTrue(
             commands2.InstantCommand(self.intake.zeroIntake())
+        )
+        self.driverController.pov(0).onTrue(
+            ShooterROT(SuperStrucConstants.ClimbPos, self.shooter)
         )
 
         # ==============================
