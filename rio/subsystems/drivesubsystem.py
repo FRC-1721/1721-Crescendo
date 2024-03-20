@@ -283,7 +283,7 @@ class DriveSubsystem(Subsystem):
                 xSpeedDelivered,
                 ySpeedDelivered,
                 rotDelivered,
-                Rotation2d.fromDegrees(self.gyro.getYaw()),
+                Rotation2d.fromDegrees(-self.gyro.getYaw()),
             )
             if fieldRelative
             else ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered)
