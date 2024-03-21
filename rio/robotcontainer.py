@@ -233,8 +233,8 @@ class RobotContainer:
         self.opController.button(1).whileTrue(IntakeRotationMAN(-1, self.intake))  # in
 
         # intake spin
-        self.opController.button(6).whileTrue(SetIntakeSpeed(0.6, self.intake))
-        self.opController.button(9).whileTrue(SetIntakeSpeed(-0.6, self.intake))
+        self.opController.button(6).whileTrue(SetIntakeSpeed(1.0, self.intake))
+        self.opController.button(9).whileTrue(SetIntakeSpeed(-1.0, self.intake))
 
         self.opController.button(9).whileFalse(SetIntakeSpeed(0, self.intake))
 

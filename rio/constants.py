@@ -162,7 +162,7 @@ class SuperStrucConstants:
     krotateInversion = True
 
     # PID values
-    krotateP = 0.01
+    krotateP = 0.005
     krotateI = 0.0
     krotateD = 0.0
     krotateFF = 0
