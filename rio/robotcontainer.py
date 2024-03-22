@@ -194,10 +194,16 @@ class RobotContainer:
         self.driverController.start().onTrue(ResetYaw(self.robotDrive))
 
         # Climbing
-        self.driverController.rightBumper().whileTrue(
+        self.driverController.pov(0).whileTrue(
             Climb(
-                lambda: self.opController.getRightTriggerAxis()
-                - self.opController.getLeftTriggerAxis(),
+                1,
+                self.climber,
+                self.shooter,
+            )
+        )
+        self.driverController.pov(180).whileTrue(
+            Climb(
+                1,
                 self.climber,
                 self.shooter,
             )
