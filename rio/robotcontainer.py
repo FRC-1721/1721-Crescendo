@@ -211,7 +211,7 @@ class RobotContainer:
         )
 
         self.driverController.rightTrigger().whileTrue(
-            commands2.parallelcommandgroup(
+            commands2.ParallelCommandGroup(
                 RotateIntake(
                     IntakeConstants.BlowPos, self.intake
                 ),  # Put intake fully inside (if it wasn't already)
@@ -219,7 +219,7 @@ class RobotContainer:
             )
         )
         self.driverController.rightTrigger().onFalse(
-            commands2.sequentialcommandgroup(
+            commands2.SequentialCommandGroup(
                 FlyWheelSpeed(1, self.shooter, False),
                 SetIntakeSpeed(-1, self.intake),
                 commands2.WaitCommand(3),
