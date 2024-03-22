@@ -107,17 +107,17 @@ class RobotContainer:
                         self.driverController.getRawAxis(1),
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
-                    * 1,
+                    * OIConstants.kDampeningAmount if self.driverController.leftTrigger() else 0,
                     wpimath.applyDeadband(
                         self.driverController.getRawAxis(0),
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
-                    * 1,
+                    * OIConstants.kDampeningAmount if self.driverController.leftTrigger() else 0,
                     -wpimath.applyDeadband(
                         self.driverController.getRawAxis(4),
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
-                    * 1,
+                    * OIConstants.kDampeningAmount if self.driverController.leftTrigger() else 0,
                     lambda: self.fieldCentricChooser.getSelected() == "Field Centric",
                     True,
                 ),
