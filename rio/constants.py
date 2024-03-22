@@ -183,9 +183,9 @@ class IntakeConstants:
     kIntakeInversion = True
 
     # conversion factor
-    kLiftConversion = 360  # Configured feb 12 by joe
-    SuckPos = 120
-    BlowPos = 1
+    kLiftConversion = 1  # Configured feb 12 by joe
+    SuckPos = 31
+    BlowPos = 0
     # lift pid
     kLiftP = 0.075
     kLiftI = 0.00000000000001

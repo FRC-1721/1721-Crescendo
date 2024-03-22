@@ -107,17 +107,17 @@ class RobotContainer:
                         self.driverController.getRawAxis(1),
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
-                    * 0.5,
+                    * 1,
                     wpimath.applyDeadband(
                         self.driverController.getRawAxis(0),
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
-                    * 0.5,
+                    * 1,
                     -wpimath.applyDeadband(
                         self.driverController.getRawAxis(4),
                         OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                     )
-                    * 0.5,
+                    * 1,
                     lambda: self.fieldCentricChooser.getSelected() == "Field Centric",
                     True,
                 ),
@@ -158,20 +158,9 @@ class RobotContainer:
             )
         )
 
-        # Shoot to speaker (button y)
+        # set Shooter to climb position
         self.driverController.y().onTrue(
-            commands2.SequentialCommandGroup(
-                RotateIntake(
-                    IntakeConstants.BlowPos, self.intake
-                ),  # Put intake fully inside (if it wasn't already)
-                FlyWheelSpeed(1.0, self.shooter, False),  # Power up the flywheels (?)
-                SetIntakeSpeed(
-                    -0.6, self.intake
-                ),  # Load magazine? (but without ending)
-                commands2.WaitCommand(3),
-                FlyWheelSpeed(0.0, self.shooter),  # Stop flywheel
-                SetIntakeSpeed(0, self.intake),  # Stop intake
-            )
+            ShooterROT(SuperStrucConstants.ClimbPos, self.shooter)
         )
 
         # Deliver to amp (button a), part a
@@ -193,8 +182,8 @@ class RobotContainer:
         # Deliver to amp (button b), part b
         self.driverController.b().onTrue(
             commands2.SequentialCommandGroup(
-                FlyWheelSpeed(0.3, self.shooter, False),  # rotates the Flywheel
-                commands2.WaitCommand(2),
+                FlyWheelSpeed(0.5, self.shooter, False),  # rotates the Flywheel
+                commands2.WaitCommand(0.375),
                 ShooterROT(
                     SuperStrucConstants.LoadPos, self.shooter
                 ),  # Rotate the shooter
@@ -220,8 +209,23 @@ class RobotContainer:
         self.driverController.back().whileTrue(
             commands2.InstantCommand(self.intake.zeroIntake())
         )
-        self.driverController.pov(0).onTrue(
-            ShooterROT(SuperStrucConstants.ClimbPos, self.shooter)
+
+        self.driverController.rightTrigger().whileTrue(
+            commands2.parallelcommandgroup(
+                RotateIntake(
+                    IntakeConstants.BlowPos, self.intake
+                ),  # Put intake fully inside (if it wasn't already)
+                FlyWheelSpeed(1, self.shooter, False),
+            )
+        )
+        self.driverController.rightTrigger().onFalse(
+            commands2.sequentialcommandgroup(
+                FlyWheelSpeed(1, self.shooter, False),
+                SetIntakeSpeed(-1, self.intake),
+                commands2.WaitCommand(3),
+                FlyWheelSpeed(0.0, self.shooter),  # Stop flywheel
+                SetIntakeSpeed(0, self.intake),  # Stop intake
+            )
         )
 
         # ==============================
