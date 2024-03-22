@@ -124,6 +124,7 @@ class OIConstants:
     # driver controller
     kDriverControllerPort = 0
     kDriveDeadband = 0.075
+    kDampeningAmount = .3
 
     # operator controller
     kOpControllerPort = 1
