@@ -71,7 +71,7 @@ class IntakeSubsystem(commands2.Subsystem):
             CANSparkBase.SoftLimitDirection.kReverse, False
         )
 
-        self.liftMotor.setSmartCurrentLimit(4)
+        self.liftMotor.setSmartCurrentLimit(8)
 
         self.intakeMotor.burnFlash()
 
