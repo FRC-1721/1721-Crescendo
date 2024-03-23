@@ -122,7 +122,7 @@ class RobotContainer:
                         )
                     ),
                     self.driverController.leftTrigger(),
-                    self.fieldCentricChooser.getSelected() == "Field Centric",
+                    lambda: self.fieldCentricChooser.getSelected() == "Field Centric",
                     True,
                 ),
                 self.robotDrive,
