@@ -193,10 +193,7 @@ class DriveSubsystem(Subsystem):
         ySpeed: float,
         rot: float,
         dampened: bool,
-        fieldRelative: typing.Callable[
-            [],
-            bool,
-        ],
+        fieldRelative: bool,
         rateLimit: bool,
     ) -> None:
         """Method to drive the robot using joystick info.
