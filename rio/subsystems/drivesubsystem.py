@@ -17,7 +17,7 @@ from phoenix5.sensors import Pigeon2
 
 from ntcore import NetworkTableInstance
 
-from constants import DriveConstants, GyroConstants
+from constants import DriveConstants, GyroConstants, OIConstants
 
 import utils.swerveutils as swerveutils
 
@@ -192,6 +192,7 @@ class DriveSubsystem(Subsystem):
         xSpeed: float,
         ySpeed: float,
         rot: float,
+        dampened: bool,
         fieldRelative: typing.Callable[
             [],
             bool,
@@ -207,8 +208,8 @@ class DriveSubsystem(Subsystem):
                               field.
         :param rateLimit:     Whether to enable rate limiting for smoother control.
         """
-        xSpeedCommanded = xSpeed
-        ySpeedCommanded = ySpeed
+        xSpeedCommanded = xSpeed * (OIConstants.kDampeningAmount if dampened else 1)
+        ySpeedCommanded = ySpeed * (OIConstants.kDampeningAmount if dampened else 1)
         self.sd.putNumber("pos/rot", rot)
         if False:  # if rateLimit
             # Convert XY to polar for rate limiting
@@ -271,7 +272,9 @@ class DriveSubsystem(Subsystem):
             self.currentRotation = self.rotLimiter.calculate(rot)
 
         else:
-            self.currentRotation = rot
+            self.currentRotation = rot * (
+                OIConstants.kDampeningAmount if dampened else 1
+            )
 
         # Convert the commanded speeds into the correct units for the drivetrain
         xSpeedDelivered = xSpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond

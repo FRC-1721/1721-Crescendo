@@ -103,21 +103,25 @@ class RobotContainer:
             # Turning is controlled by the X axis of the right stick.
             commands2.cmd.run(
                 lambda: self.robotDrive.drive(
-                    -wpimath.applyDeadband(
-                        self.driverController.getRawAxis(1),
-                        OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
-                    )
-                    * OIConstants.kDampeningAmount if self.driverController.leftTrigger() else 0,
-                    wpimath.applyDeadband(
-                        self.driverController.getRawAxis(0),
-                        OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
-                    )
-                    * OIConstants.kDampeningAmount if self.driverController.leftTrigger() else 0,
-                    -wpimath.applyDeadband(
-                        self.driverController.getRawAxis(4),
-                        OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
-                    )
-                    * OIConstants.kDampeningAmount if self.driverController.leftTrigger() else 0,
+                    (
+                        -wpimath.applyDeadband(
+                            self.driverController.getRawAxis(1),
+                            OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
+                        )
+                    ),
+                    (
+                        wpimath.applyDeadband(
+                            self.driverController.getRawAxis(0),
+                            OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
+                        )
+                    ),
+                    (
+                        -wpimath.applyDeadband(
+                            self.driverController.getRawAxis(4),
+                            OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
+                        )
+                    ),
+                    self.driverController.leftTrigger(),
                     lambda: self.fieldCentricChooser.getSelected() == "Field Centric",
                     True,
                 ),
@@ -151,7 +155,7 @@ class RobotContainer:
                 ShooterROT(SuperStrucConstants.LoadPos, self.shooter),
                 FlyWheelSpeed(0, self.shooter),  # Stop shooter (if its running)
                 RotateIntake(IntakeConstants.SuckPos, self.intake),  # Put intake down
-                intakeUntilNote(0.5, self.intake),  # Intake till note
+                intakeUntilNote(1, self.intake),  # Intake till note
                 RotateIntake(
                     IntakeConstants.BlowPos, self.intake
                 ),  # Put intake back up
