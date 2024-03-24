@@ -18,8 +18,11 @@ class DefaultFlywheel(commands2.Command):
         self.addRequirements(self.shooter)
 
     def execute(self):
-        if self.speed() > 0.1:
-            self.shooter.setFlyWheelSpeed(self.speed())
+        offset = 0.1
+        if self.speed() > offset:
+            self.shooter.setFlyWheelSpeed(
+                self.speed() - (offset * 1.1)
+            )  # To increase the deadzone
             logging.debug(f"Flywheel at speed {self.shooter.currentSpeed()}")
 
     def end(self, interrupted: bool):
