@@ -25,6 +25,7 @@ class Climb(commands2.Command):
 
         # local var of speed
         self.speed = _speed
+        self.time = 0
 
         # Command requires
         self.addRequirements((self.climber, self.shooter))

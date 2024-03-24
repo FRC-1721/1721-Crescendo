@@ -53,6 +53,7 @@ from commands.climb import Climb
 from commands.ResetYaw import ResetYaw
 from commands.spool import Spool
 from commands.lock import Lock
+from commands.defaultFlywheel import DefaultFlywheel
 
 # auto
 from autonomous.noAuto import NoAuto
@@ -130,13 +131,17 @@ class RobotContainer:
         )
 
         self.shooter.setDefaultCommand(
-            commands2.cmd.run(
-                lambda: self.shooter.setFlyWheelSpeed(
-                    self.opController.getRawAxis(2) + 0.16
-                ),
-                self.shooter,
-            )
+            DefaultFlywheel(lambda: self.opController.getRawAxis(2), self.shooter)
         )
+
+        # self.shooter.setDefaultCommand(
+        #     commands2.cmd.run(
+        #         lambda: self.shooter.setFlyWheelSpeed(
+        #             self.opController.getRawAxis(2) + 0.16
+        #         ),
+        #         self.shooter,
+        #     )
+        # )
 
     def configureButtonBindings(self) -> None:
         """
@@ -186,6 +191,9 @@ class RobotContainer:
         # Deliver to amp (button b), part b
         self.driverController.b().onTrue(
             commands2.SequentialCommandGroup(
+                ShooterROT(
+                    SuperStrucConstants.ShootPos, self.shooter
+                ),  # Rotate the shooter
                 FlyWheelSpeed(0.5, self.shooter, False),  # rotates the Flywheel
                 commands2.WaitCommand(0.375),
                 ShooterROT(
@@ -207,7 +215,7 @@ class RobotContainer:
         )
         self.driverController.pov(180).whileTrue(
             Climb(
-                1,
+                -1,
                 self.climber,
                 self.shooter,
             )
@@ -243,8 +251,12 @@ class RobotContainer:
         # ===============180===============
         # intake keybinds
         # intake movement
-        self.opController.button(2).whileTrue(IntakeRotationMAN(1, self.intake))  # out
-        self.opController.button(1).whileTrue(IntakeRotationMAN(-1, self.intake))  # in
+        self.opController.button(2).whileTrue(
+            IntakeRotationMAN(0.3, self.intake)
+        )  # out
+        self.opController.button(1).whileTrue(
+            IntakeRotationMAN(-0.3, self.intake)
+        )  # in
 
         # intake spin
         self.opController.button(6).whileTrue(SetIntakeSpeed(1.0, self.intake))

@@ -124,7 +124,7 @@ class OIConstants:
     # driver controller
     kDriverControllerPort = 0
     kDriveDeadband = 0.075
-    kDampeningAmount = .3
+    kDampeningAmount = 0.15
 
     # operator controller
     kOpControllerPort = 1
@@ -163,7 +163,7 @@ class SuperStrucConstants:
     krotateInversion = True
 
     # PID values
-    krotateP = 0.005
+    krotateP = 0.01
     krotateI = 0.0
     krotateD = 0.0
     krotateFF = 0
