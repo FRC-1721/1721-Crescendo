@@ -53,6 +53,7 @@ from commands.climb import Climb
 from commands.ResetYaw import ResetYaw
 from commands.spool import Spool
 from commands.lock import Lock
+from commands.defaultFlywheel import DefaultFlywheel
 
 # auto
 from autonomous.noAuto import NoAuto
@@ -103,21 +104,25 @@ class RobotContainer:
             # Turning is controlled by the X axis of the right stick.
             commands2.cmd.run(
                 lambda: self.robotDrive.drive(
-                    -wpimath.applyDeadband(
-                        self.driverController.getRawAxis(1),
-                        OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
-                    )
-                    * 0.5,
-                    wpimath.applyDeadband(
-                        self.driverController.getRawAxis(0),
-                        OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
-                    )
-                    * 0.5,
-                    -wpimath.applyDeadband(
-                        self.driverController.getRawAxis(4),
-                        OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
-                    )
-                    * 0.5,
+                    (
+                        -wpimath.applyDeadband(
+                            self.driverController.getRawAxis(1),
+                            OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
+                        )
+                    ),
+                    (
+                        wpimath.applyDeadband(
+                            self.driverController.getRawAxis(0),
+                            OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
+                        )
+                    ),
+                    (
+                        -wpimath.applyDeadband(
+                            self.driverController.getRawAxis(4),
+                            OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
+                        )
+                    ),
+                    self.driverController.leftTrigger(),
                     lambda: self.fieldCentricChooser.getSelected() == "Field Centric",
                     True,
                 ),
@@ -126,13 +131,17 @@ class RobotContainer:
         )
 
         self.shooter.setDefaultCommand(
-            commands2.cmd.run(
-                lambda: self.shooter.setFlyWheelSpeed(
-                    self.opController.getRawAxis(2) + 0.16
-                ),
-                self.shooter,
-            )
+            DefaultFlywheel(lambda: self.opController.getRawAxis(2), self.shooter)
         )
+
+        # self.shooter.setDefaultCommand(
+        #     commands2.cmd.run(
+        #         lambda: self.shooter.setFlyWheelSpeed(
+        #             self.opController.getRawAxis(2) + 0.16
+        #         ),
+        #         self.shooter,
+        #     )
+        # )
 
     def configureButtonBindings(self) -> None:
         """
@@ -151,27 +160,16 @@ class RobotContainer:
                 ShooterROT(SuperStrucConstants.LoadPos, self.shooter),
                 FlyWheelSpeed(0, self.shooter),  # Stop shooter (if its running)
                 RotateIntake(IntakeConstants.SuckPos, self.intake),  # Put intake down
-                intakeUntilNote(0.5, self.intake),  # Intake till note
+                intakeUntilNote(1, self.intake),  # Intake till note
                 RotateIntake(
                     IntakeConstants.BlowPos, self.intake
                 ),  # Put intake back up
             )
         )
 
-        # Shoot to speaker (button y)
+        # set Shooter to climb position
         self.driverController.y().onTrue(
-            commands2.SequentialCommandGroup(
-                RotateIntake(
-                    IntakeConstants.BlowPos, self.intake
-                ),  # Put intake fully inside (if it wasn't already)
-                FlyWheelSpeed(1.0, self.shooter, False),  # Power up the flywheels (?)
-                SetIntakeSpeed(
-                    -0.6, self.intake
-                ),  # Load magazine? (but without ending)
-                commands2.WaitCommand(3),
-                FlyWheelSpeed(0.0, self.shooter),  # Stop flywheel
-                SetIntakeSpeed(0, self.intake),  # Stop intake
-            )
+            ShooterROT(SuperStrucConstants.ClimbPos, self.shooter)
         )
 
         # Deliver to amp (button a), part a
@@ -193,8 +191,11 @@ class RobotContainer:
         # Deliver to amp (button b), part b
         self.driverController.b().onTrue(
             commands2.SequentialCommandGroup(
-                FlyWheelSpeed(0.3, self.shooter, False),  # rotates the Flywheel
-                commands2.WaitCommand(2),
+                ShooterROT(
+                    SuperStrucConstants.ShootPos, self.shooter
+                ),  # Rotate the shooter
+                FlyWheelSpeed(0.5, self.shooter, False),  # rotates the Flywheel
+                commands2.WaitCommand(0.375),
                 ShooterROT(
                     SuperStrucConstants.LoadPos, self.shooter
                 ),  # Rotate the shooter
@@ -205,10 +206,16 @@ class RobotContainer:
         self.driverController.start().onTrue(ResetYaw(self.robotDrive))
 
         # Climbing
-        self.driverController.rightBumper().whileTrue(
+        self.driverController.pov(0).whileTrue(
             Climb(
-                lambda: self.opController.getRightTriggerAxis()
-                - self.opController.getLeftTriggerAxis(),
+                1,
+                self.climber,
+                self.shooter,
+            )
+        )
+        self.driverController.pov(180).whileTrue(
+            Climb(
+                -1,
                 self.climber,
                 self.shooter,
             )
@@ -217,8 +224,26 @@ class RobotContainer:
         self.driverController.leftBumper().whileTrue(
             sendToObject(self.robotDrive, self.limelight)
         )
-        self.driverController.rightBumper().whileTrue(
+        self.driverController.back().whileTrue(
             commands2.InstantCommand(self.intake.zeroIntake())
+        )
+
+        self.driverController.rightTrigger().whileTrue(
+            commands2.ParallelCommandGroup(
+                RotateIntake(
+                    IntakeConstants.BlowPos, self.intake
+                ),  # Put intake fully inside (if it wasn't already)
+                FlyWheelSpeed(1, self.shooter, False),
+            )
+        )
+        self.driverController.rightTrigger().onFalse(
+            commands2.SequentialCommandGroup(
+                FlyWheelSpeed(1, self.shooter, False),
+                SetIntakeSpeed(-1, self.intake),
+                commands2.WaitCommand(3),
+                FlyWheelSpeed(0.0, self.shooter),  # Stop flywheel
+                SetIntakeSpeed(0, self.intake),  # Stop intake
+            )
         )
 
         # ==============================
@@ -226,12 +251,16 @@ class RobotContainer:
         # ===============180===============
         # intake keybinds
         # intake movement
-        self.opController.button(2).whileTrue(IntakeRotationMAN(1, self.intake))  # out
-        self.opController.button(1).whileTrue(IntakeRotationMAN(-1, self.intake))  # in
+        self.opController.button(2).whileTrue(
+            IntakeRotationMAN(0.3, self.intake)
+        )  # out
+        self.opController.button(1).whileTrue(
+            IntakeRotationMAN(-0.3, self.intake)
+        )  # in
 
         # intake spin
-        self.opController.button(6).whileTrue(SetIntakeSpeed(0.6, self.intake))
-        self.opController.button(9).whileTrue(SetIntakeSpeed(-0.6, self.intake))
+        self.opController.button(6).whileTrue(SetIntakeSpeed(1.0, self.intake))
+        self.opController.button(9).whileTrue(SetIntakeSpeed(-1.0, self.intake))
 
         self.opController.button(9).whileFalse(SetIntakeSpeed(0, self.intake))
 
@@ -241,8 +270,8 @@ class RobotContainer:
         self.opController.button(4).whileTrue(manualROT(-0.5, self.shooter))
 
         # climber
-        self.opController.button(5).whileTrue(Spool(0.2, self.climber, self.shooter))
-        self.opController.button(7).whileTrue(Spool(-0.1, self.climber, self.shooter))
+        self.opController.button(5).whileTrue(Spool(0.4, self.climber, self.shooter))
+        self.opController.button(7).whileTrue(Spool(-0.2, self.climber, self.shooter))
 
         # Cancel all
         self.opController.button(8).onTrue(commands2.InstantCommand(self.cancelAll))

@@ -124,6 +124,7 @@ class OIConstants:
     # driver controller
     kDriverControllerPort = 0
     kDriveDeadband = 0.075
+    kDampeningAmount = 0.15
 
     # operator controller
     kOpControllerPort = 1
@@ -150,6 +151,7 @@ class SuperStrucConstants:
     # angles for shooter
     ShootPos = 321
     LoadPos = 204
+    ClimbPos = 277
 
     # CANSpark IDS
     rotateID = 11
@@ -161,7 +163,7 @@ class SuperStrucConstants:
     krotateInversion = True
 
     # PID values
-    krotateP = 0.02
+    krotateP = 0.01
     krotateI = 0.0
     krotateD = 0.0
     krotateFF = 0
@@ -182,9 +184,9 @@ class IntakeConstants:
     kIntakeInversion = True
 
     # conversion factor
-    kLiftConversion = 360  # Configured feb 12 by joe
-    SuckPos = 120
-    BlowPos = 1
+    kLiftConversion = 1  # Configured feb 12 by joe
+    SuckPos = 31
+    BlowPos = 0
     # lift pid
     kLiftP = 0.075
     kLiftI = 0.00000000000001

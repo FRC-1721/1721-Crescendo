@@ -67,7 +67,7 @@ class Shooter(Subsystem):
 
         # limit switches
         self.magazineSwitch = self.flyMotor.getForwardLimitSwitch(
-            SparkMaxLimitSwitch.Type.kNormallyOpen
+            SparkMaxLimitSwitch.Type.kNormallyClosed
         )
 
         self.magazineSwitch.enableLimitSwitch(False)
@@ -90,9 +90,9 @@ class Shooter(Subsystem):
     def periodic(self) -> None:
         self.sd.putNumber("Thermals/rotate", self.rotateMotor.getMotorTemperature())
         self.sd.putNumber("Thermals/fly", self.flyMotor.getMotorTemperature())
-        # print(self.rotateEncoder.getPosition())
 
     def setFlyWheelSpeed(self, speed):
+        print(speed)
         self.flyMotor.set(speed)
 
     def getAngle(self) -> float:
