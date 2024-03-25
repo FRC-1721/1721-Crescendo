@@ -26,10 +26,15 @@ class RotateIntake(commands2.Command):
         logging.info(f"Moving intake to {self.angle}")
 
     def execute(self):
-        self.intakeSubsystem.lift(self.angle)
-        logging.debug(
-            f"Still moving... {self.intakeSubsystem.getAngle()} to {self.angle}"
-        )
+        if self.intakeSubsystem.getAngle() < 0:
+            # Prevents starting PID from a pose less than 0
+            self.intakeSubsystem.manualLift(0.1)
+            logging.warn("Intake angle is too inset in frame!")
+        else:
+            self.intakeSubsystem.lift(self.angle)
+            logging.debug(
+                f"Still moving... {self.intakeSubsystem.getAngle()} to {self.angle}"
+            )
 
     def isFinished(self):
         e = 1  # How close before we're done

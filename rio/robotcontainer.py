@@ -157,7 +157,7 @@ class RobotContainer:
         # Drop intake (controller x)
         self.driverController.x().onTrue(
             commands2.SequentialCommandGroup(
-                ShooterROT(SuperStrucConstants.LoadPos, self.shooter),
+                ShooterROT(SuperStrucConstants.LoadPos, self.shooter).withTimeout(1),
                 FlyWheelSpeed(0, self.shooter),  # Stop shooter (if its running)
                 RotateIntake(IntakeConstants.SuckPos, self.intake),  # Put intake down
                 intakeUntilNote(1, self.intake),  # Intake till note

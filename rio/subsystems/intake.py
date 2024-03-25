@@ -40,7 +40,9 @@ class IntakeSubsystem(commands2.Subsystem):
         self.intakeMotor.setInverted(True)
 
         # encoders
-        self.liftEncoder = self.liftMotor.getEncoder()
+        self.liftEncoder = self.liftMotor.getAbsoluteEncoder(
+            SparkAbsoluteEncoder.Type.kDutyCycle
+        )
 
         self.liftEncoder.setPositionConversionFactor(1.0)
 
@@ -52,6 +54,8 @@ class IntakeSubsystem(commands2.Subsystem):
 
         # pids
         self.liftPID = self.liftMotor.getPIDController()
+        self.liftPID.setFeedbackDevice(self.liftEncoder)
+        self.liftPID.setPositionPIDWrappingEnabled(False)
         self.liftPID.setP(IntakeConstants.kLiftP)
         self.liftPID.setI(IntakeConstants.kLiftI)
         self.liftPID.setD(IntakeConstants.kLiftD)
@@ -79,6 +83,7 @@ class IntakeSubsystem(commands2.Subsystem):
         self.sd.putNumber("Thermals/Intake", self.intakeMotor.getMotorTemperature())
         self.sd.putNumber("Intake/IntakeAngle", self.intakeEncoder.getPosition())
         self.sd.putNumber("Thermals/Lift", self.liftMotor.getMotorTemperature())
+        # print(self.liftEncoder.getPosition())
 
     def intake(self, speed):
         self.intakeMotor.set(speed)
@@ -97,4 +102,7 @@ class IntakeSubsystem(commands2.Subsystem):
         self.liftPID.setReference(angle, CANSparkMax.ControlType.kPosition)
 
     def zeroIntake(self):
-        self.liftEncoder.setPosition(0)
+        try:
+            self.liftEncoder.setPosition(0)
+        except:
+            logging.warn("Tried to zero the lift and failed")
