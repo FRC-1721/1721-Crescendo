@@ -61,6 +61,7 @@ from commands.defaultFlywheel import DefaultFlywheel
 from autonomous.noAuto import NoAuto
 from autonomous.grabNote import GrabNote
 from autonomous.shoot import Shoot
+from autonomous.FindNote import ObtainNote
 
 # NetworkTables
 from ntcore import NetworkTableInstance
@@ -86,11 +87,9 @@ class RobotContainer:
         self.limelight = limeLightCommands()
 
         # Registering Named commands
+        NamedCommands.registerCommand("Rotate intake", RotateIntake())
         NamedCommands.registerCommand(
-            "Shoot", Shoot(self.robotDrive, self.intake, self.shooter)
-        )
-        NamedCommands.registerCommand(
-            "SendToNote", sendToObject(self.robotDrive, self.limelight)
+            "SendToNote", ObtainNote(self.limelight, self.intake, self.robotDrive)
         )
         # The driver's controller
         self.driverController = CommandXboxController(0)

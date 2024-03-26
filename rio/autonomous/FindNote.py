@@ -19,11 +19,10 @@ from commands.zeroPose import zeroPose
 from constants import IntakeConstants
 
 
-class GrabNote(commands2.SequentialCommandGroup):
+class ObtainNote(commands2.SequentialCommandGroup):
     def __init__(
         self,
         _limelight: limeLightCommands,
-        _shooter: Shooter,
         _intake: IntakeSubsystem,
         _drive: DriveSubsystem,
     ) -> None:
@@ -31,21 +30,10 @@ class GrabNote(commands2.SequentialCommandGroup):
         Runs around and shoots as many speaker shots as possible
         """
         super().__init__(
-            # Resets Yaw relative to the robot's starting position
             sendToObject(_drive, _limelight),
-            ShooterROT(SuperStrucConstants.LoadPos, _shooter),
-            FlyWheelSpeed(0, _shooter),  # Stop shooter (if its running)
             RotateIntake(
                 IntakeConstants.SuckPos, _intake
             ),  # Put intake down (with a lil extra squeeze)
             intakeUntilNote(0.5, _intake),  # Intake till note
             RotateIntake(IntakeConstants.BlowPos, _intake),  # Put intake back up
-            # ================= #
-            # RETURN TO SPEAKER #
-            # ================= #
-            PoseReset(_drive),
         )
-
-
-NAME = "Grab Note"
-load = lambda bot: GrabNote(bot.limelight, bot.shooter, bot.intake, bot.robotDrive)
