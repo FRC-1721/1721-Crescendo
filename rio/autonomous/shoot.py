@@ -35,9 +35,7 @@ class Shoot(commands2.SequentialCommandGroup):
             RotateIntake(
                 IntakeConstants.BlowPos, _intake
             ),  # Put intake fully inside (if it wasn't already)
-            print("intake rotatered"),
             FlyWheelSpeed(1.0, _shooter, False),  # Power up the flywheels (?)
-            print("wheels r fly"),
             SetIntakeSpeed(-0.6, _intake),  # Load magazine? (but without ending)
             commands2.WaitCommand(1),
             FlyWheelSpeed(0.0, _shooter),  # Stop flywheel

@@ -16,6 +16,8 @@ from wpimath.controller import (
 from wpimath.geometry import Pose2d, Rotation2d, Translation2d
 from wpimath.trajectory import TrajectoryConfig, TrajectoryGenerator
 
+from pathplannerlib.auto import NamedCommands
+
 # CommandsV2
 import commands2
 from commands2 import cmd
@@ -83,6 +85,13 @@ class RobotContainer:
         self.climber = Climber()
         self.limelight = limeLightCommands()
 
+        # Registering Named commands
+        NamedCommands.registerCommand(
+            "Shoot", Shoot(self.robotDrive, self.intake, self.shooter)
+        )
+        NamedCommands.registerCommand(
+            "SendToNote", sendToObject(self.robotDrive, self.limelight)
+        )
         # The driver's controller
         self.driverController = CommandXboxController(0)
 
