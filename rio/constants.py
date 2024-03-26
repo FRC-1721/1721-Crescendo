@@ -17,12 +17,19 @@ from wpimath.trajectory import TrapezoidProfileRadians
 
 from rev import CANSparkMax
 
+from pathplannerlib.config import (
+    HolonomicPathFollowerConfig,
+    ReplanningConfig,
+    PIDConstants,
+)
+
 
 class NeoMotorConstants:
     kFreeSpeedRpm = 5676
 
 
 class DriveConstants:
+
     # Driving Parameters - Note that these are not the maximum capable speeds of
     # the robot, rather the allowed maximum speeds
     kMaxSpeedMetersPerSecond = 4.8
@@ -36,6 +43,7 @@ class DriveConstants:
     kTrackWidth = units.inchesToMeters(20.3937)
     # Distance between centers of right and left wheels on robot
     kWheelBase = units.inchesToMeters(20.5)
+    kDriveBaseRadius = math.sqrt(kTrackWidth**2 + kWheelBase**2)
 
     # Distance between front and back wheels on robot
     kModulePositions = [
@@ -64,6 +72,14 @@ class DriveConstants:
     kRearRightTurningCanId = 4
 
     kGyroReversed = True
+
+    HolonomicConfig = HolonomicPathFollowerConfig(  # HolonomicPathFollowerConfig, this should likely live in your Constants class
+        PIDConstants(5.0, 0.0, 0.0),  # Translation PID constants
+        PIDConstants(5.0, 0.0, 0.0),  # Rotation PID constants
+        kMaxSpeedMetersPerSecond,  # Max module speed, in m/s
+        kDriveBaseRadius,  # Drive base radius in meters. Distance from robot center to furthest module.
+        ReplanningConfig(),  # Default path replanning config. See the API for the options here
+    )
 
 
 class ModuleConstants:
@@ -186,7 +202,7 @@ class IntakeConstants:
     # conversion factor
     kLiftConversion = 1  # Configured feb 12 by joe
     SuckPos = 0.541
-    BlowPos = 0
+    BlowPos = 0.005
     # lift pid
     kLiftP = 3.3
     kLiftI = 0.0000001
