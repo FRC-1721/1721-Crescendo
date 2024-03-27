@@ -87,7 +87,9 @@ class RobotContainer:
         self.limelight = limeLightCommands()
 
         # Registering Named commands
-        NamedCommands.registerCommand("Rotate intake", RotateIntake())
+        NamedCommands.registerCommand(
+            "Shoot", Shoot(self.robotDrive, self.intake, self.shooter)
+        )
         NamedCommands.registerCommand(
             "SendToNote", ObtainNote(self.limelight, self.intake, self.robotDrive)
         )

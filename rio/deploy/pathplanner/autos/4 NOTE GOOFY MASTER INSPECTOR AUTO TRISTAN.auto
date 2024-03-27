@@ -1,0 +1,97 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.3575516532110967,
+      "y": 5.569689495202854
+    },
+    "rotation": 0.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "RotateIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CenterToClose2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SendToNote"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CenterFromClose2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CenterToClose3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SendToNote"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CenterFromClose3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CenterToClose1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SendToNote"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CenterFromClose1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
