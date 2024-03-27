@@ -102,8 +102,8 @@ class DriveSubsystem(Subsystem):
 
         AutoBuilder.configureHolonomic(
             self.odometry.getPose,
-            self.odometry.resetPosition,
-            DriveConstants.kDriveKinematics,
+            self.resetOdometry,
+            self.getChassisSpeedsFromSwerveOdometry,
             self.speedsDrive,
             DriveConstants.HolonomicConfig,
             self.shouldFlipPath,
@@ -169,6 +169,9 @@ class DriveSubsystem(Subsystem):
         self.sd.putNumber("Thermals/Swerve/FR/turn", self.frontRight.getTurnTemp())
         self.sd.putNumber("Thermals/Swerve/RL/turn", self.rearLeft.getTurnTemp())
         self.sd.putNumber("Thermals/Swerve/RR/turn", self.rearRight.getTurnTemp())
+
+    def getChassisSpeedsFromSwerveOdometry(self) -> ChassisSpeeds:
+        return DriveConstants.kDriveKinematics.toChassisSpeeds(self.getModuleStates())
 
     def getPose(self) -> Pose2d:
         """Returns the currently-estimated pose of the robot.
@@ -268,6 +271,18 @@ class DriveSubsystem(Subsystem):
         )
         self.rearLeft.setDesiredState(SwerveModuleState(0, Rotation2d.fromDegrees(-45)))
         self.rearRight.setDesiredState(SwerveModuleState(0, Rotation2d.fromDegrees(45)))
+
+    def getModuleStates(
+        self,
+    ) -> (SwerveModuleState, SwerveModuleState, SwerveModuleState, SwerveModuleState):
+
+        # Messy... use a loop next time!
+        return [
+            self.frontLeft.getState(),
+            self.frontRight.getState(),
+            self.rearLeft.getState(),
+            self.rearRight.getState(),
+        ]
 
     def setModuleStates(
         self,
