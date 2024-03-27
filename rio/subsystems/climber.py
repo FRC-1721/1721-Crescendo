@@ -30,7 +30,7 @@ class Climber(commands2.Subsystem):
         self.motor.setInverted(ClimberConstants.kInversion)
 
     def periodic(self) -> None:
-        self.sd.putNumber("Thermals/Climber", self.motor.getMotorTemperature())
+        self.sd.putNumber("Thermals/Climber/Winch", self.motor.getMotorTemperature())
 
     def setClimberMotorSpeed(self, speed):
         self.motor.set(speed)

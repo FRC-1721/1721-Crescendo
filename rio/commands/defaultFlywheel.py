@@ -38,7 +38,7 @@ class DefaultFlywheel(commands2.Command):
 
     def end(self, interrupted: bool):
         if not interrupted:
-            logging.info(f"Default is done with speed {self.isFinished()}")
+            logging.info(f"Default flywheel is done with speed {self.isFinished()}")
         else:
             logging.warn("Default Flywheel was interrupted!")
 
