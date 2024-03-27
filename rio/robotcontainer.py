@@ -338,12 +338,16 @@ class RobotContainer:
             "vision Auto",
             GrabNote(self.limelight, self.shooter, self.intake, self.robotDrive),
         )
-
+        self.autoChooser.addOption(
+            "GoofyAhh", PathPlannerAuto("4 NOTE GOOFY MASTER INSPECTOR AUTO TRISTAN")
+        )
         self.autoChooser.addOption(
             "shoot Auto",
             Shoot(self.robotDrive, self.intake, self.shooter),
         )
-        self.autoChooser.addOption("Poopy")
+        self.autoChooser.addOption(
+            "Poopy",
+        )
         wpilib.SmartDashboard.putData("Auto/Mode", self.autoChooser)
 
     def getAutonomousCommand(self) -> commands2.Command:
