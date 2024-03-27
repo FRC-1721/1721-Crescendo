@@ -36,7 +36,7 @@ class Climb(commands2.Command):
 
     def execute(self):
         angle = self.shooter.getAngle()
-        softLimit = SuperStrucConstants.ShootPos - 20
+        softLimit = SuperStrucConstants.ShootPos + 30
 
         if angle <= softLimit:
             self.climber.setClimberMotorSpeed(self.speed)

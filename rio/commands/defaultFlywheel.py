@@ -40,6 +40,6 @@ class DefaultFlywheel(commands2.Command):
         if not interrupted:
             logging.info(f"Default flywheel is done with speed {self.isFinished()}")
         else:
-            logging.warn("Default Flywheel was interrupted!")
+            logging.warning("Default Flywheel was interrupted!")
 
         return True
