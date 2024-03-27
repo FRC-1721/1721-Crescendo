@@ -32,6 +32,10 @@ class Climber(commands2.Subsystem):
     def periodic(self) -> None:
         self.sd.putNumber("Thermals/Climber/Winch", self.motor.getMotorTemperature())
 
+    def setIdleMode(self, mode):
+        self.motor.setIdleMode(mode)
+        self.motor.burnFlash()
+
     def setClimberMotorSpeed(self, speed):
         self.motor.set(speed)
 

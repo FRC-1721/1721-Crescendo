@@ -119,7 +119,7 @@ class limeLightCommands(commands2.Subsystem):
             driveX = -0.02 * self.distX
         else:
             driveX = 0
-        print(driveY)
+        # print(driveY)
         driver.drive(driveY, driveX, 0, False, True)
 
     def isAtOBJ(self) -> bool:
