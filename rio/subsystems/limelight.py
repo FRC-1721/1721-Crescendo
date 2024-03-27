@@ -21,6 +21,9 @@ class limeLightCommands(commands2.Subsystem):
         # field size in goofy limelight units
         self.fieldSize = [16, 8]
 
+        self.distY = 0
+        self.distX = 0
+
         # self.xFifo = array([0] * 10)
         # self.yFifo = array([0] * 10)
 
