@@ -91,7 +91,6 @@ class Shooter(Subsystem):
         self.sd.putNumber("Thermals/rotate", self.rotateMotor.getMotorTemperature())
         self.sd.putNumber("Thermals/fly", self.flyMotor.getMotorTemperature())
         self.sd.putNumber("Angle/Shooter", self.rotateEncoder.getPosition())
-        print(self.rotateEncoder.getPosition())
 
     def setFlyWheelSpeed(self, speed):
         print(speed)

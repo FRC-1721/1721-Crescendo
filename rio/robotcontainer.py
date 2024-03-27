@@ -348,9 +348,6 @@ class RobotContainer:
             "shoot Auto",
             Shoot(self.robotDrive, self.intake, self.shooter),
         )
-        # self.autoChooser.addOption(
-        #     "Poopy",
-        # )
         wpilib.SmartDashboard.putData("Auto/Mode", self.autoChooser)
 
     def getAutonomousCommand(self) -> commands2.Command:
