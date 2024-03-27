@@ -332,7 +332,6 @@ class RobotContainer:
         """
         Configure Autonomous Modes
         """
-
         self.autoChooser = wpilib.SendableChooser()
 
         self.autoChooser.setDefaultOption("No Auto", NoAuto(self.robotDrive))

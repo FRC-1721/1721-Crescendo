@@ -13,21 +13,17 @@ help:	## Prints this help message
 sim:	## Run the simulator
 	python -m robotpy sim
 
-nc:	## Deploy to the robot (with netconsole)
+nc:
+	robotpy deploy
+
+rush:	## Deploy now! (With netconsole)
 	python -m robotpy deploy --nc --no-install --skip-test
 
 push:	## Deploy to the robot (push only, no netconsole)
 	python -m robotpy deploy
 
-download:	## Download robot requirements locally
-	python -m robotpy installer download -r robot_requirements.txt
-	python -m robotpy installer download-python
-
-install:	## Install requirements, run download first!
-	python -m robotpy installer install -r robot_requirements.txt
-
 sync:		## Sync robotpy requirements
-	python -m robotpy sync
+	robotpy sync
 
 info:	## Shortcut to get information about the code already on the bot
 	python -m robotpy deploy-info
