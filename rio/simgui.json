@@ -23,6 +23,9 @@
   },
   "NetworkTables": {
     "transitory": {
+      "PathPlanner": {
+        "open": true
+      },
       "SmartDashboard": {
         "Swerve": {
           "FL": {

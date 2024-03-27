@@ -145,6 +145,9 @@ class RobotContainer:
             DefaultFlywheel(lambda: self.opController.getRawAxis(2), self.shooter)
         )
 
+        # Configure pathplanner
+        # PathPlanner
+
         # self.shooter.setDefaultCommand(
         #     commands2.cmd.run(
         #         lambda: self.shooter.setFlyWheelSpeed(
@@ -345,9 +348,9 @@ class RobotContainer:
             "shoot Auto",
             Shoot(self.robotDrive, self.intake, self.shooter),
         )
-        self.autoChooser.addOption(
-            "Poopy",
-        )
+        # self.autoChooser.addOption(
+        #     "Poopy",
+        # )
         wpilib.SmartDashboard.putData("Auto/Mode", self.autoChooser)
 
     def getAutonomousCommand(self) -> commands2.Command:

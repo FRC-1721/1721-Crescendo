@@ -13,7 +13,7 @@ help:	## Prints this help message
 sim:	## Run the simulator
 	python -m robotpy sim
 
-deploy:	## Deploy to the robot (with netconsole)
+nc:	## Deploy to the robot (with netconsole)
 	python -m robotpy deploy --nc --no-install --skip-test
 
 push:	## Deploy to the robot (push only, no netconsole)
