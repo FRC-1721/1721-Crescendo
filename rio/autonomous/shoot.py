@@ -27,8 +27,6 @@ class Shoot(commands2.SequentialCommandGroup):
         """
         super().__init__(
             # Resets Yaw relative to the robot's starting position
-            ResetYaw(_drive),
-            zeroPose(_drive),
             # ============ #
             # SPEAKER SHOT #
             # ============ #
@@ -41,7 +39,3 @@ class Shoot(commands2.SequentialCommandGroup):
             FlyWheelSpeed(0.0, _shooter),  # Stop flywheel
             SetIntakeSpeed(0, _intake),  # Stop intake)
         )
-
-
-NAME = "Shoot"
-load = lambda bot: Shoot(bot.robotDrive, bot.intake, bot.shooter)

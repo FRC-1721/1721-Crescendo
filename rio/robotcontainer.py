@@ -333,14 +333,16 @@ class RobotContainer:
         self.autoChooser = wpilib.SendableChooser()
 
         self.autoChooser.setDefaultOption("No Auto", NoAuto(self.robotDrive))
-
+        """
         self.autoChooser.addOption(
             "vision Auto",
             GrabNote(self.limelight, self.shooter, self.intake, self.robotDrive),
         )
+        
         self.autoChooser.addOption(
             "GoofyAhh", PathPlannerAuto("4 NOTE GOOFY MASTER INSPECTOR AUTO TRISTAN")
         )
+        """
         self.autoChooser.addOption(
             "shoot Auto",
             Shoot(self.robotDrive, self.intake, self.shooter),

@@ -120,7 +120,7 @@ class limeLightCommands(commands2.Subsystem):
         else:
             driveX = 0
         # print(driveY)
-        driver.drive(driveY, driveX, 0, False, True)
+        driver.drive(driveY, driveX, 0, 0, False, False)
 
     def isAtOBJ(self) -> bool:
         if (-0.1 < self.distY < 0.25) and (-0.25 < self.distX < 0.25):
