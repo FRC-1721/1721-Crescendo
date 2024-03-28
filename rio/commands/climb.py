@@ -38,7 +38,7 @@ class Climb(commands2.Command):
 
     def execute(self):
         angle = self.shooter.getAngle()
-        softLimit = SuperStrucConstants.LoadPos + 35
+        softLimit = SuperStrucConstants.LoadPos + 20
         self.shooter.rotateManual(0)
 
         if angle >= softLimit:
