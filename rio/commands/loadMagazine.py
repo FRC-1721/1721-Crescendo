@@ -47,4 +47,4 @@ class LoadMagazine(commands2.Command):
         if not interrupted:
             logging.info(f"Done, magazine loaded")
         else:
-            logging.warn("Load Magazine was inturrupted or cancled!")
+            logging.warn("Load Magazine was interrupted or canceled!")

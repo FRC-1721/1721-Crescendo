@@ -5,6 +5,7 @@
 # the WPILib BSD license file in the root directory of this project.
 #
 
+from ntcore import NetworkTableInstance
 import commands2
 import wpilib
 import logging
@@ -18,6 +19,8 @@ class HolyToaster(commands2.TimedCommandRobot):
         # autonomous chooser on the dashboard.
         self.container = RobotContainer()
         self.autonomousCommand = None
+        self.nt = NetworkTableInstance.getDefault()
+        self.sd = self.nt.getTable("SmartDashboard")
 
         if not wpilib.RobotBase.isReal():
             # Do some things if the robot is NOT real
@@ -25,7 +28,11 @@ class HolyToaster(commands2.TimedCommandRobot):
             # Ovverride default logging
             logging.basicConfig(level=logging.DEBUG)
 
+        # Jack added this
+        self.sd.putBoolean("Auto/IsAuto", False)
+
     def autonomousInit(self) -> None:
+        self.sd.putBoolean("Auto/IsAuto", True)
         self.autonomousCommand = self.container.getAutonomousCommand()
 
         if self.autonomousCommand:
@@ -34,15 +41,22 @@ class HolyToaster(commands2.TimedCommandRobot):
             print("No auto command?")
 
     def teleopInit(self) -> None:
+        self.sd.putBoolean("Auto/IsAuto", False)
         if self.autonomousCommand:
             self.autonomousCommand.cancel()
 
     def disabledInit(self) -> None:
+        # Jack added this
+        self.sd.putBoolean("Auto/IsAuto", False)
+
         # Joe added this
         commands2.CommandScheduler.getInstance().cancelAll()
         logging.info("All commands canceled when entering disabled")
 
     def testInit(self) -> None:
+        # Jack added this
+        self.sd.putBoolean("Auto/IsAuto", False)
+
         commands2.CommandScheduler.getInstance().cancelAll()
 
 

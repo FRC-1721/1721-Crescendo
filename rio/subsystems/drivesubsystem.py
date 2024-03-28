@@ -2,6 +2,12 @@ import math
 import typing
 
 import wpilib
+from pathplannerlib.auto import AutoBuilder
+from pathplannerlib.config import (
+    HolonomicPathFollowerConfig,
+    ReplanningConfig,
+    PIDConstants,
+)
 
 from commands2 import Subsystem
 from wpimath.filter import SlewRateLimiter
@@ -94,7 +100,15 @@ class DriveSubsystem(Subsystem):
         )
         self.gyroAngle = self.gyro.getYaw()
 
-        # self.gyro.setAngleAdjustment(90)
+        AutoBuilder.configureHolonomic(
+            self.odometry.getPose,
+            self.resetOdometry,
+            self.getChassisSpeedsFromSwerveOdometry,
+            self.speedsDrive,
+            DriveConstants.HolonomicConfig,
+            self.shouldFlipPath,
+            self,
+        )
 
     def periodic(self) -> None:
         # Update the odometry in the periodic block
@@ -156,6 +170,9 @@ class DriveSubsystem(Subsystem):
         self.sd.putNumber("Thermals/Swerve/RL/turn", self.rearLeft.getTurnTemp())
         self.sd.putNumber("Thermals/Swerve/RR/turn", self.rearRight.getTurnTemp())
 
+    def getChassisSpeedsFromSwerveOdometry(self) -> ChassisSpeeds:
+        return DriveConstants.kDriveKinematics.toChassisSpeeds(self.getModuleStates())
+
     def getPose(self) -> Pose2d:
         """Returns the currently-estimated pose of the robot.
 
@@ -211,77 +228,14 @@ class DriveSubsystem(Subsystem):
         xSpeedCommanded = xSpeed * (OIConstants.kDampeningAmount if dampened else 1)
         ySpeedCommanded = ySpeed * (OIConstants.kDampeningAmount if dampened else 1)
         self.sd.putNumber("pos/rot", rot)
-        if False:  # if rateLimit
-            # Convert XY to polar for rate limiting
-            inputTranslationDir = math.atan2(ySpeed, xSpeed)
-            inputTranslationMag = math.hypot(xSpeed, ySpeed)
-
-            # Calculate the direction slew rate based on an estimate of the lateral acceleration
-            if self.currentTranslationMag != 0.0:
-                directionSlewRate = abs(
-                    DriveConstants.kDirectionSlewRate / self.currentTranslationMag
-                )
-            else:
-                directionSlewRate = 500.0
-                # some high number that means the slew rate is effectively instantaneous
-
-            currentTime = wpilib.Timer.getFPGATimestamp()
-            elapsedTime = currentTime - self.prevTime
-            angleDif = swerveutils.angleDifference(
-                inputTranslationDir, self.currentTranslationDir
-            )
-            if angleDif < 0.45 * math.pi:
-                self.currentTranslationDir = swerveutils.stepTowardsCircular(
-                    self.currentTranslationDir,
-                    inputTranslationDir,
-                    directionSlewRate * elapsedTime,
-                )
-                self.currentTranslationMag = self.magLimiter.calculate(
-                    inputTranslationMag
-                )
-
-            elif angleDif > 0.85 * math.pi:
-                # some small number to avoid floating-point errors with equality checking
-                # keep currentTranslationDir unchanged
-                if self.currentTranslationMag > 1e-4:
-                    self.currentTranslationMag = self.magLimiter.calculate(0.0)
-                else:
-                    self.currentTranslationDir = swerveutils.wrapAngle(
-                        self.currentTranslationDir + math.pi
-                    )
-                    self.currentTranslationMag = self.magLimiter.calculate(
-                        inputTranslationMag
-                    )
-
-            else:
-                self.currentTranslationDir = swerveutils.stepTowardsCircular(
-                    self.currentTranslationDir,
-                    inputTranslationDir,
-                    directionSlewRate * elapsedTime,
-                )
-                self.currentTranslationMag = self.magLimiter.calculate(0.0)
-
-            self.prevTime = currentTime
-
-            xSpeedCommanded = self.currentTranslationMag * math.cos(
-                self.currentTranslationDir
-            )
-            ySpeedCommanded = self.currentTranslationMag * math.sin(
-                self.currentTranslationDir
-            )
-            self.currentRotation = self.rotLimiter.calculate(rot)
-
-        else:
-            self.currentRotation = rot * (
-                OIConstants.kDampeningAmount if dampened else 1
-            )
+        self.currentRotation = rot * (OIConstants.kDampeningAmount if dampened else 1)
 
         # Convert the commanded speeds into the correct units for the drivetrain
         xSpeedDelivered = xSpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond
         ySpeedDelivered = ySpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond
         rotDelivered = self.currentRotation * DriveConstants.kMaxAngularSpeed
 
-        swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
+        self.speeds = (
             ChassisSpeeds.fromFieldRelativeSpeeds(
                 xSpeedDelivered,
                 ySpeedDelivered,
@@ -290,6 +244,16 @@ class DriveSubsystem(Subsystem):
             )
             if fieldRelative
             else ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered)
+        )
+
+        self.speedsDrive(self.speeds)
+
+    def speedsDrive(self, speeds) -> None:
+
+        self.speeds = speeds
+
+        swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
+            self.speeds
         )
         fl, fr, rl, rr = SwerveDrive4Kinematics.desaturateWheelSpeeds(
             swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond
@@ -307,6 +271,18 @@ class DriveSubsystem(Subsystem):
         )
         self.rearLeft.setDesiredState(SwerveModuleState(0, Rotation2d.fromDegrees(-45)))
         self.rearRight.setDesiredState(SwerveModuleState(0, Rotation2d.fromDegrees(45)))
+
+    def getModuleStates(
+        self,
+    ) -> (SwerveModuleState, SwerveModuleState, SwerveModuleState, SwerveModuleState):
+
+        # Messy... use a loop next time!
+        return [
+            self.frontLeft.getState(),
+            self.frontRight.getState(),
+            self.rearLeft.getState(),
+            self.rearRight.getState(),
+        ]
 
     def setModuleStates(
         self,
@@ -364,8 +340,11 @@ class DriveSubsystem(Subsystem):
 
     def getAcc(self):
         xAcc = self.gyro.getBiasedAccelerometer()[1][0]
-        print(xAcc)
+        # print(xAcc)
         if xAcc < -2500:
-            print("POOP FART----------------------------asdfasdfasdfasdfasdfasdf")
+            print("POOFARTICLE 8=======================================D")
             return True
         return False
+
+    def shouldFlipPath(self):
+        return self.nt.getTable("FMSinfo").getEntry("IsRedAlliance")

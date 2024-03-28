@@ -88,13 +88,16 @@ class Shooter(Subsystem):
         self.rotateMotor.burnFlash()
 
     def periodic(self) -> None:
-        self.sd.putNumber("Thermals/rotate", self.rotateMotor.getMotorTemperature())
-        self.sd.putNumber("Thermals/fly", self.flyMotor.getMotorTemperature())
+        self.sd.putNumber(
+            "Thermals/Shooter/Rotate", self.rotateMotor.getMotorTemperature()
+        )
+        self.sd.putNumber(
+            "Thermals/Shooter/Wheels", self.flyMotor.getMotorTemperature()
+        )
         self.sd.putNumber("Angle/Shooter", self.rotateEncoder.getPosition())
-        print(self.rotateEncoder.getPosition())
 
     def setFlyWheelSpeed(self, speed):
-        print(speed)
+        # print(speed)
         self.flyMotor.set(speed)
 
     def getAngle(self) -> float:

@@ -21,6 +21,9 @@ class limeLightCommands(commands2.Subsystem):
         # field size in goofy limelight units
         self.fieldSize = [16, 8]
 
+        self.distY = 0
+        self.distX = 0
+
         # self.xFifo = array([0] * 10)
         # self.yFifo = array([0] * 10)
 
@@ -116,8 +119,8 @@ class limeLightCommands(commands2.Subsystem):
             driveX = -0.02 * self.distX
         else:
             driveX = 0
-        print(driveY)
-        driver.drive(driveY, driveX, 0, False, True)
+        # print(driveY)
+        driver.drive(driveY, driveX, 0, 0, False, False)
 
     def isAtOBJ(self) -> bool:
         if (-0.1 < self.distY < 0.25) and (-0.25 < self.distX < 0.25):

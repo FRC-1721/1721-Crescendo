@@ -5,6 +5,7 @@ import logging
 import os
 import importlib
 import commands2
+from pathplannerlib.auto import PathPlannerAuto
 
 # wpimath
 import wpimath
@@ -15,6 +16,8 @@ from wpimath.controller import (
 )
 from wpimath.geometry import Pose2d, Rotation2d, Translation2d
 from wpimath.trajectory import TrajectoryConfig, TrajectoryGenerator
+
+from pathplannerlib.auto import NamedCommands
 
 # CommandsV2
 import commands2
@@ -51,7 +54,6 @@ from commands.setIntakeSpeed import SetIntakeSpeed
 from commands.loadMagazine import LoadMagazine
 from commands.climb import Climb
 from commands.ResetYaw import ResetYaw
-from commands.spool import Spool
 from commands.lock import Lock
 from commands.defaultFlywheel import DefaultFlywheel
 
@@ -59,6 +61,7 @@ from commands.defaultFlywheel import DefaultFlywheel
 from autonomous.noAuto import NoAuto
 from autonomous.grabNote import GrabNote
 from autonomous.shoot import Shoot
+from autonomous.FindNote import ObtainNote
 
 # NetworkTables
 from ntcore import NetworkTableInstance
@@ -83,6 +86,13 @@ class RobotContainer:
         self.climber = Climber()
         self.limelight = limeLightCommands()
 
+        # Registering Named commands
+        NamedCommands.registerCommand(
+            "Shoot", Shoot(self.robotDrive, self.intake, self.shooter)
+        )
+        NamedCommands.registerCommand(
+            "SendToNote", ObtainNote(self.limelight, self.intake, self.robotDrive)
+        )
         # The driver's controller
         self.driverController = CommandXboxController(0)
 
@@ -133,6 +143,9 @@ class RobotContainer:
         self.shooter.setDefaultCommand(
             DefaultFlywheel(lambda: self.opController.getRawAxis(2), self.shooter)
         )
+
+        # Configure pathplanner
+        # PathPlanner
 
         # self.shooter.setDefaultCommand(
         #     commands2.cmd.run(
@@ -270,8 +283,7 @@ class RobotContainer:
         self.opController.button(4).whileTrue(manualROT(-0.5, self.shooter))
 
         # climber
-        self.opController.button(5).whileTrue(Spool(0.4, self.climber, self.shooter))
-        self.opController.button(7).whileTrue(Spool(-0.2, self.climber, self.shooter))
+        self.opController.button(5).whileTrue(Climb(0.4, self.climber, self.shooter))
 
         # Cancel all
         self.opController.button(8).onTrue(commands2.InstantCommand(self.cancelAll))
@@ -318,21 +330,23 @@ class RobotContainer:
         """
         Configure Autonomous Modes
         """
-
         self.autoChooser = wpilib.SendableChooser()
 
         self.autoChooser.setDefaultOption("No Auto", NoAuto(self.robotDrive))
-
+        """
         self.autoChooser.addOption(
             "vision Auto",
             GrabNote(self.limelight, self.shooter, self.intake, self.robotDrive),
         )
-
+        
+        self.autoChooser.addOption(
+            "GoofyAhh", PathPlannerAuto("4 NOTE GOOFY MASTER INSPECTOR AUTO TRISTAN")
+        )
+        """
         self.autoChooser.addOption(
             "shoot Auto",
             Shoot(self.robotDrive, self.intake, self.shooter),
         )
-
         wpilib.SmartDashboard.putData("Auto/Mode", self.autoChooser)
 
     def getAutonomousCommand(self) -> commands2.Command:

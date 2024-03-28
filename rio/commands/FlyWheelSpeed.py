@@ -32,7 +32,7 @@ class FlyWheelSpeed(commands2.Command):
 
     def end(self, interrupted: bool):
         if not interrupted:
-            logging.info(f"Done, up to speed is {self.isFinished()}")
+            logging.info(f"Done, flywheel up to speed is {self.isFinished()}")
         else:
             logging.warn("FlyWheelSpeed was interrupted!")
 
