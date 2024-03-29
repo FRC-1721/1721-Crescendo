@@ -279,8 +279,8 @@ class RobotContainer:
 
         # shooter keybinds
         # shooter movement
-        self.opController.button(3).whileTrue(manualROT(0.5, self.shooter))
-        self.opController.button(4).whileTrue(manualROT(-0.5, self.shooter))
+        self.opController.button(3).whileTrue(manualROT(0.2, self.shooter))
+        self.opController.button(4).whileTrue(manualROT(-0.2, self.shooter))
 
         # climber
         self.opController.button(5).whileTrue(Climb(0.4, self.climber, self.shooter))
