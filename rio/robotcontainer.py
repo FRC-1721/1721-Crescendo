@@ -180,11 +180,6 @@ class RobotContainer:
             )
         )
 
-        # set Shooter to climb position
-        self.driverController.y().onTrue(
-            ShooterROT(SuperStrucConstants.ClimbPos, self.shooter)
-        )
-
         # Deliver to amp (button a), part a
         self.driverController.a().onTrue(
             commands2.SequentialCommandGroup(
@@ -220,18 +215,10 @@ class RobotContainer:
 
         # Climbing
         self.driverController.pov(0).whileTrue(
-            Climb(
-                1,
-                self.climber,
-                self.shooter,
-            )
+            ShooterROT(SuperStrucConstants.HarmonyPos, self.shooter)
         )
         self.driverController.pov(180).whileTrue(
-            Climb(
-                -1,
-                self.climber,
-                self.shooter,
-            )
+            ShooterROT(SuperStrucConstants.ClimbPos, self.shooter)
         )
 
         self.driverController.leftBumper().whileTrue(

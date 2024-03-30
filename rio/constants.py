@@ -167,6 +167,7 @@ class SuperStrucConstants:
     ShootPos = 321
     LoadPos = 204
     ClimbPos = 285
+    HarmonyPos = 316
 
     # CANSpark IDS
     rotateID = 11
