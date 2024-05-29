@@ -65,10 +65,10 @@ class DriveConstants:
     kFrontRightDrivingCanId = 1
     kRearRightDrivingCanId = 3
 
-    kFrontLeftTurningCanId = 6
-    kRearLeftTurningCanId = 8
-    kFrontRightTurningCanId = 2
-    kRearRightTurningCanId = 4
+    kFrontLeftDriveInversion = True
+    kRearLeftDriveInversion = True
+    kFrontRightDriveInversion = False
+    kRearRightDriveInversion = False
 
     kGyroReversed = True
 
