@@ -41,24 +41,28 @@ class DriveSubsystem(Subsystem):
             DriveConstants.kFrontLeftDrivingCanId,
             DriveConstants.kFrontLeftTurningCanId,
             DriveConstants.kFrontLeftChassisAngularOffset,
+            DriveConstants.kFrontLeftDriveInversion,
         )
 
         self.frontRight = MikeSwerveModule(
             DriveConstants.kFrontRightDrivingCanId,
             DriveConstants.kFrontRightTurningCanId,
             DriveConstants.kFrontRightChassisAngularOffset,
+            DriveConstants.kFrontRightDriveInversion,
         )
 
         self.rearLeft = MikeSwerveModule(
             DriveConstants.kRearLeftDrivingCanId,
             DriveConstants.kRearLeftTurningCanId,
             DriveConstants.kBackLeftChassisAngularOffset,
+            DriveConstants.kRearLeftDriveInversion,
         )
 
         self.rearRight = MikeSwerveModule(
             DriveConstants.kRearRightDrivingCanId,
             DriveConstants.kRearRightTurningCanId,
             DriveConstants.kBackRightChassisAngularOffset,
+            DriveConstants.kRearRightDriveInversion,
         )
 
         # Configure networktables
@@ -342,7 +346,6 @@ class DriveSubsystem(Subsystem):
         xAcc = self.gyro.getBiasedAccelerometer()[1][0]
         # print(xAcc)
         if xAcc < -2500:
-            print("POOFARTICLE 8=======================================D")
             return True
         return False
 
