@@ -9,7 +9,7 @@
       "maximized": "1",
       "style": "1",
       "userScale": "2",
-      "width": "1366",
+      "width": "1364",
       "xpos": "9",
       "ypos": "76"
     }
@@ -61,7 +61,7 @@
     "###Timing": {
       "Collapsed": "0",
       "Pos": "5,150",
-      "Size": "135,150"
+      "Size": "133,104"
     },
     "Debug##Default": {
       "Collapsed": "0",
