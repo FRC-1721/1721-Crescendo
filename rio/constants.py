@@ -70,8 +70,8 @@ class DriveConstants:
     kFrontRightTurningCanId = 2
     kRearRightTurningCanId = 4
 
-    kFrontLeftDriveInversion = True
-    kRearLeftDriveInversion = True
+    kFrontLeftDriveInversion = False
+    kRearLeftDriveInversion = False
     kFrontRightDriveInversion = False
     kRearRightDriveInversion = False
 
