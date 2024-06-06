@@ -7,7 +7,11 @@ from constants import ModuleConstants
 
 class MikeSwerveModule:
     def __init__(
-        self, drivingCANId: int, turningCANId: int, chassisAngularOffset: float
+        self,
+        drivingCANId: int,
+        turningCANId: int,
+        chassisAngularOffset: float,
+        inversionValue: bool,
     ) -> None:
         """Constructs a Mike Swerve Module, a custom module designed in house.
 
@@ -105,6 +109,9 @@ class MikeSwerveModule:
         self.turningSparkMax.setSmartCurrentLimit(
             ModuleConstants.kTurningMotorCurrentLimit
         )
+
+        # set the inversion of the driving SPARK
+        self.drivingSparkMax.setInverted(inversionValue)
 
         # Save the SPARK MAX configurations. If a SPARK MAX browns out during
         # operation, it will maintain the above configurations.

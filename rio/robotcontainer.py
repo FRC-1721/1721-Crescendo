@@ -115,19 +115,19 @@ class RobotContainer:
             commands2.cmd.run(
                 lambda: self.robotDrive.drive(
                     (
-                        -wpimath.applyDeadband(
+                        wpimath.applyDeadband(
                             self.driverController.getRawAxis(1),
                             OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                         )
                     ),
                     (
-                        wpimath.applyDeadband(
+                        -wpimath.applyDeadband(
                             self.driverController.getRawAxis(0),
                             OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                         )
                     ),
                     (
-                        -wpimath.applyDeadband(
+                        wpimath.applyDeadband(
                             self.driverController.getRawAxis(4),
                             OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                         )

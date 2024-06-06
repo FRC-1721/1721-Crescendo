@@ -70,6 +70,11 @@ class DriveConstants:
     kFrontRightTurningCanId = 2
     kRearRightTurningCanId = 4
 
+    kFrontLeftDriveInversion = False
+    kRearLeftDriveInversion = False
+    kFrontRightDriveInversion = False
+    kRearRightDriveInversion = False
+
     kGyroReversed = True
 
     HolonomicConfig = HolonomicPathFollowerConfig(  # HolonomicPathFollowerConfig, this should likely live in your Constants class
