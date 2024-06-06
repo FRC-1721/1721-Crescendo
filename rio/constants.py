@@ -166,7 +166,8 @@ class SuperStrucConstants:
     # angles for shooter
     ShootPos = 321
     LoadPos = 204
-    ClimbPos = 277
+    ClimbPos = 285
+    HarmonyPos = 316
 
     # CANSpark IDS
     rotateID = 11
@@ -200,8 +201,8 @@ class IntakeConstants:
 
     # conversion factor
     kLiftConversion = 1  # Configured feb 12 by joe
-    SuckPos = 0.541
-    BlowPos = 0.005
+    SuckPos = 0.645
+    BlowPos = 0.1
     # lift pid
     kLiftP = 3.3
     kLiftI = 0.0000001
