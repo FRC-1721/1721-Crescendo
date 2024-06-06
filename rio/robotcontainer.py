@@ -116,8 +116,7 @@ class RobotContainer:
                 lambda: self.robotDrive.drive(
                     (
                         wpimath.applyDeadband(
-                            self.driverController.getRawAxis(1
-                            ),
+                            self.driverController.getRawAxis(1),
                             OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                         )
                     ),
