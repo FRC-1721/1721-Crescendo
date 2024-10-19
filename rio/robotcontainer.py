@@ -94,7 +94,7 @@ class RobotContainer:
             "SendToNote", ObtainNote(self.limelight, self.intake, self.robotDrive)
         )
         # The driver's controller
-        self.driverController = CommandXboxController(0)
+        self.driverController = CommandGenericHID(0)
 
         # the operators controller
         self.opController = CommandXboxController(OIConstants.kOpControllerPort)
@@ -116,13 +116,13 @@ class RobotContainer:
                 lambda: self.robotDrive.drive(
                     (
                         wpimath.applyDeadband(
-                            self.driverController.getRawAxis(1) * 0.3,
+                            self.driverController.getRawAxis(1) * 0.75,
                             OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                         )
                     ),
                     (
                         -wpimath.applyDeadband(
-                            self.driverController.getRawAxis(0) * 0.3,
+                            self.driverController.getRawAxis(0) * 0.75,
                             OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                         )
                     ),
@@ -132,7 +132,7 @@ class RobotContainer:
                             OIConstants.kDriveDeadband,  # TODO: Use constants to set these controls
                         )
                     ),
-                    self.driverController.leftTrigger(),
+                    self.driverController.button(4),
                     lambda: self.fieldCentricChooser.getSelected() == "Field Centric",
                     True,
                 ),
@@ -168,7 +168,7 @@ class RobotContainer:
         # ==============================
 
         # Drop intake (controller x)
-        self.driverController.x().onTrue(
+        self.driverController.button(1).onTrue(
             commands2.SequentialCommandGroup(
                 ShooterROT(SuperStrucConstants.LoadPos, self.shooter).withTimeout(1),
                 FlyWheelSpeed(0, self.shooter),  # Stop shooter (if its running)
@@ -181,7 +181,7 @@ class RobotContainer:
         )
 
         # Deliver to amp (button a), part a
-        self.driverController.a().onTrue(
+        self.driverController.button(7).onTrue(
             commands2.SequentialCommandGroup(
                 RotateIntake(IntakeConstants.BlowPos, self.intake).withTimeout(
                     1
@@ -197,7 +197,7 @@ class RobotContainer:
         )
 
         # Deliver to amp (button b), part b
-        self.driverController.b().onTrue(
+        self.driverController.button(8).onTrue(
             commands2.SequentialCommandGroup(
                 ShooterROT(
                     SuperStrucConstants.ShootPos, self.shooter
@@ -211,7 +211,7 @@ class RobotContainer:
             )
         )
 
-        self.driverController.start().onTrue(ResetYaw(self.robotDrive))
+        self.driverController.button(12).onTrue(ResetYaw(self.robotDrive))
 
         # Climbing
         self.driverController.pov(0).whileTrue(
@@ -221,14 +221,15 @@ class RobotContainer:
             ShooterROT(SuperStrucConstants.ClimbPos, self.shooter)
         )
 
-        self.driverController.leftBumper().whileTrue(
-            sendToObject(self.robotDrive, self.limelight)
-        )
-        self.driverController.back().whileTrue(
+        # self.driverController.leftBumper().whileTrue(
+        #     sendToObject(self.robotDrive, self.limelight)
+        # )
+        self.driverController.button(11).whileTrue(
             commands2.InstantCommand(self.intake.zeroIntake())
         )
 
-        self.driverController.rightTrigger().whileTrue(
+        # speaker
+        self.driverController.button(8).whileTrue(
             commands2.ParallelCommandGroup(
                 RotateIntake(
                     IntakeConstants.BlowPos, self.intake
@@ -236,7 +237,7 @@ class RobotContainer:
                 FlyWheelSpeed(1, self.shooter, False),
             )
         )
-        self.driverController.rightTrigger().onFalse(
+        self.driverController.button(9).onFalse(
             commands2.SequentialCommandGroup(
                 FlyWheelSpeed(1, self.shooter, False),
                 SetIntakeSpeed(-1, self.intake),
